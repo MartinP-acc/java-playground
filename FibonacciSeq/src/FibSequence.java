@@ -7,6 +7,10 @@ public class FibSequence {
 
     //returns number for n
     public static long printNrInSequence(long n){
+        if (n<0){
+            System.out.println("the number must be > 0");
+            return 0;
+        }
         if (n<2) return n;
         return printNrInSequence(n-1)+printNrInSequence(n-2);
     }
