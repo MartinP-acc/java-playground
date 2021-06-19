@@ -1,5 +1,8 @@
 package testing;
 
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -12,11 +15,20 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class OrderTest {
 
+    private Order order;
+
+    @BeforeEach
+    void initOrder(){
+        this.order = new Order();
+    }
+
+    @AfterEach
+    void clearOrderList(){
+        this.order.cancel();
+    }
+
     @Test
     void mealListShouldBeEmptyAfterCreationOrder(){
-
-        //given
-        Order order = new Order();
 
         //then
         assertThat(order.getMeals(),empty());
@@ -26,7 +38,6 @@ class OrderTest {
     void addingOrderShouldIncreaseOrderSize(){
 
         //given
-        Order order = new Order();
         Meal meal = new Meal(30, "Classic Burger");
 
         //when
@@ -41,7 +52,6 @@ class OrderTest {
     @Test
     void removingMealFromOrderShouldDecreaseOrderSize(){
         //given
-        Order order = new Order();
         Meal meal = new Meal(30, "Classic Burger");
 
         //when
@@ -56,7 +66,6 @@ class OrderTest {
     @Test
     void mealsShouldBeInCorrectOrderAfterAddingMealsToOrderList(){
         //given
-        Order order = new Order();
         Meal meal1 = new Meal(30, "Classic Burger");
         Meal meal2 = new Meal(35, "Cheese and Bacon Burger");
 
@@ -73,7 +82,6 @@ class OrderTest {
     @Test
     void testIfTwoMealListsAreTheSame(){
         //given
-        Order order = new Order();
         Meal meal1 = new Meal(30, "Classic Burger");
         Meal meal2 = new Meal(35, "Cheese and Bacon Burger");
         Meal meal3 = new Meal(29, "Chicken Burger");
