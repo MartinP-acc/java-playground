@@ -1,18 +1,25 @@
 package testing;
 
+import org.junit.jupiter.api.DynamicContainer;
+import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestFactory;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.function.Executable;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 //import static org.hamcrest.MatcherAssert.assertThat;
-//import static org.hamcrest.Matchers.*;
+//import static org.hamcrest.Matchers.*;;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Stream;
 
+import static org.assertj.core.api.Assertions.in;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -121,6 +128,34 @@ class MealTest {
 
         if (price>7) throw new IllegalArgumentException();
         assertThat(price).isLessThan(20);
+    }
+
+    private int calculatePrice(int price, int quantity) {
+        return  price * quantity;
+    }
+
+    @TestFactory
+    Collection<DynamicTest> calculateMealPrices(){
+
+        Order order = new Order();
+        order.addMealsToOrder(new Meal(30, "Classic Burger", 2));
+        order.addMealsToOrder(new Meal(28, "Chicken Burger", 3));
+        order.addMealsToOrder(new Meal(35, "Cheese and Bacon Burger", 1));
+
+        Collection<DynamicTest> dynamicTests = new ArrayList<>();
+        for (int i=0; i<order.getMeals().size(); i++){
+            int price = order.getMeals().get(i).getPrice();
+            int quantity = order.getMeals().get(i).getQuantity();
+
+//            Executable executable = ()->{
+//                assertThat(calculatePrice(price,quantity)).isLessThan(150);
+//            };
+//
+//            String name = "Test name " + i;
+//            DynamicTest dynamicTest = DynamicTest.dynamicTest(name, executable);
+            dynamicTests.add(DynamicTest.dynamicTest("Test name "+i, ()->assertThat(calculatePrice(price,quantity)).isLessThan(150)));
+        }
+        return dynamicTests;
     }
 
 }
