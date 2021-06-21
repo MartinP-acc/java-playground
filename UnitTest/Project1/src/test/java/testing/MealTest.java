@@ -1,9 +1,6 @@
 package testing;
 
-import org.junit.jupiter.api.DynamicContainer;
-import org.junit.jupiter.api.DynamicTest;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestFactory;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.function.Executable;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -134,6 +131,7 @@ class MealTest {
         return  price * quantity;
     }
 
+    @Tag("burgers")
     @TestFactory
     Collection<DynamicTest> calculateMealPrices(){
 
