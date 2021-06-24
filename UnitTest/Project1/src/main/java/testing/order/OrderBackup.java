@@ -1,4 +1,6 @@
-package testing;
+package testing.order;
+
+import testing.Order;
 
 import java.io.*;
 
