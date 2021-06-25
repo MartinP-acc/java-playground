@@ -1,4 +1,7 @@
-package testing;
+package testing.cart;
+
+import testing.Meal;
+import testing.Order;
 
 import java.util.ArrayList;
 import java.util.List;
