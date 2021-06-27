@@ -1,16 +1,25 @@
+import java.util.HashMap;
+
 public class Solution {
 
     public int solution(int[] a){
 
-        for (int i=0; i<a.length; i++){
-            int actual = a[i];
-            int counter = 0;
+        if (a.length==0) return -1;
 
-            for (int l : a) {
-                if (actual == l) counter++;
-            }
-            if (counter>(a.length/2)) return i;
+        HashMap<Integer,Integer> leaderBoard = new HashMap<>();
+
+        for (int j : a) {
+            leaderBoard.put(j, leaderBoard.getOrDefault(j, 0) + 1);
         }
+
+        for (HashMap.Entry<Integer, Integer> pair : leaderBoard.entrySet()) {
+            if (pair.getValue()>a.length/2) {
+                for (int i=0; i<(a.length); i++){
+                    if (a[i]==pair.getKey()) return i;
+                }
+            }
+        }
+
         return -1;
     }
 }
