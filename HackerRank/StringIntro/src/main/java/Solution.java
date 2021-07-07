@@ -12,7 +12,6 @@ public class Solution {
 
         String a1 = A.substring(0,1).toUpperCase();
         String b1 = B.substring(0,1).toUpperCase();
-
         
         String[] sort = new String[]{A,B};
         Arrays.sort(sort);
