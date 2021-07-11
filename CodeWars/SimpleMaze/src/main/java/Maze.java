@@ -29,8 +29,8 @@ public class Maze {
                     else throw new IllegalArgumentException("There are more than one Kate in the maze");
                 }
             }
-            if (pos.x == -1) throw new RuntimeException("There isn't Kate in the maze");
         }
+        if (pos.x == -1) throw new RuntimeException("There isn't Kate in the maze");
         return checkWay(maze, new Point(pos.x+1, pos.y)) ||
                 checkWay(maze, new Point(pos.x-1, pos.y)) ||
                 checkWay(maze, new Point(pos.x, pos.y+1)) ||
