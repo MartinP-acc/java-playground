@@ -49,12 +49,12 @@ class FinderTest {
                         "W...W.WW.\n" +
                         "....W.W..";
 
-        //assertEquals( 4,  Finder.pathFinder(a));
-        //assertEquals( -1, Finder.pathFinder(b));
-        //assertEquals( 10,  Finder.pathFinder(c));
-        //assertEquals( -1, Finder.pathFinder(d));
+        assertEquals( 4,  Finder.pathFinder(a));
+        assertEquals( -1, Finder.pathFinder(b));
+        assertEquals( 10,  Finder.pathFinder(c));
+        assertEquals( -1, Finder.pathFinder(d));
         assertEquals(16,Finder.pathFinder(e));
-        //assertEquals(-1,Finder.pathFinder(f));
+        assertEquals(-1,Finder.pathFinder(f));
     }
 
 }

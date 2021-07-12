@@ -1,50 +1,52 @@
 import java.awt.*;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Finder {
+    static private String[][] maze2D;
+    static private final HashMap<Point,Integer> basePoints = new HashMap<>();
+    static private final HashMap<Point,Integer> directions = new HashMap<>();
+    static private final HashMap<Point,Integer> checked = new HashMap<>();
 
-    private static int movesToExit;
+    private static void splitMazeToArray(String maze){
+        String[] line = maze.split("\n");
+        maze2D = new String[line.length+2][line[0].length()+2];
+        for (int x = 0; x< maze2D.length; x++){
+            maze2D[0][x]="W";
+            maze2D[maze2D.length-1][x]="W";
+        }
+        for (int y=0; y< line.length; y++){
+            maze2D[y+1][0]="W";
+            System.arraycopy(line[y].split(""), 0, maze2D[y + 1], 1, line.length);
+            maze2D[y+1][maze2D[y+1].length-1]="W";
+        }
+    }
 
-    public static void move(String[][] maze, Point pos, Set<Point> way){
-        if (way.size()<movesToExit) {
-            if (pos.y >= 0 && pos.y < maze.length) {
-                if (pos.x >= 0 && pos.x < maze[pos.y].length) {
-                    if (maze[pos.y][pos.x].equals(".") && !way.contains(pos)) {
-                        if (pos.y == maze.length - 1 && pos.x == maze[pos.y].length - 1) {
-                            movesToExit = way.size();
-                            for (int y=0; y< maze.length; y++){
-                                System.out.println();
-                                for (int x=0; x<maze[y].length; x++){
-                                    if (way.contains(new Point(x,y))) System.out.print("*");
-                                    else System.out.print(maze[y][x]);
-                                }
-                            }
-                            System.out.println(way.size());
-                        } else {
-                            Set<Point> newWay = new HashSet<>(way);
-                            newWay.add(pos);
-                            move(maze, new Point(pos.x + 1, pos.y), newWay);
-                            move(maze, new Point(pos.x, pos.y + 1), newWay);
-                            move(maze, new Point(pos.x - 1, pos.y), newWay);
-                            move(maze, new Point(pos.x, pos.y - 1), newWay);
-                        }
-                    }
-                }
+    private static void countCellValueFromEndToStart(){
+        basePoints.put(new Point(maze2D[0].length-2, maze2D.length-2 ),0);
+        while (!basePoints.isEmpty()){
+            for (Map.Entry<Point,Integer> base : basePoints.entrySet()){
+                directions.put(new Point(base.getKey().x-1,base.getKey().y),base.getValue()+1);
+                directions.put(new Point(base.getKey().x,base.getKey().y-1),base.getValue()+1);
+                directions.put(new Point(base.getKey().x+1,base.getKey().y),base.getValue()+1);
+                directions.put(new Point(base.getKey().x,base.getKey().y+1),base.getValue()+1);
             }
+            checked.putAll(basePoints);
+            basePoints.clear();
+            for (Map.Entry<Point,Integer> dir : directions.entrySet()){
+                if (maze2D[dir.getKey().y][dir.getKey().x].equals(".") &&
+                        !checked.containsKey(dir.getKey())) basePoints.put(dir.getKey(),dir.getValue());
+            }
+            directions.clear();
+            if (checked.containsKey(new Point(1,1))) basePoints.clear();
         }
     }
 
     public static int pathFinder(String maze) {
-        String[] rows = maze.split("\n");
-        String[][] maze2d = new String[rows.length][rows[0].length()];
-        for (int y=0; y< maze2d.length; y++){
-            maze2d[y] = rows[y].split("");
-        }
-        movesToExit=Integer.MAX_VALUE;
-        Set<Point> way = new HashSet<>();
-        move(maze2d, new Point(0,0), way);
-        if (movesToExit==Integer.MAX_VALUE) return -1;
-        return movesToExit;
+        splitMazeToArray(maze);
+        countCellValueFromEndToStart();
+        int result = checked.getOrDefault(new Point(1,1),-1);
+        checked.clear();
+        return result;
     }
 }
