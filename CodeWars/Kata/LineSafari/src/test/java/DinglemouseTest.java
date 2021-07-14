@@ -4,6 +4,24 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class DinglemouseTest {
 
+    @Test
+    public void exGoodOwn() {
+        final char[][] grid = Preloaded.makeGrid(new String[] {
+                "X---++-+  +----+  +---------+       ",
+                " ++ ++ |+-+    |  |         +------+",
+                " ||    |+-----+|  |     ++++       |",
+                "+++--+ +------+|  |    +++++-------+",
+                "|    +---------+  |    +-----------+",
+                "++  +-----+       |+--------------+|",
+                "++  | ++  |       |+------------X ||",
+                "+---+ |+--+       +---------------+|",
+                "      +----------------------------+"
+        });
+        Preloaded.showGrid(grid);
+        assertTrue(Dinglemouse.line(grid));
+    }
+
+
     // "Good" examples from the Kata description.
 
     @Test

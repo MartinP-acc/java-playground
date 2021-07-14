@@ -25,7 +25,7 @@ public class Dinglemouse {
         visited.add(new Point(-1,-1));
         Point p = new Point(start.x, start.y);
         System.out.println("\n"+end+" end");
-
+        int loopCounter=0;
         while (p.x!=end.x || p.y != end.y){
             if (grid[p.x][p.y]!='-'){
                 if (p.x<grid.length-1 && grid[p.x+1][p.y]!=' ') nearP.add(new Point(p.x+1,p.y));
@@ -56,6 +56,11 @@ public class Dinglemouse {
                 if (p.y< grid[p.x].length-1 && grid[p.x][p.y+1]=='|') nearP.remove(new Point(p.x, p.y+1));
             }
             System.out.print(p.x+","+p.y+"-> ");
+            loopCounter++;
+            if (loopCounter==10){
+                System.out.println();
+                loopCounter=0;
+            }
             nearP.removeIf(visited::contains);
             if (nearP.size()!=1) {
                 System.out.println("\n wrong number possible directions : "+nearP.size());
