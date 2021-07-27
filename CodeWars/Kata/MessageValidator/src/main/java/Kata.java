@@ -7,7 +7,9 @@ public class Kata {
         String[] split = message.replaceAll("([a-zA-Z])([0-9])","$1,$2").split(",");
         for (String s : split) {
             Matcher num = Pattern.compile("([0-9]+)").matcher(s);
-            if (num.find()) if (Integer.parseInt(num.group()) + num.group().length() != s.length()) return false;
+            if (num.find()){
+                if (Integer.parseInt(num.group()) + num.group().length() != s.length()) return false;
+            }else if (s.length()!=0) return false;
         }
         return true;
     }

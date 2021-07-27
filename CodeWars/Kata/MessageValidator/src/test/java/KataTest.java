@@ -13,6 +13,8 @@ class KataTest {
         assertTrue(Kata.isAValidMessage("1a2bb3ccc4dddd5eeeee"), "1a2bb3ccc4dddd5eeeee");
         assertTrue(Kata.isAValidMessage("0"), "");
         assertTrue(Kata.isAValidMessage(""), "");
+        assertFalse(Kata.isAValidMessage("abskfqQQeRsGsddsW124"), "");
+        assertFalse(Kata.isAValidMessage("oNKFDroHAYzVUVeULyIlWoKOVrubPfDlYMOVqJpIbvBsvXyvBmrSMOgEMXZZYyzamCAtPKgJMxVOZvrcJlXTNPLSLJnyqgQSbXgXWIxUgQfytyjOlnEJiWSXHWeDxSmpmjsQPVpVmntjNFsoNEfTkwNIwCwwFweJWSIeTjQVnGQHgjQkHBrgQejNKcUwxzbtvmJJUcHSBYKpZAlDgMNInohcKrVStiexCQJhNfNpgvsdzVGVpFXXxNzcieiPHvyomerOwAwOZggeJUDc266bZdUEWpAUUtvwYPAXoHMKQoGIgRalWysDmPijRcJEJfyiXponOREZMfMHbkSGAjZjYIPYAGcpzrtaBmfiNfTIXORysRkmwpCSRRJXkefICtfzHGqwiCdSoBTWqVWRtsxMYEByVUIJdwyxrhxzZYyiCRdzCdnjLmkBieGCBhoGHWBcmhPtPORLzHnxzJQaUcusshGWqMIfXdRQXmXYDaOtAdsYbtIaCVhhummzvVpNdaRfEgqdtpcVRjiTJObOCAzZhzOFiYVJZ216kbIhmnZbsEQFUzpVFZpxSStahCwzTBBXwyTSCsDBGceYIfAJxxwzRLDyvkmFZsJnbwErNAnxLysusZihJfnftbmEwPSnyfbqFnEGjOSZRmJQsdwMLKDsYbXGHVkAZaWqdmcWHBLQmFOFpaICWyCaMZEyOqZAQILpymmDQCDEDUpRVNQQCADWOAixAbrDntywOwdavAhfATJzFVkDSYeYbYiJ"), "");
     }
 
 }
