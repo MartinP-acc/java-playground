@@ -18,11 +18,4 @@ class AreSameTest {
         assertFalse(AreSame.comp(a, b));
     }
 
-    @Test
-    public void test3() {
-        int[] a = new int[]{};
-        int[] b = new int[]{};
-        assertFalse(AreSame.comp(a, b));
-    }
-
 }
