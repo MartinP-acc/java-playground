@@ -50,5 +50,22 @@ class DinglemouseTest {
         assertEquals(out, Dinglemouse.connectTheDots(in));
     }
 
+    @Test
+    public void example3() {
+        String in = "  e     f   m     n   \n" +
+                " d       g l       o  \n" +
+                "          j           \n" +
+                " c       h k       p  \n" +
+                "  b     a   s     r   \n";
+
+        String out = "  *******   *******   \n" +
+                " *       * *       *  \n" +
+                " *       ***       *  \n" +
+                " *       * *       *  \n" +
+                "  *******   *******   \n";
+
+        Util.show(in, out);
+        assertEquals(out, Dinglemouse.connectTheDots(in));
+    }
 
 }
