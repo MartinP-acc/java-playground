@@ -16,6 +16,11 @@ public class Main {
         System.out.println(cities.vertex("Kraków").showEdges());
         System.out.println(cities.vertex("Toruń").showEdges());
 
+        System.out.println("remove test");
+        System.out.println(cities.vertex("Wrocław").showEdges());
+        cities.vertex("Łódź").removeEdgeTo("Wrocław");
+        System.out.println(cities.vertex("Wrocław").showEdges());
+        cities.vertex("Wrocław").removeEdgeTo("Łódź");
 
     }
 }

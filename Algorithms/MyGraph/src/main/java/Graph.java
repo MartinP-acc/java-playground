@@ -5,7 +5,7 @@ public class Graph {
     protected Map<String,Node> allVertex = new HashMap<>();
 
     public Node vertex(String name){
-        if (!allVertex.containsKey(name)) allVertex.put(name, new Node(name));
+        if (!allVertex.containsKey(name)) allVertex.put(name, new Node(name, this));
         return allVertex.get(name);
     }
 
@@ -13,12 +13,14 @@ public class Graph {
         allVertex.forEach((s, node) -> System.out.print(s+" "));
     }
 
-    static class Node extends Graph{
+    static class Node{
 
-        private String name;
-        private Set<String> neighbours;
+        private final Graph instance;
+        private final String name;
+        private final Set<String> neighbours;
 
-        Node(String name) {
+        Node(String name, Graph instance) {
+            this.instance = instance;
             this.name = name;
             neighbours = new HashSet<>();
         }
@@ -26,9 +28,16 @@ public class Graph {
         public void edgeTo(String ... neighbours){
             this.neighbours.addAll(Arrays.asList(neighbours));
             for (String n : this.neighbours){
-                if (!allVertex.containsKey(n)) super.allVertex.put(n, new Node(n));
-                allVertex.get(n).neighbours.add(this.name);
+                if (!instance.allVertex.containsKey(n)) instance.allVertex.put(n, new Node(n, instance));
+                instance.allVertex.get(n).neighbours.add(this.name);
             }
+        }
+
+        public void removeEdgeTo(String name){
+            if (neighbours.contains(name)){
+                instance.allVertex.get(name).neighbours.remove(this.name);
+                neighbours.remove(name);
+            } else System.out.println("Can't remove edge "+this.name+"-"+name+"\nedge is not exist");
         }
 
         public String showEdges(){
