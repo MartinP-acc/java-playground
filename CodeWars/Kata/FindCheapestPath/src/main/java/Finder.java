@@ -3,92 +3,111 @@ import java.awt.Point;
 
 class Node{
 
-    private final int row;
-    private final int col;
-    private int weight;
-    private final int limit = Finder.getLimit()-1;
-    private final String direction;
-    private List<Node> neighbours;
+    public int weight;
+    public Node previous;
+    public String direction;
 
-    public Node(int row, int col){
-        this.row = row;
-        this.col = col;
-        this.direction = "";
+    Node(int row, int col){
+        this.weight = Finder.grid[row][col];
     }
 
-    public Node(int row, int col, int weight, String direction) {
-        this.row = row;
-        this.col = col;
-        this.weight = weight + Finder.getWeight(row, col);
+    Node(int addWeight, Node previous, String direction){
+        setNode(addWeight,previous,direction);
+    }
+
+    public void setNode(int weight, Node previous, String direction){
+        this.weight = weight;
+        this.previous = previous;
         this.direction = direction;
     }
 
-    private void addNeighbours(){
-        neighbours = new ArrayList<>();
-        if (row>0) neighbours.add(new Node(row-1, col, this.weight, "up "));
-        if (row<limit) neighbours.add(new Node(row+1, col, this.weight, "down "));
-        if (col>0) neighbours.add(new Node(row, col-1, this.weight, "left "));
-        if (col<limit) neighbours.add(new Node(row, col+1, this.weight, "right "));
-    }
-
-    public List<Node> getNeighbours() {
-        addNeighbours();
-        return neighbours;
-    }
-
-    public String getDirection() {
-        return direction;
-    }
-
-    public int getWeight() {
-        return weight;
-    }
-
-    public Point getPoint(){
-        return new Point(row,col);
+    public List<Point> neighbours(Point c){
+        List<Point> n = new ArrayList<>();
+        if (c.x>0) n.add(new Point(c.x-1,c.y));
+        if (c.x<Finder.xLimit) n.add(new Point(c.x+1,c.y));
+        if (c.y>0) n.add(new Point(c.x,c.y-1));
+        if (c.y<Finder.yLimit) n.add(new Point(c.x,c.y+1));
+        return n;
     }
 }
 
 public class Finder {
 
-    private static int[][] grid;
-    private static List<Point> visited;
-    private static Stack<Node> queue;
-    private static Point end;
-    private static List<String> result;
+    public static int[][] grid;
+    public static int xLimit;
+    public static int yLimit;
+    public static Map<Point,Node> openSet;
+    public static List<Point> closedSet;
+    public static Point start;
+    public static Point end;
+    public static Stack<String> path;
 
-    public static int getWeight(int row, int col){
-        return grid[row][col];
+    private static List<String> findPath(){
+
+        path = new Stack<>();
+        closedSet = new ArrayList<>();
+        openSet = new HashMap<>();
+        openSet.put(start, new Node(start.x, start.y));
+
+        while (!openSet.isEmpty()){
+
+            Point current = findLowestWeight(openSet);
+            Node currentNode = openSet.get(current);
+
+            if (current.equals(end)) return reconstructPath(currentNode);
+
+            for (Point neighbor : currentNode.neighbours(current)){
+                if (!closedSet.contains(neighbor)){
+                    int temp = currentNode.weight + grid[neighbor.x][neighbor.y];
+                    String direction = setDirection(current,neighbor);
+                    if (openSet.containsKey(neighbor)){
+                        if (temp < openSet.get(neighbor).weight){
+                            openSet.get(neighbor).setNode(temp,currentNode,direction);
+                        }
+                    } else {
+                        openSet.put(neighbor,new Node(temp,currentNode,direction));
+                    }
+                }
+            }
+            closedSet.add(current);
+            openSet.remove(current);
+        }
+        return new ArrayList<>();
     }
 
-    public static int getLimit(){
-        return grid.length;
+    private static List<String> reconstructPath(Node currentNode) {
+        Node node = currentNode;
+        while (node.previous!=null){
+            path.push(node.direction);
+            node = node.previous;
+        }
+        return path;
     }
 
-    public static void findPath(Node next){
-        visited.add(next.getPoint());
-        result.add(next.getDirection());
-        System.out.println(next.getWeight()+" "+next.getDirection()+" "+next.getPoint().x+","+next.getPoint().y);
-        if (!next.getPoint().equals(end)){
-            next.getNeighbours().forEach(node -> {
-                if (!visited.contains(node.getPoint())) queue.push(node);
-            });
-            queue.sort(Comparator.comparing(Node::getWeight).reversed());
-            while (!queue.isEmpty()){
-                findPath(queue.pop());
+    private static String setDirection(Point c, Point n) {
+        if (c.x < n.x) return "up";
+        if (c.x > n.x) return "down";
+        if (c.y < n.y) return "left";
+        return "right";
+    }
+
+    private static Point findLowestWeight(Map<Point,Node> openSet) {
+        Point winner = new Point(-1,-1);
+        for (Map.Entry<Point,Node> spot : openSet.entrySet()){
+            if (winner.x == -1) winner = spot.getKey();
+            else {
+                if (spot.getValue().weight < openSet.get(winner).weight) winner = spot.getKey();
             }
         }
+        return winner;
     }
 
     public static List<String> cheapestPath(int[][] t, Point start, Point finish){
+        Finder.start = finish;
+        end = start;
         grid = t;
-        end = finish;
-        queue = new Stack<>();
-        Node startNode = new Node(start.x, start.y);
-        visited = new ArrayList<>();
-        result = new ArrayList<>();
-        findPath(startNode);
-        System.out.println();
-        return result;
+        xLimit = grid.length-1;
+        yLimit = grid[0].length-1;
+        return findPath();
     }
 }

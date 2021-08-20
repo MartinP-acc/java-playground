@@ -41,7 +41,4 @@ class FinderTest {
 
         assertEquals(expected, Finder.cheapestPath(tollMap, start, finish));
     }
-
-
-
 }
