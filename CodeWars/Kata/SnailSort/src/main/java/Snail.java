@@ -1,14 +1,17 @@
 public class Snail {
 
     public static int[] snail(int[][] array) {
-        int len = array.length;
+
         if (array[0].length==0) return new int[0];
-        int[] snailSorted = new int[len*len];
-        int row = 0;
-        int col = 0;
-        int direction = 0;
-        int counter = 0;
-        for (int i=0; i< snailSorted.length; i++){
+
+        int len             = array.length;
+        int row             = 0;
+        int col             = 0;
+        int direction       = 0;
+        int counter         = 0;
+        int[] snailSorted   = new int[len*len];
+
+        for (int i=0; i<snailSorted.length; i++){
 
             snailSorted[i] = array[row][col];
 
