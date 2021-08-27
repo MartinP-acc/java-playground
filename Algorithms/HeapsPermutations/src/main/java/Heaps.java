@@ -18,7 +18,7 @@ public class Heaps {
             Arrays.stream(array).forEach(i -> System.out.print(i+" "));
             System.out.println();
         }else {
-            for (int i=0; i<k-1; i++){
+            for (int i=0; i<k; i++){
                 permutation(k -1, array);
                 if (k%2==0) {
                     swap(array, i,k-1);
