@@ -1,0 +1,37 @@
+ZADADA "FIRST"
+Fast - powinny wykonywać się szybko
+Isolated - skupianie się na jak najmniejszej składowej 
+Repeatable - test powinien dawać ten sam wynik przy wielkorotnym uruchamianiu
+Self-validating - samo sprawdzający się , automatyczne uruchamianie testów
+Timely - pisanie testów w czasie pisania nowej funkcjonalności i nie zostawianie ich na później
+
+ZASADA" CORRECT"
+Conformance - zgodność (test powinien sprawdzać zgodność podanych danych)
+Ordering - test powinien sprawdzać jak zachowa się program przy posortowanej lub nieposortowanej liście
+Range - testowanie przekroczenia maksymalnej wartości i minimalnego zakresu
+Reference - testowanie jak zachowa się obiekt bez innych referencji 
+Existence - co się stanie w przypadku wartości null;
+Cardinality - sprawdzanie czy dany zbiór ma odpowiednią ilość elementów
+Time - kolejność wywołania metod i sprawdzanie metod wykorzystujących wielowątkowość
+
+
+Code Coverage
+
+plugin
+org.jacoco
+execution goal prepare-agent
+execution default-report
+          phase test
+	
+	goal report
+
+
+Antywzorce
+nastawianie się na pokrycie kodu w 100% testami
+nieintuicyjne nazwy metod testowych
+długowykonujące się testy
+testy, które nie sprzątają po sobie (nie usuwają pliku lub danych z bazy danych)
+pisanie niepowiązanych ze sobą asercji w jednej metodzie testowej
+ignorowanie testów kiedy zgłasza błąd
+traktowanie testu jako niepotrzebnego kodu
+brak automatyzacji uruchamiania testów
