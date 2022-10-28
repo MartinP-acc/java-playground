@@ -1,9 +1,10 @@
 package pl.com.calmandwritecode;
 
-import model.Artist;
+import model.AllTabView;
 import model.DataSource;
 
 import java.util.List;
+import java.util.Scanner;
 
 public class Main {
 
@@ -14,8 +15,12 @@ public class Main {
         if (dataSource.open()) {
             System.out.println("Database is open");
 
-            List<Artist> artists = dataSource.queryArtists(DataSource.DESC_ORDER);
-            printTable(artists);
+            System.out.print("Search by title: ");
+            Scanner scanner = new Scanner(System.in);
+            String song = scanner.nextLine();
+            dataSource.createViewOfAllTables();
+            List<AllTabView> view = dataSource.queryAllTablesView("%"+song+"%");
+            printTable(view);
 
             if (dataSource.close()) {
                 System.out.println("Database is closed");
@@ -31,7 +36,7 @@ public class Main {
 
     public static void printTable(List<?> list){
         if (list.isEmpty()){
-            System.out.println("The table is empty or couldn't query the table");
+            System.out.println("The result list is empty or couldn't query the table");
         }else {
             for (Object row : list) System.out.println(row.toString());
         }
