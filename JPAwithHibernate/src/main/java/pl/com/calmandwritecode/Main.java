@@ -1,11 +1,11 @@
 package pl.com.calmandwritecode;
 
 import pl.com.calmandwritecode.model.Employee;
-import pl.com.calmandwritecode.model.Game;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import java.util.List;
 
 public class Main {
 
@@ -15,16 +15,25 @@ public class Main {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
 
         Employee employee = new Employee();
-        employee.setId(1);
-        employee.setFirstName("Jan");
+        employee.setFirstName("Krzysiu");
         employee.setLastName("Kowalski");
-        employee.setSalary(4500);
+        employee.setSalary(3400);
 
         entityManager.getTransaction().begin();
         entityManager.persist(employee);
         entityManager.getTransaction().commit();
 
+
+        entityManager.getTransaction().begin();
+        List<Employee> employees = entityManager
+                .createQuery("select e from "+Employee.class.getName()+" e").getResultList();
+        employees.get(0).setLastName("Lasek");
+
+        entityManager.getTransaction().commit();
         entityManager.close();
         entityManagerFactory.close();
+        for (Employee emp : employees)
+            if (!emp.getLastName().isEmpty())System.out.println(emp);
+
     }
 }

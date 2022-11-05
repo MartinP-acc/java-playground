@@ -6,6 +6,8 @@
      http://xmlns.jcp.org/xml/ns/persistence/persistence_2_2.xsd">
 
     <persistence-unit name="HelloWorldPU" transaction-type="RESOURCE_LOCAL">
+        <class>pl.com.calmandwritecode.model.Employee</class>
+        <exclude-unlisted-classes>true</exclude-unlisted-classes>
         <properties>
             <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver"/>
             <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/mysqldb"/>
