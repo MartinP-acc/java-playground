@@ -4,10 +4,10 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
+import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -105,6 +105,27 @@ class EmployeeTest{
         entityManager.getTransaction().commit();
 
         assertEquals(newStreet,address.getStreet());
+    }
+
+    @Test
+    void shouldReturnSelectedEmployeesBySurname(){
+        entityManager.getTransaction().begin();
+        TypedQuery<Employee> query = entityManager.createQuery(
+                "select e from Employee e where e.lastName in :names",
+                Employee.class
+        );
+        List<String> names = new ArrayList<>();
+        names.add("Grzyb");
+        names.add("Młynarz");
+        names.add("Nowak");
+
+        query.setParameter("names", names);
+
+        List<Employee> employees = query.getResultList();
+        entityManager.getTransaction().commit();
+
+        assertEquals(names.size(),employees.size());
+        for (Employee employee : employees) System.out.println(employee.getFirstName()+" "+employee.getLastName());
     }
 
     @AfterAll
