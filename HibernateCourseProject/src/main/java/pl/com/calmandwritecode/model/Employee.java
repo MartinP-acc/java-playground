@@ -1,6 +1,8 @@
 package pl.com.calmandwritecode.model;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "employees")
@@ -19,6 +21,9 @@ public class Employee {
     @OneToOne
     @JoinColumn(name = "home_address_id")
     protected Address homeAddress;
+
+    @ElementCollection
+    protected Set<Phone> phones = new HashSet<>();
 
     public long getId() {
         return id;
@@ -62,5 +67,13 @@ public class Employee {
 
     public double getTax() {
         return tax;
+    }
+
+    public Set<Phone> getPhones() {
+        return phones;
+    }
+
+    public void addPhone(Phone phone) {
+        this.phones.add(phone);
     }
 }

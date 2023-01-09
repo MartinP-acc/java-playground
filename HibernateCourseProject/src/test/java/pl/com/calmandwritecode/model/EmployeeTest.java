@@ -5,10 +5,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -24,6 +21,7 @@ class EmployeeTest{
         entityManagerFactory = Persistence.createEntityManagerFactory("CourseProject");
         entityManager = entityManagerFactory.createEntityManager();
         Set<Employee> employees = loadEmployees();
+        addPhones(employees);
         saveEmployeesInDb(employees);
         employeeCount = employees.size();
     }
@@ -81,6 +79,46 @@ class EmployeeTest{
 
         employee.setHomeAddress(address);
         return employee;
+    }
+
+    private static void addPhones(Set<Employee> employees){
+        Stack<Phone> phones = loadPhones();
+        for (Employee employee : employees){
+            employee.addPhone(phones.pop());
+            employee.addPhone(phones.pop());
+        }
+    }
+
+    private static Stack<Phone> loadPhones() {
+        Stack<Phone> phones = new Stack<>();
+        phones.push(createNewPhone("domowy","174563224"));
+        phones.push(createNewPhone("komorkowy","775235987"));
+        phones.push(createNewPhone("domowy","178835632"));
+        phones.push(createNewPhone("komorkowy","349097472"));
+        phones.push(createNewPhone("domowy","179832845"));
+        phones.push(createNewPhone("komorkowy","987372764"));
+        phones.push(createNewPhone("domowy","178294763"));
+        phones.push(createNewPhone("komorkowy","874266423"));
+        phones.push(createNewPhone("domowy","171113335"));
+        phones.push(createNewPhone("komorkowy","997668993"));
+        phones.push(createNewPhone("domowy","172849482"));
+        phones.push(createNewPhone("komorkowy","267509724"));
+        phones.push(createNewPhone("domowy","175694629"));
+        phones.push(createNewPhone("komorkowy","222444666"));
+        phones.push(createNewPhone("domowy","172244676"));
+        phones.push(createNewPhone("komorkowy","786547947"));
+        phones.push(createNewPhone("domowy","445566889"));
+        phones.push(createNewPhone("komorkowy","212434656"));
+        phones.push(createNewPhone("domowy","175476899"));
+        phones.push(createNewPhone("komorkowy","897563539"));
+        return phones;
+    }
+
+    private static Phone createNewPhone(String type, String number){
+        Phone phone = new Phone();
+        phone.setType(type);
+        phone.setNumber(number);
+        return phone;
     }
 
     @Test
