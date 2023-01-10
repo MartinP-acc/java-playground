@@ -23,8 +23,8 @@ public class Ball {
         x += xSpeed;
         y += ySpeed;
 
-        if (x<0 || x> Gdx.graphics.getWidth()) xSpeed = -xSpeed;
-        if (y<0 || y> Gdx.graphics.getHeight()) ySpeed = -ySpeed;
+        if (x<radius || x> Gdx.graphics.getWidth()-radius) xSpeed = -xSpeed;
+        if (y<radius || y> Gdx.graphics.getHeight()-radius) ySpeed = -ySpeed;
     }
 
     public void draw(ShapeRenderer shape){
