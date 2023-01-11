@@ -32,7 +32,7 @@ public class TannGame extends ApplicationAdapter {
 	}
 
 	private void createBricks() {
-		int x = 5;
+		int x = 30;
 		int y = Gdx.graphics.getHeight()/2;
 		while (y < Gdx.graphics.getHeight()-20){
 			while (x < Gdx.graphics.getWidth()-60){
@@ -40,7 +40,7 @@ public class TannGame extends ApplicationAdapter {
 				x+=65;
 			}
 			y+=25;
-			x=5;
+			x=30;
 		}
 	}
 

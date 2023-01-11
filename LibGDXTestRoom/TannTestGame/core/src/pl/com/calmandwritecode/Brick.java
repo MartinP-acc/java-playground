@@ -20,7 +20,12 @@ public class Brick {
 
     public void update(Ball ball){
         if (collideWith(ball)){
-            ball.ySpeed = - ball.ySpeed;
+            if (ball.y < y+5 || ball.y > y+ySize-5) ball.ySpeed = - ball.ySpeed;
+            if (ball.x <= x+5 && ball.xSpeed>0) ball.xSpeed = -ball.xSpeed;
+
+
+            if (ball.x >= x+xSize-5 && ball.xSpeed<0) ball.xSpeed = -ball.xSpeed;
+
             destroyed = true;
         }
     }

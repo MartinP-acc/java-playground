@@ -31,6 +31,16 @@ public class Paddle {
     public void checkCollision(Ball ball){
         if (collideWith(ball)){
             ball.ySpeed = -ball.ySpeed;
+            int leftX = x + xSize/4;
+            int rightX = x + 3*xSize/4;
+
+            if (ball.x <= x+5 && ball.xSpeed>0) ball.xSpeed = -ball.xSpeed;
+            else
+            if (ball.x < leftX) ball.xSpeed -= 2;
+
+            if (ball.x >= x+xSize-5 && ball.xSpeed<0) ball.xSpeed = -ball.xSpeed;
+            else
+            if (ball.x > rightX) ball.xSpeed += 2;
         }
     }
 
