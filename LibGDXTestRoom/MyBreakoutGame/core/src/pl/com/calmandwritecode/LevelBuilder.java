@@ -17,12 +17,12 @@ public class LevelBuilder {
 
     public final static String LEVEL2 =
             "b1b1b1b1b1b1b1b1b1b1b1b1n"+
-            "b2eeeeeeeeeeeeeeeeeeeeb2n"+
-            "b3b3b3b3b3b3b3b3b3b3eeb3n"+
-            "b4eeeeeeeeeeeeeeeeeeeeb4n"+
-            "b5eeb5b5b5b5b5b5b5b5b5b5n"+
-            "b6eeeeeeeeeeeeeeeeeeeeb6n"+
-            "b7b7b7b7b7b7b7b7b7b7eeb7n"+
+            "b2                    b2n"+
+            "b3b3b3b3b3b3b3b3b3b3  b3n"+
+            "b4                    b4n"+
+            "b5  b5b5b5b5b5b5b5b5b5b5n"+
+            "b6                    b6n"+
+            "b7b7b7b7b7b7b7b7b7b7  b7n"+
             "b0b0b0b0b0b0b0b0b0b0b0b0";
 
     public final static String LEVEL3 =
@@ -36,7 +36,7 @@ public class LevelBuilder {
                     "b0b0b0b0b0b0b0b0b0b0b0b0";
 
     private final static char BRICK = 'b';
-    private final static char EMPTY = 'e';
+    private final static char EMPTY = ' ';
     private final static char NEXT_LINE = 'n';
 
     private final Texture[] textures;
@@ -74,6 +74,10 @@ public class LevelBuilder {
             }
         }
         return bricks;
+    }
+
+    public void dispose(){
+        for(Texture texture : textures) texture.dispose();
     }
 
 }

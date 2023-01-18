@@ -9,8 +9,8 @@ import com.badlogic.gdx.math.Vector2;
 
 public class Paddle extends Rectangle {
 
-    private float widthScreen;
-    private Texture paddleTexture;
+    private final float widthScreen;
+    private final Texture paddleTexture;
 
     public Paddle(float widthScreen){
         this. widthScreen = widthScreen;
@@ -19,7 +19,6 @@ public class Paddle extends Rectangle {
         y = 40;
         width = paddleTexture.getWidth();
         height = paddleTexture.getHeight();
-
     }
 
     public void draw(SpriteBatch batch){
@@ -32,27 +31,28 @@ public class Paddle extends Rectangle {
         if (x<0) x=0;
     }
 
-    public void collision(Ball ball){
-        Vector2 start = new Vector2(x,y+height);
-        Vector2 end = new Vector2(x+width,y+height);
-        Vector2 center = new Vector2(ball.x+ball.xSpeed, ball.y+ball.ySpeed);
+    public void collision(Ball ball) {
+        Vector2 start = new Vector2(x, y + height);
+        Vector2 end = new Vector2(x + width, y + height);
+        Vector2 center = new Vector2(ball.x, ball.y);
 
-        if (Intersector.intersectSegmentCircle(start,end,center,25)){
+        if (Intersector.intersectSegmentCircle(start, end, center, 25)) {
             ball.ySpeed = -ball.ySpeed;
-            if (ball.x<x+60) ball.xSpeed -= 2;
-            if (ball.x>x+width-60) ball.xSpeed +=2;
-        }else
-        if (Intersector.intersectSegmentCircle(new Vector2(x,y),new Vector2(x,y+height),center,25) ||
-                Intersector.intersectSegmentCircle(new Vector2(x+width,y),new Vector2(x+width,y+height),center,25)) {
-            ball.xSpeed = -ball.xSpeed;
-            ball.ySpeed = -ball.ySpeed;
-
+            if (ball.x < x + 60) {
+                ball.xSpeed -= 1;
+                if (ball.x < x + 30) ball.xSpeed -= 1;
+            } else if (ball.x > x + width - 60) {
+                ball.xSpeed += 1;
+                if (ball.x < x + width - 30) ball.xSpeed -= 1;
+            } else if (Intersector.intersectSegmentCircle(new Vector2(x, y), new Vector2(x, y + height), center, 25) ||
+                    Intersector.intersectSegmentCircle(new Vector2(x + width, y), new Vector2(x + width, y + height), center, 25)) {
+                ball.xSpeed = -ball.xSpeed;
+                ball.ySpeed = -ball.ySpeed;
+            }
         }
     }
 
     public void dispose(){
         paddleTexture.dispose();
     }
-
-
 }

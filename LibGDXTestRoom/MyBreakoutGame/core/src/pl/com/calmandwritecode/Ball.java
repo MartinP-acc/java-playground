@@ -8,9 +8,9 @@ import com.badlogic.gdx.math.Vector2;
 
 public class Ball extends Circle {
 
-    private Texture ballTexture;
-    private float widthScreen;
-    private float heightScreen;
+    private final Texture ballTexture;
+    private final float widthScreen;
+    private final float heightScreen;
     public float xSpeed;
     public float ySpeed;
     public Vector2 position;
@@ -39,5 +39,10 @@ public class Ball extends Circle {
         if (x<=0 && xSpeed<0) xSpeed = -xSpeed;
         if (x>=widthScreen-radius && xSpeed>0) xSpeed = -xSpeed;
         if (y>=heightScreen-radius && ySpeed>0) ySpeed = -ySpeed;
+    }
+
+    public void accelerateBall(){
+        xSpeed = xSpeed * 1.05f;
+        ySpeed = ySpeed * 1.05f;
     }
 }
