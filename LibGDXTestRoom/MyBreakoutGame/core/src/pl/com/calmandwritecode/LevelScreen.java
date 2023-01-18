@@ -33,7 +33,7 @@ public class LevelScreen implements Screen {
 
         bricks = new Array<>();
         builder = new LevelBuilder();
-        bricks = builder.buildFromString(LevelBuilder.LEVEL3);
+        bricks = builder.buildFromString(LevelBuilder.LEVEL4);
     }
 
     @Override
@@ -87,7 +87,8 @@ public class LevelScreen implements Screen {
         }
         if (closest != null){
             closest.collision(ball);
-            bricks.removeIndex(bricks.indexOf(closest,true));
+            if (closest.destroyed)
+                bricks.removeIndex(bricks.indexOf(closest,true));
         }
     }
 

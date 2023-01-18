@@ -38,16 +38,17 @@ public class Paddle extends Rectangle {
 
         if (Intersector.intersectSegmentCircle(start, end, center, 25)) {
             ball.ySpeed = -ball.ySpeed;
+            ball.y += ball.ySpeed;
             if (ball.x < x + 60) {
                 ball.xSpeed -= 1;
                 if (ball.x < x + 30) ball.xSpeed -= 1;
             } else if (ball.x > x + width - 60) {
                 ball.xSpeed += 1;
                 if (ball.x < x + width - 30) ball.xSpeed -= 1;
-            } else if (Intersector.intersectSegmentCircle(new Vector2(x, y), new Vector2(x, y + height), center, 25) ||
+            }
+            if (Intersector.intersectSegmentCircle(new Vector2(x, y), new Vector2(x, y + height), center, 25) ||
                     Intersector.intersectSegmentCircle(new Vector2(x + width, y), new Vector2(x + width, y + height), center, 25)) {
                 ball.xSpeed = -ball.xSpeed;
-                ball.ySpeed = -ball.ySpeed;
             }
         }
     }
