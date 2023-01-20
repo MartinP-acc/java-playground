@@ -72,7 +72,7 @@ public class LevelBuilder {
     public Array<Brick> buildFromString(String map){
         Array<Brick> bricks = new Array<>();
         float x=30;
-        float y=650;
+        float y=610;
         for (int i=0; i<map.length(); i++){
             char c = map.charAt(i);
             if (c == BRICK) {

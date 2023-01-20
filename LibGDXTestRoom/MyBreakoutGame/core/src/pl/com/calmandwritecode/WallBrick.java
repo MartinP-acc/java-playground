@@ -10,9 +10,7 @@ public class WallBrick extends Brick {
 
     @Override
     public void collision(Ball ball) {
-        if (ball.y<y || ball.y>y+height) ball.ySpeed =-ball.ySpeed;
-        if (ball.x>x+width && ball.xSpeed<0) ball.xSpeed =-ball.xSpeed;
-        if (ball.x<x && ball.xSpeed>0) ball.xSpeed =-ball.xSpeed;
+        bounce(ball);
         ball.update();
     }
 }

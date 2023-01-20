@@ -33,7 +33,7 @@ public class LevelScreen implements Screen {
 
         bricks = new Array<>();
         builder = new LevelBuilder();
-        bricks = builder.buildFromString(LevelBuilder.LEVEL4);
+        bricks = builder.buildFromString(LevelBuilder.LEVEL2);
     }
 
     @Override
