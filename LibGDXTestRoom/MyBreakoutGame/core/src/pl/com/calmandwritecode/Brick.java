@@ -36,5 +36,6 @@ public class Brick extends Rectangle {
         if (ball.y-ball.radius<y || ball.y+ball.radius>y+height) ball.ySpeed =-ball.ySpeed;
         if (ball.x+ball.radius>x+width && ball.xSpeed<0) ball.xSpeed =-ball.xSpeed;
         if (ball.x-ball.radius<x && ball.xSpeed>0) ball.xSpeed =-ball.xSpeed;
+        ball.playBounce();
     }
 }

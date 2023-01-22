@@ -4,6 +4,7 @@ import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -23,6 +24,7 @@ public class LevelScreen implements Screen {
     private final LevelBuilder builder;
     private final TextureAtlas atlas;
 
+
     public LevelScreen(BreakoutGame game) {
         this.game = game;
         float WIDTH = Gdx.graphics.getWidth();
@@ -38,6 +40,8 @@ public class LevelScreen implements Screen {
         
         camera = new OrthographicCamera();
         camera.setToOrtho(false, WIDTH, HEIGHT);
+
+
     }
 
     @Override

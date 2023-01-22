@@ -52,6 +52,7 @@ public class Paddle extends Rectangle {
                     Intersector.intersectSegmentCircle(new Vector2(x + width, y), new Vector2(x + width, y + height), center, 25)) {
                 ball.xSpeed = -ball.xSpeed;
             }
+            ball.playBounce();
         }
     }
 
