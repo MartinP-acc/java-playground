@@ -1,7 +1,5 @@
 package pl.com.calmandwritecode;
 
-
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
@@ -33,8 +31,10 @@ public class Brick extends Rectangle {
     }
 
     protected void bounce(Ball ball){
-        if (ball.y-ball.radius<y || ball.y+ball.radius>y+height) ball.ySpeed =-ball.ySpeed;
+        if (ball.y<y || ball.y>y+height) ball.ySpeed =-ball.ySpeed;
+        else
         if (ball.x+ball.radius>x+width && ball.xSpeed<0) ball.xSpeed =-ball.xSpeed;
+        else
         if (ball.x-ball.radius<x && ball.xSpeed>0) ball.xSpeed =-ball.xSpeed;
         ball.playBounce();
     }
