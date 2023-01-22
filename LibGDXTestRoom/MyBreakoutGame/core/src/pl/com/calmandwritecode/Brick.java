@@ -2,6 +2,7 @@ package pl.com.calmandwritecode;
 
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
@@ -10,9 +11,9 @@ public class Brick extends Rectangle {
 
     public boolean destroyed = false;
     public Vector2 center;
-    protected Texture texture;
+    protected Sprite texture;
 
-    public Brick(float x, float y, Texture texture){
+    public Brick(float x, float y, Sprite texture){
         this.x = x;
         this.y = y;
         this.width = texture.getWidth();

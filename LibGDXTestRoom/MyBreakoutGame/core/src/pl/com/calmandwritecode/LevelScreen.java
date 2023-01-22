@@ -7,6 +7,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
@@ -20,20 +21,23 @@ public class LevelScreen implements Screen {
     private final Paddle paddle;
     private Array<Brick> bricks;
     private final LevelBuilder builder;
+    private final TextureAtlas atlas;
 
     public LevelScreen(BreakoutGame game) {
         this.game = game;
         float WIDTH = Gdx.graphics.getWidth();
         float HEIGHT = Gdx.graphics.getHeight();
+
+        atlas = new TextureAtlas("breakout-tx.atlas");
+
+        ball = new Ball(WIDTH, HEIGHT,atlas);
+        paddle = new Paddle(WIDTH,atlas);
+        bricks = new Array<>();
+        builder = new LevelBuilder(atlas);
+        bricks = builder.buildFromString(LevelBuilder.LEVEL2);
+        
         camera = new OrthographicCamera();
         camera.setToOrtho(false, WIDTH, HEIGHT);
-        Gdx.app.setLogLevel(Application.LOG_DEBUG);
-        ball = new Ball(WIDTH, HEIGHT);
-        paddle = new Paddle(WIDTH);
-
-        bricks = new Array<>();
-        builder = new LevelBuilder();
-        bricks = builder.buildFromString(LevelBuilder.LEVEL2);
     }
 
     @Override
@@ -114,8 +118,6 @@ public class LevelScreen implements Screen {
 
     @Override
     public void dispose() {
-        ball.dispose();
-        paddle.dispose();
-        builder.dispose();
+        atlas.dispose();
     }
 }

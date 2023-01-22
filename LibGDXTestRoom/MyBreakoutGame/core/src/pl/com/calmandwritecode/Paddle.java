@@ -2,7 +2,9 @@ package pl.com.calmandwritecode;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
@@ -10,11 +12,11 @@ import com.badlogic.gdx.math.Vector2;
 public class Paddle extends Rectangle {
 
     private final float widthScreen;
-    private final Texture paddleTexture;
+    private final Sprite paddleTexture;
 
-    public Paddle(float widthScreen){
+    public Paddle(float widthScreen, TextureAtlas atlas){
         this. widthScreen = widthScreen;
-        paddleTexture = new Texture(Gdx.files.internal("paddle.png"));
+        paddleTexture = atlas.createSprite("paddle");
         x = widthScreen/2;
         y = 40;
         width = paddleTexture.getWidth();
@@ -54,6 +56,5 @@ public class Paddle extends Rectangle {
     }
 
     public void dispose(){
-        paddleTexture.dispose();
     }
 }

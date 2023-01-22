@@ -1,20 +1,18 @@
 package pl.com.calmandwritecode;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
+
+import com.badlogic.gdx.graphics.g2d.Sprite;
 
 public class HardBrick extends Brick{
 
     private int hits;
-    private static Texture[] textures = new Texture[]{
-            new Texture(Gdx.files.internal("hard_brick0.png")),
-            new Texture(Gdx.files.internal("hard_brick1.png")),
-            new Texture(Gdx.files.internal("hard_brick2.png"))
-    };
+    private final Sprite[] textures;
 
-    public HardBrick(float x, float y, Texture texture) {
+    public HardBrick(float x, float y, Sprite... textures) {
         super(x, y, textures[0]);
         hits = 0;
+        this.textures = textures;
+
     }
 
     @Override

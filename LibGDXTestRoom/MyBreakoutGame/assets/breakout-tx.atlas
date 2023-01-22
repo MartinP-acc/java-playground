@@ -1,0 +1,104 @@
+
+breakout-tx.png
+size: 512, 128
+format: RGBA8888
+filter: Nearest, Nearest
+repeat: none
+ball
+  rotate: false
+  xy: 448, 96
+  size: 22, 22
+  orig: 22, 22
+  offset: 0, 0
+  index: -1
+brick1
+  rotate: false
+  xy: 2, 66
+  size: 100, 30
+  orig: 100, 30
+  offset: 0, 0
+  index: -1
+brick2
+  rotate: false
+  xy: 2, 34
+  size: 100, 30
+  orig: 100, 30
+  offset: 0, 0
+  index: -1
+brick3
+  rotate: false
+  xy: 104, 66
+  size: 100, 30
+  orig: 100, 30
+  offset: 0, 0
+  index: -1
+brick4
+  rotate: false
+  xy: 2, 2
+  size: 100, 30
+  orig: 100, 30
+  offset: 0, 0
+  index: -1
+brick5
+  rotate: false
+  xy: 104, 34
+  size: 100, 30
+  orig: 100, 30
+  offset: 0, 0
+  index: -1
+brick6
+  rotate: false
+  xy: 104, 2
+  size: 100, 30
+  orig: 100, 30
+  offset: 0, 0
+  index: -1
+brick7
+  rotate: false
+  xy: 244, 88
+  size: 100, 30
+  orig: 100, 30
+  offset: 0, 0
+  index: -1
+brick8
+  rotate: false
+  xy: 346, 88
+  size: 100, 30
+  orig: 100, 30
+  offset: 0, 0
+  index: -1
+hard_brick0
+  rotate: false
+  xy: 206, 56
+  size: 100, 30
+  orig: 100, 30
+  offset: 0, 0
+  index: -1
+hard_brick1
+  rotate: false
+  xy: 206, 24
+  size: 100, 30
+  orig: 100, 30
+  offset: 0, 0
+  index: -1
+hard_brick2
+  rotate: false
+  xy: 308, 56
+  size: 100, 30
+  orig: 100, 30
+  offset: 0, 0
+  index: -1
+paddle
+  rotate: false
+  xy: 2, 98
+  size: 240, 20
+  orig: 240, 20
+  offset: 0, 0
+  index: -1
+wall_brick
+  rotate: false
+  xy: 308, 24
+  size: 100, 30
+  orig: 100, 30
+  offset: 0, 0
+  index: -1
