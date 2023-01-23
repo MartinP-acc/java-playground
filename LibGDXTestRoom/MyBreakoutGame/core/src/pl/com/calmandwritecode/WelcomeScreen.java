@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.AlphaAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -21,16 +22,25 @@ public class WelcomeScreen implements Screen {
     private Label header;
     private Label.LabelStyle labelStyle;
     private TextButton startButton, exitButton;
+    private BreakoutGame game;
+    AlphaAction fadeIn, fadeOut;
 
     public WelcomeScreen(final BreakoutGame game) {
         this.font = game.font;
         stage = new Stage();
         table = new Table();
+        this.game = game;
+        Gdx.input.setCursorCatched(false);
 
+    }
+
+    @Override
+    public void show() {
         TextButton.TextButtonStyle buttonStyle = new TextButton.TextButtonStyle();
         buttonStyle.font = font;
         buttonStyle.fontColor = Color.GOLD;
         buttonStyle.downFontColor = Color.RED;
+        buttonStyle.overFontColor = Color.GREEN;
         startButton = new TextButton("start",buttonStyle);
         startButton.addListener(new ChangeListener() {
             @Override
@@ -62,10 +72,21 @@ public class WelcomeScreen implements Screen {
         table.add(startButton);
         table.row();
         table.add(exitButton);
-    }
 
-    @Override
-    public void show() {
+        fadeIn = new AlphaAction();
+        fadeIn.setAlpha(0);
+        fadeIn.setDuration(0);
+
+        fadeOut = new AlphaAction();
+        fadeOut.setAlpha(1);
+        fadeOut.setDuration(3);
+
+        table.addAction(fadeIn);
+        table.act(Gdx.graphics.getDeltaTime());
+        if (fadeIn.isComplete()){
+            table.addAction(fadeOut);
+            table.act(Gdx.graphics.getDeltaTime());
+        }
     }
 
     @Override
@@ -73,6 +94,8 @@ public class WelcomeScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         stage.act(delta);
         stage.draw();
+
+
     }
 
     @Override
