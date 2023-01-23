@@ -1,10 +1,8 @@
 package pl.com.calmandwritecode;
 
-import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -36,17 +34,16 @@ public class LevelScreen implements Screen {
         paddle = new Paddle(WIDTH,atlas);
         bricks = new Array<>();
         builder = new LevelBuilder(atlas);
-        bricks = builder.buildFromString(LevelBuilder.LEVEL2);
+        bricks = builder.buildFromString(LevelBuilder.LEVEL4);
         
         camera = new OrthographicCamera();
         camera.setToOrtho(false, WIDTH, HEIGHT);
 
-
+        Gdx.input.setCursorCatched(true);
     }
 
     @Override
     public void show() {
-
     }
 
     @Override
@@ -68,10 +65,14 @@ public class LevelScreen implements Screen {
             ball.accelerateBall();
         }
 
-        if (ball.y<=0){
-            game.setScreen(new WelcomeScreen(game));
-            dispose();
+        if (ball.y<=0 || Gdx.input.isKeyPressed(Input.Keys.ESCAPE)){
+            backToMenu();
         }
+    }
+
+    private void backToMenu(){
+        game.setScreen(new WelcomeScreen(game));
+        dispose();
     }
 
     private void drawBricks(SpriteBatch batch) {
