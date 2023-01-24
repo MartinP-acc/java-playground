@@ -5,10 +5,14 @@ import com.badlogic.gdx.Screen;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.AlphaAction;
+import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -24,6 +28,9 @@ public class WelcomeScreen implements Screen {
     private TextButton startButton, exitButton;
     private BreakoutGame game;
     AlphaAction fadeIn, fadeOut;
+    private Texture texture;
+    private TextureRegion textureRegion;
+    private Image image;
 
     public WelcomeScreen(final BreakoutGame game) {
         this.font = game.font;
@@ -31,7 +38,13 @@ public class WelcomeScreen implements Screen {
         table = new Table();
         this.game = game;
         Gdx.input.setCursorCatched(false);
-
+        texture = new Texture(Gdx.files.internal("puzzle.png"));
+        texture.setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat);
+        textureRegion = new TextureRegion(texture);
+        textureRegion.setRegion(0,0,Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
+        image = new Image(textureRegion);
+        image.setSize(Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
+        image.setPosition(0,0);
     }
 
     @Override
@@ -63,7 +76,8 @@ public class WelcomeScreen implements Screen {
         header = new Label("breakout test",labelStyle);
 
         Gdx.input.setInputProcessor(stage);
-        stage.setRoot(table);
+        stage.addActor(image);
+        stage.addActor(table);
 
         table.setDebug(false);
         table.setBounds(0,0,Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
@@ -81,12 +95,11 @@ public class WelcomeScreen implements Screen {
         fadeOut.setAlpha(1);
         fadeOut.setDuration(3);
 
-        table.addAction(fadeIn);
+        SequenceAction fadeInAndOut = new SequenceAction();
+        fadeInAndOut.addAction(fadeIn);
+        fadeInAndOut.addAction(fadeOut);
+        table.addAction(fadeInAndOut);
         table.act(Gdx.graphics.getDeltaTime());
-        if (fadeIn.isComplete()){
-            table.addAction(fadeOut);
-            table.act(Gdx.graphics.getDeltaTime());
-        }
     }
 
     @Override
