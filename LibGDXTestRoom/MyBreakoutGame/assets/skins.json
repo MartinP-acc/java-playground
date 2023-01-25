@@ -1,0 +1,23 @@
+{
+  "com.badlogic.gdx.graphics.Color": {
+    "red": { "r": 1, "g": 0, "b": 0, "a": 1 },
+    "green": { "r": 0, "g": 1, "b": 0, "a": 1 },
+    "gold": { "hex" : "ffd700ff" }
+  },
+  "com.badlogic.gdx.graphics.g2d.BitmapFont": {
+    "large": { "file": "fonts/bmfont120bold.fnt" }
+  },
+  "com.badlogic.gdx.scenes.scene2d.ui.TextButton$TextButtonStyle": {
+    "default": {
+      "font": "large",
+      "fontColor": "gold",
+      "downFontColor": "red",
+      "overFontColor": "green"
+    }
+  },
+  "com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle": {
+    "default": {
+      "font": "large"
+    }
+  }
+}
