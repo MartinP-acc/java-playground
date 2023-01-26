@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Intersector;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 
@@ -19,7 +20,6 @@ public class LevelScreen implements Screen {
     private final Ball ball;
     private final Paddle paddle;
     private Array<Brick> bricks;
-    private final LevelBuilder builder;
     private final TextureAtlas atlas;
 
 
@@ -32,9 +32,10 @@ public class LevelScreen implements Screen {
 
         ball = new Ball(WIDTH, HEIGHT,atlas);
         paddle = new Paddle(WIDTH,atlas);
+
+        LevelBuilder builder = new LevelBuilder(atlas);
         bricks = new Array<>();
-        builder = new LevelBuilder(atlas);
-        bricks = builder.buildFromString(LevelBuilder.LEVEL4);
+        bricks = builder.buildFromString(LevelBuilder.LEVELS[MathUtils.random(0,3)]);
         
         camera = new OrthographicCamera();
         camera.setToOrtho(false, WIDTH, HEIGHT);

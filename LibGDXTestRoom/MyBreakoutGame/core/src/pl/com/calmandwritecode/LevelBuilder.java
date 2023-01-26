@@ -6,26 +6,26 @@ import com.badlogic.gdx.utils.Array;
 
 public class LevelBuilder {
 
-    public final static String LEVEL1 = "b1b1b1b1b1b1b1b1b1b1b1b1n"+
-                                        "b2b2b2b2b2b2b2b2b2b2b2b2n"+
-                                        "b3b3b3b3b3b3b3b3b3b3b3b3n"+
-                                        "b4b4b4b4b4b4b4b4b4b4b4b4n"+
-                                        "b5b5b5b5b5b5b5b5b5b5b5b5n"+
-                                        "b6b6b6b6b6b6b6b6b6b6b6b6n"+
-                                        "b7b7b7b7b7b7b7b7b7b7b7b7n"+
-                                        "b0b0b0b0b0b0b0b0b0b0b0b0";
-
-    public final static String LEVEL2 =
-            "b1b1b1b1b1b1b1b1b1b1b1b1n"+
-            "b2                    b2n"+
-            "b3            b3b3b3  b3n"+
-            "b4                    b4n"+
-            "b5  b5b5b5b5          b5n"+
-            "b6                    b6n"+
-            "b7b7b7b7b7b7b7b7b7b7  b7n"+
-            "hbhbhbhbhbhbhbhbhbhb  hb";
-
-    public final static String LEVEL3 =
+    public final static String[] LEVELS = new String[]{
+                //LEVEL0
+                    "b1b1b1b1b1b1b1b1b1b1b1b1n"+
+                    "b2b2b2b2b2b2b2b2b2b2b2b2n"+
+                    "b3b3b3b3b3b3b3b3b3b3b3b3n"+
+                    "b4b4b4b4b4b4b4b4b4b4b4b4n"+
+                    "b5b5b5b5b5b5b5b5b5b5b5b5n"+
+                    "b6b6b6b6b6b6b6b6b6b6b6b6n"+
+                    "b7b7b7b7b7b7b7b7b7b7b7b7n"+
+                    "b0b0b0b0b0b0b0b0b0b0b0b0",
+                //LEVEL1
+                    "b1b1b1b1b1b1b1b1b1b1b1b1n"+
+                    "b2                    b2n"+
+                    "b3            b3b3b3  b3n"+
+                    "b4                    b4n"+
+                    "b5  b5b5b5b5          b5n"+
+                    "b6                    b6n"+
+                    "b7b7b7b7b7b7b7b7b7b7  b7n"+
+                    "hbhbhbhbhbhbhbhbhbhb  hb",
+                //LEVEL2
                     "b1b1                  hbn"+
                     "b2b2b2b2              hbn"+
                     "b3b3b3b3b3b3          hbn"+
@@ -34,9 +34,8 @@ public class LevelBuilder {
                     "b6b6b6b6b6b6b6b6b6b6b6n"+
                     "b7b7b7b7b7b7b7b7b7b7b7b7n"+
                     "b0b0b0b0b0b0b0b0b0b0b0b0n"+
-                    "wbwbwbwbwbwbwbwbwbwbwb";
-
-    public final static String LEVEL4 =
+                    "wbwbwbwbwbwbwbwbwbwbwb",
+                //LEVEL3
                     "b1b1n"+
                     "b2b2b2b2n"+
                     "b3b3b3b3b3b3        hbn"+
@@ -45,7 +44,8 @@ public class LevelBuilder {
                     "b6b6b6b6b6b6b6b6b6b6wbn"+
                     "b7b7b7b7b7b7b7b7b7b7wbn"+
                     "b0b0b0b0b0b0b0b0b0b0wbn"+
-                    "wbwbwbwbwbwbwbwbwbwbwb";
+                    "wbwbwbwbwbwbwbwbwbwbwb"
+    };
 
     private final static char BRICK = 'b';
     private final static char HARD_BRICK = 'h';
@@ -73,6 +73,7 @@ public class LevelBuilder {
                 atlas.createSprite("hard_brick2"),
         };
     }
+
 
     public Array<Brick> buildFromString(String map){
         Array<Brick> bricks = new Array<>();
