@@ -24,7 +24,7 @@ public class Ball extends Circle {
         this.widthScreen = widthScreen;
         this.heightScreen = heightScreen;
         xSpeed = 2;
-        ySpeed = 4;
+        ySpeed = 3;
         position = new Vector2(x,y);
         ballBounceSound = Gdx.audio.newSound(Gdx.files.internal("ball_bounce.ogg"));
     }

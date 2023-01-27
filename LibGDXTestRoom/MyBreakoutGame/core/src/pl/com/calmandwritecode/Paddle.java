@@ -36,9 +36,10 @@ public class Paddle extends Rectangle {
     public void collision(Ball ball) {
         Vector2 start = new Vector2(x, y + height);
         Vector2 end = new Vector2(x + width, y + height);
-        Vector2 center = new Vector2(ball.x, ball.y);
+        Vector2 center = new Vector2(ball.x+ball.xSpeed, ball.y+ball.ySpeed);
+        boolean wasCollision = false;
 
-        if (Intersector.intersectSegmentCircle(start, end, center, 25)) {
+        if (Intersector.intersectSegmentCircle(start, end, center, ball.radius*ball.radius)) {
             ball.ySpeed = -ball.ySpeed;
             ball.y += ball.ySpeed;
             if (ball.x < x + 60) {
@@ -48,12 +49,21 @@ public class Paddle extends Rectangle {
                 ball.xSpeed += 1;
                 if (ball.x < x + width - 30) ball.xSpeed -= 1;
             }
-            if (Intersector.intersectSegmentCircle(new Vector2(x, y), new Vector2(x, y + height), center, 25) ||
-                    Intersector.intersectSegmentCircle(new Vector2(x + width, y), new Vector2(x + width, y + height), center, 25)) {
-                ball.xSpeed = -ball.xSpeed;
-            }
-            ball.playBounce();
+            wasCollision = true;
+        }else
+
+        if (Intersector.intersectSegmentCircle(new Vector2(x, y), new Vector2(x, y + height), center, ball.radius*ball.radius)){
+            ball.x = x-ball.radius-3;
+            ball.xSpeed = -5;
+            wasCollision = true;
+        }else
+        if (Intersector.intersectSegmentCircle(new Vector2(x + width, y), new Vector2(x + width, y + height), center, ball.radius*ball.radius)) {
+            ball.x = x+width+ball.radius+3;
+            ball.xSpeed = 5;
+            wasCollision = true;
         }
+
+        if (wasCollision)ball.playBounce();
     }
 
     public void dispose(){
