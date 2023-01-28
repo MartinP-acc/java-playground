@@ -16,6 +16,7 @@ public class Ball extends Circle {
     public float xSpeed;
     public float ySpeed;
     public Vector2 position;
+    public Vector2 futurePos;
     private  final Sound ballBounceSound;
 
     public Ball(float widthScreen, float heightScreen, TextureAtlas atlas){
@@ -26,6 +27,7 @@ public class Ball extends Circle {
         xSpeed = 2;
         ySpeed = 3;
         position = new Vector2(x,y);
+        futurePos = new Vector2(x+xSpeed,y+ySpeed);
         ballBounceSound = Gdx.audio.newSound(Gdx.files.internal("ball_bounce.ogg"));
     }
 
@@ -52,6 +54,8 @@ public class Ball extends Circle {
             ySpeed = -ySpeed;
             playBounce();
         }
+        position.set(x,y);
+        futurePos.set(x+xSpeed,y+ySpeed);
     }
 
     public void accelerateBall(){

@@ -2,6 +2,7 @@ package pl.com.calmandwritecode;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
@@ -11,6 +12,13 @@ public class Brick extends Rectangle {
     public Vector2 center;
     protected Sprite texture;
 
+    private Vector2 bottomLeft;
+    private Vector2 topLeft;
+    private Vector2 bottomRight;
+    private Vector2 topRight;
+
+    private String boundSide;
+
     public Brick(float x, float y, Sprite texture){
         this.x = x;
         this.y = y;
@@ -18,6 +26,11 @@ public class Brick extends Rectangle {
         this.height = texture.getHeight();
         this.texture = texture;
         center = new Vector2(x+width/2,y+height/2);
+
+        bottomLeft = new Vector2(x,y);
+        bottomRight = new Vector2(x+width,y);
+        topLeft = new Vector2(x,y+height);
+        topRight = new Vector2(x+width, y+height );
     }
 
     public void draw(SpriteBatch batch){
@@ -30,12 +43,53 @@ public class Brick extends Rectangle {
         ball.update();
     }
 
+    public Vector2 ballIntersect(Ball ball){
+        boundSide = "none";
+        Vector2 intersectionPoint = new Vector2();
+        Vector2 nearestIntersection = new Vector2();
+        if (Intersector.intersectSegments(ball.position.x,ball.position.y,ball.futurePos.x,ball.futurePos.y,
+                bottomLeft.x-ball.radius,bottomLeft.y-ball.radius,topLeft.x-ball.radius,topLeft.y+ball.radius,intersectionPoint)){
+            boundSide = "left";
+            nearestIntersection = intersectionPoint;
+        }
+        if (Intersector.intersectSegments(ball.position.x,ball.position.y,ball.futurePos.x,ball.futurePos.y,
+                bottomRight.x+ball.radius,bottomRight.y-ball.radius,topRight.x+ball.radius,topRight.y-ball.radius,intersectionPoint)){
+            if (boundSide.equals("none") || nearestIntersection.dst(ball.position)<intersectionPoint.dst(ball.position)) {
+                boundSide = "right";
+                nearestIntersection = intersectionPoint;
+            }
+        }
+        if (Intersector.intersectSegments(ball.position.x,ball.position.y,ball.futurePos.x,ball.futurePos.y,
+                bottomRight.x-ball.radius,bottomRight.y-ball.radius,bottomLeft.x+ball.radius,bottomLeft.y-ball.radius,intersectionPoint)){
+            if (boundSide.equals("none") || nearestIntersection.dst(ball.position)<intersectionPoint.dst(ball.position)) {
+                boundSide = "bottom";
+                nearestIntersection = intersectionPoint;
+            }
+        }
+        if (Intersector.intersectSegments(ball.position.x,ball.position.y,ball.futurePos.x,ball.futurePos.y,
+                topRight.x-ball.radius,topRight.y+ball.radius,topLeft.x+ball.radius,topLeft.y+ball.radius,intersectionPoint)){
+            if (boundSide.equals("none") || nearestIntersection.dst(ball.position)<intersectionPoint.dst(ball.position)) {
+                boundSide = "top";
+                nearestIntersection = intersectionPoint;
+            }
+        }
+        return !boundSide.equals("none") ? nearestIntersection : null;
+    }
+
+
     protected void bounce(Ball ball){
-        if (ball.y<y || ball.y>y+height) ball.ySpeed =-ball.ySpeed;
-        else
-        if (ball.x+ball.radius>x+width && ball.xSpeed<0) ball.xSpeed =-ball.xSpeed;
-        else
-        if (ball.x-ball.radius<x && ball.xSpeed>0) ball.xSpeed =-ball.xSpeed;
+        switch (boundSide){
+            case "left":
+            case "right":
+                ball.xSpeed = -ball.xSpeed;
+                ball.update();
+                break;
+            case "top":
+            case "bottom":
+                ball.ySpeed = -ball.ySpeed;
+                ball.update();
+            default:break;
+        }
         ball.playBounce();
     }
 }

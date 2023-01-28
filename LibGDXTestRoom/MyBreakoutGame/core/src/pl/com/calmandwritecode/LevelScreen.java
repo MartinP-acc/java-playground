@@ -7,8 +7,9 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.math.Intersector;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 
@@ -21,6 +22,7 @@ public class LevelScreen implements Screen {
     private final Paddle paddle;
     private Array<Brick> bricks;
     private final TextureAtlas atlas;
+    private ShapeRenderer shapeRenderer;
 
 
     public LevelScreen(BreakoutGame game) {
@@ -41,6 +43,7 @@ public class LevelScreen implements Screen {
         camera.setToOrtho(false, WIDTH, HEIGHT);
 
         Gdx.input.setCursorCatched(true);
+        shapeRenderer = new ShapeRenderer();
     }
 
     @Override
@@ -58,6 +61,11 @@ public class LevelScreen implements Screen {
         drawBricks(game.batch);
         findBrickCollision();
         game.batch.end();
+        shapeRenderer.setAutoShapeType(true);
+        shapeRenderer.setProjectionMatrix(camera.combined);
+        shapeRenderer.begin();
+        shapeRenderer.line(ball.position,ball.futurePos);
+        shapeRenderer.end();
         paddle.collision(ball);
         paddle.update();
         ball.update();
@@ -87,8 +95,9 @@ public class LevelScreen implements Screen {
         float currentDistance;
         Brick closest = null;
         for (Brick brick : bricks){
-            if (Intersector.overlaps(ball,brick)){
-                currentDistance = ball.position.dst(brick.center);
+            Vector2 intersection = brick.ballIntersect(ball);
+            if (intersection != null){
+                currentDistance = ball.position.dst(intersection);
                 if (currentDistance<distance) {
                     distance = currentDistance;
                     closest = brick;
@@ -99,6 +108,7 @@ public class LevelScreen implements Screen {
             closest.collision(ball);
             if (closest.destroyed)
                 bricks.removeIndex(bricks.indexOf(closest,true));
+            findBrickCollision();
         }
     }
 
