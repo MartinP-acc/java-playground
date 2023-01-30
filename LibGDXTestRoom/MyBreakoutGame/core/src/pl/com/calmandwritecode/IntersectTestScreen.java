@@ -18,7 +18,7 @@ public class IntersectTestScreen implements Screen {
     ShapeRenderer shapeRenderer;
     TestSegment leftSegment, topSegment, moveSegment,bottomSegment, rightSegment;
     BoundingBox bounds;
-    Circle circle;
+    Circle circle, testPoint;
     Vector2 intersectPoint;
     Ray ray;
     float squaredRadius;
@@ -39,6 +39,7 @@ public class IntersectTestScreen implements Screen {
         rightSegment = new TestSegment(new Vector2(600,100), new Vector2(600,300));
         bounds = new BoundingBox(new Vector3(bottomSegment.start.x,bottomSegment.start.y,0),new Vector3(rightSegment.end.x,rightSegment.end.y,0));
         squaredRadius = (circle.radius*circle.radius);
+        testPoint = new Circle(700,500,4);
     }
 
     @Override
@@ -55,12 +56,14 @@ public class IntersectTestScreen implements Screen {
         shapeRenderer.line(moveSegment.start,moveSegment.end);
         shapeRenderer.circle(circle.x, circle.y, circle.radius);
         shapeRenderer.circle(intersectPoint.x, intersectPoint.y,4);
+        shapeRenderer.circle(testPoint.x,testPoint.y,testPoint.radius);
         shapeRenderer.end();
 
         circle.setPosition(Gdx.input.getX(),Gdx.graphics.getHeight()-Gdx.input.getY());
         moveSegment.start.set(Gdx.input.getX(),Gdx.graphics.getHeight()-Gdx.input.getY());
         moveSegment.end.set(Gdx.input.getX()+rayXend,Gdx.graphics.getHeight()-Gdx.input.getY()+rayYend);
-
+        if (circle.contains(testPoint.x, testPoint.y)) shapeRenderer.setColor(Color.GREEN);
+        else shapeRenderer.setColor(Color.WHITE);
         if (Intersector.intersectSegments(moveSegment.start,moveSegment.end,topSegment.start,topSegment.end,intersectPoint)) shapeRenderer.setColor(Color.MAGENTA);
         else
         if (Intersector.intersectSegments(moveSegment.start,moveSegment.end,bottomSegment.start,bottomSegment.end,intersectPoint)) shapeRenderer.setColor(Color.RED);

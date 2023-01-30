@@ -54,6 +54,10 @@ public class Ball extends Circle {
             ySpeed = -ySpeed;
             playBounce();
         }
+        updateVectors();
+    }
+
+    public void updateVectors(){
         position.set(x,y);
         futurePos.set(x+xSpeed,y+ySpeed);
     }

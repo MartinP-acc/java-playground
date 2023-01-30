@@ -22,8 +22,6 @@ public class LevelScreen implements Screen {
     private final Paddle paddle;
     private Array<Brick> bricks;
     private final TextureAtlas atlas;
-    private ShapeRenderer shapeRenderer;
-
 
     public LevelScreen(BreakoutGame game) {
         this.game = game;
@@ -43,7 +41,6 @@ public class LevelScreen implements Screen {
         camera.setToOrtho(false, WIDTH, HEIGHT);
 
         Gdx.input.setCursorCatched(true);
-        shapeRenderer = new ShapeRenderer();
     }
 
     @Override
@@ -56,16 +53,11 @@ public class LevelScreen implements Screen {
         camera.update();
         game.batch.setProjectionMatrix(camera.combined);
         game.batch.begin();
-        ball.draw(game.batch);
         paddle.draw(game.batch);
         drawBricks(game.batch);
+        ball.draw(game.batch);
         findBrickCollision();
         game.batch.end();
-        shapeRenderer.setAutoShapeType(true);
-        shapeRenderer.setProjectionMatrix(camera.combined);
-        shapeRenderer.begin();
-        shapeRenderer.line(ball.position,ball.futurePos);
-        shapeRenderer.end();
         paddle.collision(ball);
         paddle.update();
         ball.update();

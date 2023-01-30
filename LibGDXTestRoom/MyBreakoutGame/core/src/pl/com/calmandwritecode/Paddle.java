@@ -39,7 +39,8 @@ public class Paddle extends Rectangle {
         Vector2 center = new Vector2(ball.x+ball.xSpeed, ball.y+ball.ySpeed);
         boolean wasCollision = false;
 
-        if (Intersector.intersectSegmentCircle(start, end, center, ball.radius*ball.radius)) {
+        if (Intersector.intersectSegmentCircle(start, end, center, ball.radius*ball.radius)||
+                Intersector.intersectSegmentCircle(new Vector2(x,y), new Vector2(x+width,y), center, ball.radius*ball.radius)) {
             if (ball.ySpeed<0)ball.ySpeed = -ball.ySpeed;
             ball.y += ball.ySpeed;
             if (ball.x < x + 60) {
