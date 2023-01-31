@@ -27,7 +27,7 @@ public class Ball extends Circle {
         xSpeed = 2;
         ySpeed = 3;
         position = new Vector2(x,y);
-        futurePos = new Vector2(x+xSpeed,y+ySpeed);
+        futurePos = new Vector2(x+xSpeed*10,y+ySpeed*10);
         ballBounceSound = Gdx.audio.newSound(Gdx.files.internal("ball_bounce.ogg"));
     }
 
@@ -59,7 +59,7 @@ public class Ball extends Circle {
 
     public void updateVectors(){
         position.set(x,y);
-        futurePos.set(x+xSpeed,y+ySpeed);
+        futurePos.set(x+xSpeed*5,y+ySpeed*5);
     }
 
     public void accelerateBall(){

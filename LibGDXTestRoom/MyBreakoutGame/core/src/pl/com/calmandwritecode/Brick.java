@@ -49,50 +49,38 @@ public class Brick extends Rectangle {
         Vector2 intersectionPoint = new Vector2();
         Vector2 nearestIntersection = new Vector2();
         Circle futureball = new Circle(ball.position,ball.radius);
-        if(Intersector.overlaps(futureball,this)){
-
-            if (Intersector.intersectSegments(ball.position.x,ball.position.y,ball.futurePos.x,ball.futurePos.y,
-                    bottomLeft.x,bottomLeft.y,topLeft.x,topLeft.y,intersectionPoint)){
+        if (ball.xSpeed>0) {
+            if (Intersector.intersectSegments(ball.position.x, ball.position.y, ball.futurePos.x, ball.futurePos.y,
+                    bottomLeft.x, bottomLeft.y, topLeft.x, topLeft.y, intersectionPoint)) {
                 boundSide = "left";
                 nearestIntersection = intersectionPoint;
             }
-            if (Intersector.intersectSegments(ball.position.x,ball.position.y,ball.futurePos.x,ball.futurePos.y,
-                    bottomRight.x,bottomRight.y,topRight.x,topRight.y,intersectionPoint)){
-                if (boundSide.equals("none") || nearestIntersection.dst(ball.position)<intersectionPoint.dst(ball.position)) {
+        }
+        if (ball.xSpeed<0) {
+            if (Intersector.intersectSegments(ball.position.x, ball.position.y, ball.futurePos.x, ball.futurePos.y,
+                    bottomRight.x, bottomRight.y, topRight.x, topRight.y, intersectionPoint)) {
+                if (boundSide.equals("none") || nearestIntersection.dst(ball.position) < intersectionPoint.dst(ball.position)) {
                     boundSide = "right";
                     nearestIntersection = intersectionPoint;
                 }
             }
-            if (Intersector.intersectSegments(ball.position.x,ball.position.y,ball.futurePos.x,ball.futurePos.y,
-                    bottomRight.x,bottomRight.y,bottomLeft.x,bottomLeft.y,intersectionPoint)){
-                if (boundSide.equals("none") || nearestIntersection.dst(ball.position)<intersectionPoint.dst(ball.position)) {
-                    boundSide = "bottom";
-                    nearestIntersection = intersectionPoint;
+        }
+        if (boundSide.equals("none")){
+            if (ball.ySpeed>0) {
+                if (Intersector.intersectSegments(ball.position.x, ball.position.y, ball.futurePos.x, ball.futurePos.y,
+                        bottomRight.x, bottomRight.y, bottomLeft.x, bottomLeft.y, intersectionPoint)) {
+                    if (boundSide.equals("none") || nearestIntersection.dst(ball.position) < intersectionPoint.dst(ball.position)) {
+                        boundSide = "bottom";
+                        nearestIntersection = intersectionPoint;
+                    }
                 }
-            }
-            if (Intersector.intersectSegments(ball.position.x,ball.position.y,ball.futurePos.x,ball.futurePos.y,
-                    topRight.x,topRight.y,topLeft.x,topLeft.y,intersectionPoint)){
-                if (boundSide.equals("none") || nearestIntersection.dst(ball.position)<intersectionPoint.dst(ball.position)) {
-                    boundSide = "top";
-                    nearestIntersection = intersectionPoint;
-                }
-            }
-            if (boundSide.equals("none")){
-                if (ball.overlaps(new Circle(bottomLeft.x,bottomLeft.y,1))){
-                    nearestIntersection = bottomLeft;
-                    boundSide = ball.position.y<bottomLeft.y ? "bottom" : "left";
-                }else
-                if (ball.overlaps(new Circle(bottomRight.x,bottomRight.y,1))){
-                    nearestIntersection = bottomRight;
-                    boundSide = ball.position.y<bottomRight.y ? "bottom" : "right";
-                }else
-                if (ball.overlaps(new Circle(topLeft.x,topLeft.y,1))){
-                    nearestIntersection = topLeft;
-                    boundSide = ball.position.y>topLeft.y ? "top" : "left";
-                }else
-                if (ball.overlaps(new Circle(topRight.x,topRight.y,1))){
-                    nearestIntersection = topRight;
-                    boundSide = ball.position.y>topRight.y ? "top" : "left";
+            }else if (ball.ySpeed<0) {
+                if (Intersector.intersectSegments(ball.position.x, ball.position.y, ball.futurePos.x, ball.futurePos.y,
+                        topRight.x, topRight.y, topLeft.x, topLeft.y, intersectionPoint)) {
+                    if (boundSide.equals("none") || nearestIntersection.dst(ball.position) < intersectionPoint.dst(ball.position)) {
+                        boundSide = "top";
+                        nearestIntersection = intersectionPoint;
+                    }
                 }
             }
         }
