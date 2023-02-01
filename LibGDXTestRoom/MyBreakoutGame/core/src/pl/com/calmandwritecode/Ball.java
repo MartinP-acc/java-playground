@@ -59,7 +59,10 @@ public class Ball extends Circle {
 
     public void updateVectors(){
         position.set(x,y);
-        futurePos.set(x+xSpeed*5,y+ySpeed*5);
+        float xs = xSpeed>=0 ? xSpeed : -xSpeed;
+        float ys = ySpeed>=0 ? ySpeed : -ySpeed;
+        float multiplier = xs>ys ? 12/xs : 12/ys;
+        futurePos.set(x+xSpeed*multiplier,y+ySpeed*multiplier);
     }
 
     public void accelerateBall(){
