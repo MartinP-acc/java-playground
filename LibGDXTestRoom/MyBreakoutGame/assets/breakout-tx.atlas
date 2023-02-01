@@ -95,6 +95,13 @@ paddle
   orig: 240, 20
   offset: 0, 0
   index: -1
+small_paddle
+  rotate: false
+  xy: 206, 15
+  size: 79, 7
+  orig: 79, 7
+  offset: 0, 0
+  index: -1
 wall_brick
   rotate: false
   xy: 308, 24

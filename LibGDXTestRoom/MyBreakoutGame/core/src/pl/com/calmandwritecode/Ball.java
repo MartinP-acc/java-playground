@@ -73,4 +73,11 @@ public class Ball extends Circle {
     public void playBounce(){
         ballBounceSound.play();
     }
+
+    public void backToCentre(){
+        x=widthScreen/2;
+        y=heightScreen/2-100;
+        xSpeed = 2;
+        ySpeed = 3;
+    }
 }

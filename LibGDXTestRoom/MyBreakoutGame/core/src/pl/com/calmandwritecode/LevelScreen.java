@@ -4,10 +4,10 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
@@ -22,6 +22,7 @@ public class LevelScreen implements Screen {
     private final Paddle paddle;
     private Array<Brick> bricks;
     private final TextureAtlas atlas;
+    private final LifeCounter lifeCounter;
 
     public LevelScreen(BreakoutGame game) {
         this.game = game;
@@ -40,6 +41,8 @@ public class LevelScreen implements Screen {
         camera = new OrthographicCamera();
         camera.setToOrtho(false, WIDTH, HEIGHT);
 
+        lifeCounter = new LifeCounter(atlas);
+
         Gdx.input.setCursorCatched(true);
     }
 
@@ -50,12 +53,14 @@ public class LevelScreen implements Screen {
     @Override
     public void render(float delta) {
         ScreenUtils.clear(Color.BLACK);
+        Gdx.gl20.glClear(GL20.GL_COLOR_BUFFER_BIT);
         camera.update();
         game.batch.setProjectionMatrix(camera.combined);
         game.batch.begin();
         paddle.draw(game.batch);
         drawBricks(game.batch);
         ball.draw(game.batch);
+        lifeCounter.draw(game.batch);
         findBrickCollision();
         game.batch.end();
         paddle.collision(ball);
@@ -66,7 +71,12 @@ public class LevelScreen implements Screen {
             ball.accelerateBall();
         }
 
-        if (ball.y<=0 || Gdx.input.isKeyPressed(Input.Keys.ESCAPE)){
+        if (ball.y < 0){
+            lifeCounter.ballOut();
+            ball.backToCentre();
+        }
+
+        if (lifeCounter.isGameOver() || Gdx.input.isKeyPressed(Input.Keys.ESCAPE)){
             backToMenu();
         }
     }
