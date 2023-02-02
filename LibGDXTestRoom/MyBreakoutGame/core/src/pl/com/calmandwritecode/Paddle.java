@@ -1,6 +1,7 @@
 package pl.com.calmandwritecode;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -13,6 +14,7 @@ public class Paddle extends Rectangle {
 
     private final float widthScreen;
     private final Sprite paddleTexture;
+    private boolean readyToThrow;
 
     public Paddle(float widthScreen, TextureAtlas atlas){
         this. widthScreen = widthScreen;
@@ -34,6 +36,15 @@ public class Paddle extends Rectangle {
     }
 
     public void collision(Ball ball) {
+
+        if (readyToThrow){
+            if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)){
+                ball.ySpeed=4;
+                ball.xSpeed=2;
+                readyToThrow = false;
+            }
+        }
+
         Vector2 start = new Vector2(x, y + height);
         Vector2 end = new Vector2(x + width, y + height);
         Vector2 center = new Vector2(ball.x+ball.xSpeed, ball.y+ball.ySpeed);
@@ -65,6 +76,14 @@ public class Paddle extends Rectangle {
         }
 
         if (wasCollision)ball.playBounce();
+    }
+
+    public void setReadyToThrow(){
+        readyToThrow = true;
+    }
+
+    public boolean isReadyToThrow() {
+        return readyToThrow;
     }
 
     public void dispose(){

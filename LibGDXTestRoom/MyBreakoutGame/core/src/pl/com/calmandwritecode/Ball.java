@@ -24,8 +24,7 @@ public class Ball extends Circle {
         ballTexture = atlas.createSprite("ball");
         this.widthScreen = widthScreen;
         this.heightScreen = heightScreen;
-        xSpeed = 2;
-        ySpeed = 3;
+        stop();
         position = new Vector2(x,y);
         futurePos = new Vector2(x+xSpeed*10,y+ySpeed*10);
         ballBounceSound = Gdx.audio.newSound(Gdx.files.internal("ball_bounce.ogg"));
@@ -79,5 +78,15 @@ public class Ball extends Circle {
         y=heightScreen/2-100;
         xSpeed = 2;
         ySpeed = 3;
+    }
+
+    public void stop(){
+        xSpeed = 0;
+        ySpeed = 0;
+    }
+
+    public void stickTo(Paddle paddle){
+        x = paddle.x+ paddle.width/2;
+        y = paddle.y+ paddle.height+radius+1;
     }
 }

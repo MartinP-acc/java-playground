@@ -33,6 +33,7 @@ public class LevelScreen implements Screen {
 
         ball = new Ball(WIDTH, HEIGHT,atlas);
         paddle = new Paddle(WIDTH,atlas);
+        paddle.setReadyToThrow();
 
         LevelBuilder builder = new LevelBuilder(atlas);
         bricks = new Array<>();
@@ -73,7 +74,12 @@ public class LevelScreen implements Screen {
 
         if (ball.y < 0){
             lifeCounter.ballOut();
-            ball.backToCentre();
+            ball.stop();
+            paddle.setReadyToThrow();
+        }
+
+        if (paddle.isReadyToThrow()){
+            ball.stickTo(paddle);
         }
 
         if (lifeCounter.isGameOver() || Gdx.input.isKeyPressed(Input.Keys.ESCAPE)){
