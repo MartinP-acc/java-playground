@@ -101,8 +101,10 @@ public class LevelScreen implements Screen {
     private void findBrickCollision() {
         float distance = Float.MAX_VALUE;
         float currentDistance;
+        boolean gameOn = false;
         Brick closest = null;
         for (Brick brick : bricks){
+            if (brick.destryable) gameOn = brick.destryable;
             Vector2 intersection = brick.ballIntersect(ball);
             if (intersection != null){
                 currentDistance = ball.position.dst(intersection);
@@ -118,6 +120,8 @@ public class LevelScreen implements Screen {
                 bricks.removeIndex(bricks.indexOf(closest,true));
             findBrickCollision();
         }
+
+        if (!gameOn) backToMenu();
     }
 
     @Override

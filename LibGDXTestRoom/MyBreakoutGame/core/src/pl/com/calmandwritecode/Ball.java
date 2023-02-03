@@ -60,7 +60,7 @@ public class Ball extends Circle {
         position.set(x,y);
         float xs = xSpeed>=0 ? xSpeed : -xSpeed;
         float ys = ySpeed>=0 ? ySpeed : -ySpeed;
-        float multiplier = xs>ys ? 12/xs : 12/ys;
+        float multiplier = xs>ys ? 10/xs : 10/ys;
         futurePos.set(x+xSpeed*multiplier,y+ySpeed*multiplier);
     }
 

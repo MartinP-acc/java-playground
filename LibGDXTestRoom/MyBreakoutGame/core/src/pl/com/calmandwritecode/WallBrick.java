@@ -5,6 +5,7 @@ public class WallBrick extends Brick {
 
     public WallBrick(float x, float y, Sprite texture) {
         super(x, y, texture);
+        destryable = false;
     }
 
     @Override
