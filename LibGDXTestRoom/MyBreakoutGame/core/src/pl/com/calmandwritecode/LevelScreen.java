@@ -147,5 +147,6 @@ public class LevelScreen implements Screen {
     @Override
     public void dispose() {
         atlas.dispose();
+        ball.dispose();
     }
 }

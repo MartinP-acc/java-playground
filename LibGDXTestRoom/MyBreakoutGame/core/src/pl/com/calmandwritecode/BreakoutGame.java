@@ -15,7 +15,7 @@ public class BreakoutGame extends Game {
 	public void create () {
 		batch = new SpriteBatch();
 		font = new BitmapFont(Gdx.files.internal("fonts/bmfont120bold.fnt"));
-		setScreen(new WelcomeScreen(this));
+		setScreen(new EditorScreen());
 	}
 
 	@Override
