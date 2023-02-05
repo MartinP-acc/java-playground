@@ -1,110 +1,117 @@
 
 breakout-tx.png
-size: 512, 128
+size: 1024, 256
 format: RGBA8888
 filter: Nearest, Nearest
 repeat: none
 ball
   rotate: false
-  xy: 448, 96
+  xy: 206, 10
   size: 22, 22
   orig: 22, 22
   offset: 0, 0
   index: -1
 brick1
   rotate: false
-  xy: 2, 66
+  xy: 503, 211
   size: 100, 30
   orig: 100, 30
   offset: 0, 0
   index: -1
 brick2
   rotate: false
-  xy: 2, 34
+  xy: 2, 2
   size: 100, 30
   orig: 100, 30
   offset: 0, 0
   index: -1
 brick3
   rotate: false
-  xy: 104, 66
+  xy: 503, 179
   size: 100, 30
   orig: 100, 30
   offset: 0, 0
   index: -1
 brick4
   rotate: false
-  xy: 2, 2
+  xy: 605, 211
   size: 100, 30
   orig: 100, 30
   offset: 0, 0
   index: -1
 brick5
   rotate: false
-  xy: 104, 34
+  xy: 104, 2
   size: 100, 30
   orig: 100, 30
   offset: 0, 0
   index: -1
 brick6
   rotate: false
-  xy: 104, 2
+  xy: 503, 147
   size: 100, 30
   orig: 100, 30
   offset: 0, 0
   index: -1
 brick7
   rotate: false
-  xy: 244, 88
+  xy: 605, 179
   size: 100, 30
   orig: 100, 30
   offset: 0, 0
   index: -1
 brick8
   rotate: false
-  xy: 346, 88
+  xy: 707, 211
   size: 100, 30
   orig: 100, 30
   offset: 0, 0
   index: -1
+dialog
+  rotate: false
+  xy: 2, 56
+  size: 499, 185
+  orig: 499, 185
+  offset: 0, 0
+  index: -1
 hard_brick0
   rotate: false
-  xy: 206, 56
+  xy: 503, 115
   size: 100, 30
   orig: 100, 30
   offset: 0, 0
   index: -1
 hard_brick1
   rotate: false
-  xy: 206, 24
+  xy: 605, 147
   size: 100, 30
   orig: 100, 30
   offset: 0, 0
   index: -1
 hard_brick2
   rotate: false
-  xy: 308, 56
+  xy: 707, 179
   size: 100, 30
   orig: 100, 30
   offset: 0, 0
   index: -1
 paddle
   rotate: false
-  xy: 2, 98
+  xy: 2, 34
   size: 240, 20
   orig: 240, 20
   offset: 0, 0
   index: -1
 small_paddle
   rotate: false
-  xy: 206, 15
+  xy: 244, 47
   size: 79, 7
   orig: 79, 7
   offset: 0, 0
   index: -1
 wall_brick
   rotate: false
-  xy: 308, 24
+  xy: 809, 211
   size: 100, 30
   orig: 100, 30
   offset: 0, 0

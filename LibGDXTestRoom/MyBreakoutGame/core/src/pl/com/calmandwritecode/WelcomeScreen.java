@@ -57,6 +57,15 @@ public class WelcomeScreen implements Screen {
             }
         });
 
+        TextButton editorButton = new TextButton("level editor",menuSkin);
+        editorButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                game.setScreen(new EditorScreen(game));
+                dispose();
+            }
+        });
+
         Label header = new Label("breakout test", menuSkin);
 
         AlphaAction fadeIn = new AlphaAction();
@@ -77,6 +86,8 @@ public class WelcomeScreen implements Screen {
         table.add(header).pad(100);
         table.row();
         table.add(startButton);
+        table.row();
+        table.add(editorButton);
         table.row();
         table.add(exitButton);
         table.addAction(fadeInAndOut);

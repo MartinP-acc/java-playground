@@ -16,9 +16,11 @@ public class GridCell extends Rectangle {
 
     public boolean cursorOver;
     public Sprite sprite;
+    public String brickName;
 
     public GridCell(float y, float x){
         super(15+50*x,200+30*y,50,30);
+        brickName = " ";
     }
 
     public void draw(ShapeRenderer shapeRenderer, Rectangle cursorRect){
@@ -37,22 +39,54 @@ public class GridCell extends Rectangle {
         if (cursorOver && Gdx.input.isButtonPressed(Input.Buttons.LEFT)){
             String spriteName = "";
             switch (button.getCheckedIndex()){
-                case 0: spriteName = "brick1"; break;
-                case 1: spriteName = "brick2"; break;
-                case 2: spriteName = "brick3"; break;
-                case 3: spriteName = "brick4"; break;
-                case 4: spriteName = "brick5"; break;
-                case 5: spriteName = "brick6"; break;
-                case 6: spriteName = "brick7"; break;
-                case 7: spriteName = "brick8"; break;
-                case 8: spriteName = "hard_brick0"; break;
-                case 9: spriteName = "wall_brick"; break;
+                case 0:
+                    spriteName = "brick1";
+                    brickName = "b0";
+                    break;
+
+                case 1:
+                    spriteName = "brick2";
+                    brickName = "b1";
+                    break;
+                case 2:
+                    spriteName = "brick3";
+                    brickName = "b2";
+                    break;
+                case 3:
+                    spriteName = "brick4";
+                    brickName = "b3";
+                    break;
+                case 4:
+                    spriteName = "brick5";
+                    brickName = "b4";
+                    break;
+                case 5:
+                    spriteName = "brick6";
+                    brickName = "b5";
+                    break;
+                case 6:
+                    spriteName = "brick7";
+                    brickName = "b6";
+                    break;
+                case 7:
+                    spriteName = "brick8";
+                    brickName = "b7";
+                    break;
+                case 8:
+                    spriteName = "hard_brick0";
+                    brickName = "hb";
+                    break;
+                case 9:
+                    spriteName = "wall_brick";
+                    brickName = "wb";
+                    break;
             }
             sprite = atlas.createSprite(spriteName);
         }
 
         if (cursorOver && Gdx.input.isButtonPressed(Input.Buttons.RIGHT)){
             sprite = null;
+            brickName=" ";
         }
     }
 }
