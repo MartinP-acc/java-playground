@@ -35,4 +35,8 @@ public class LifeCounter {
         return lives < 0;
     }
 
+    public void dispose(){
+        font.dispose();
+    }
+
 }

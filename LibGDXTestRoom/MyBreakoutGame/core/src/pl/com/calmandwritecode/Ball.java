@@ -41,7 +41,7 @@ public class Ball extends Circle {
     public void update(){
         x+=xSpeed;
         y+=ySpeed;
-        if (x<=0 && xSpeed<0){
+        if (x<=radius && xSpeed<0){
             xSpeed = -xSpeed;
             playBounce();
         }
@@ -58,15 +58,17 @@ public class Ball extends Circle {
 
     public void updateVectors(){
         position.set(x,y);
-        float xs = xSpeed>=0 ? xSpeed : -xSpeed;
-        float ys = ySpeed>=0 ? ySpeed : -ySpeed;
+        float xs = Math.abs(xSpeed);
+        float ys = Math.abs(ySpeed);
         float multiplier = xs>ys ? 10/xs : 10/ys;
         futurePos.set(x+xSpeed*multiplier,y+ySpeed*multiplier);
     }
 
     public void accelerateBall(){
-        xSpeed = xSpeed * 1.05f;
-        ySpeed = ySpeed * 1.05f;
+        if (Math.abs(xSpeed)<10 && Math.abs(ySpeed)<10) {
+            xSpeed = xSpeed * 1.1f;
+            ySpeed = ySpeed * 1.1f;
+        }
     }
 
     public void playBounce(){

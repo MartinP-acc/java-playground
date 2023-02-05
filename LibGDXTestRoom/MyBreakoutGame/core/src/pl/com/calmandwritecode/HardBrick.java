@@ -12,6 +12,7 @@ public class HardBrick extends Brick{
         super(x, y, textures[0]);
         hits = 0;
         this.textures = textures;
+        pointsWorth = 30;
 
     }
 

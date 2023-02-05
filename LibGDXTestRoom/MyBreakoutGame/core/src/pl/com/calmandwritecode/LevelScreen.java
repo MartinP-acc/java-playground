@@ -6,12 +6,11 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.Json;
-import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.utils.*;
 
 public class LevelScreen implements Screen {
 
@@ -24,13 +23,16 @@ public class LevelScreen implements Screen {
     private final TextureAtlas atlas;
     private final LifeCounter lifeCounter;
 
+    private long lastCheckoutTime;
+    private long score;
+    private BitmapFont font;
+
     public LevelScreen(BreakoutGame game) {
         this.game = game;
         float WIDTH = Gdx.graphics.getWidth();
         float HEIGHT = Gdx.graphics.getHeight();
 
         atlas = new TextureAtlas("breakout-tx.atlas");
-
         ball = new Ball(WIDTH, HEIGHT,atlas);
         paddle = new Paddle(WIDTH,atlas);
         paddle.setReadyToThrow();
@@ -40,14 +42,16 @@ public class LevelScreen implements Screen {
         LevelBuilder builder = new LevelBuilder(atlas);
         bricks = new Array<>();
         bricks = builder.buildFromString(level.getBrickMap());
-        
+
         camera = new OrthographicCamera();
         camera.setToOrtho(false, WIDTH, HEIGHT);
 
         lifeCounter = new LifeCounter(atlas);
 
+        score = 0;
+        font = new BitmapFont();
 
-
+        lastCheckoutTime = TimeUtils.millis();
         Gdx.input.setCursorCatched(true);
     }
 
@@ -67,13 +71,16 @@ public class LevelScreen implements Screen {
         ball.draw(game.batch);
         lifeCounter.draw(game.batch);
         findBrickCollision();
+        font.draw(game.batch, "Score : "+score,Gdx.graphics.getWidth()/2,Gdx.graphics.getHeight()-10);
         game.batch.end();
         paddle.collision(ball);
         paddle.update();
         ball.update();
 
-        if (Gdx.input.isKeyPressed(Input.Keys.SPACE)){
+        if (TimeUtils.timeSinceMillis(lastCheckoutTime)>20000){
             ball.accelerateBall();
+            System.out.println(ball.xSpeed+" "+ball.ySpeed);
+            lastCheckoutTime = TimeUtils.millis();
         }
 
         if (ball.y < 0){
@@ -120,8 +127,10 @@ public class LevelScreen implements Screen {
         }
         if (closest != null){
             closest.collision(ball);
-            if (closest.destroyed)
-                bricks.removeIndex(bricks.indexOf(closest,true));
+            if (closest.destroyed) {
+                score += closest.getPointsWorth();
+                bricks.removeIndex(bricks.indexOf(closest, true));
+            }
             findBrickCollision();
         }
 
@@ -152,5 +161,6 @@ public class LevelScreen implements Screen {
     public void dispose() {
         atlas.dispose();
         ball.dispose();
+        lifeCounter.dispose();
     }
 }

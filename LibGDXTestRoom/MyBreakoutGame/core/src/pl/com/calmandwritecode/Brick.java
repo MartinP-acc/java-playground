@@ -2,7 +2,6 @@ package pl.com.calmandwritecode;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
@@ -20,6 +19,8 @@ public class Brick extends Rectangle {
     private Vector2 topRight;
 
     private String boundSide;
+    private Vector2 lastIntersection;
+    protected int pointsWorth;
 
     public Brick(float x, float y, Sprite texture){
         this.x = x;
@@ -33,6 +34,7 @@ public class Brick extends Rectangle {
         bottomRight = new Vector2(x+width,y);
         topLeft = new Vector2(x,y+height);
         topRight = new Vector2(x+width, y+height );
+        pointsWorth = 10;
     }
 
     public void draw(SpriteBatch batch){
@@ -96,6 +98,7 @@ public class Brick extends Rectangle {
                 }
             }
         }
+        lastIntersection = nearestIntersection;
         return !boundSide.equals("none") ? nearestIntersection : null;
     }
 
@@ -104,19 +107,31 @@ public class Brick extends Rectangle {
         switch (boundSide){
             case "left":
                 if (ball.xSpeed>0)ball.xSpeed = -ball.xSpeed;
+                ball.x = lastIntersection.x-ball.radius;
+                ball.y = lastIntersection.y;
                 break;
             case "right":
                 if (ball.xSpeed<0)ball.xSpeed = -ball.xSpeed;
+                ball.x = lastIntersection.x+ball.radius;
+                ball.y = lastIntersection.y;
                 break;
             case "top":
                 if (ball.ySpeed<0)ball.ySpeed = -ball.ySpeed;
+                ball.y = lastIntersection.y+ball.radius;
+                ball.x = lastIntersection.x;
                 break;
             case "bottom":
                 if (ball.ySpeed>0)ball.ySpeed = -ball.ySpeed;
+                ball.y = lastIntersection.y-ball.radius;
+                ball.x = lastIntersection.x;
                 break;
             default:break;
         }
         ball.updateVectors();
         ball.playBounce();
+    }
+
+    public int getPointsWorth() {
+        return pointsWorth;
     }
 }

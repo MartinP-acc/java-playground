@@ -54,10 +54,8 @@ public class LevelBuilder {
     private final static char NEXT_LINE = 'n';
 
     private final Sprite[] textures;
-    private final TextureAtlas atlas;
 
     public LevelBuilder(TextureAtlas atlas){
-        this.atlas = atlas;
         textures = new Sprite[]{
                 atlas.createSprite("brick1"),
                 atlas.createSprite("brick2"),
@@ -77,8 +75,8 @@ public class LevelBuilder {
 
     public Array<Brick> buildFromString(String map){
         Array<Brick> bricks = new Array<>();
-        float x=30;
-        float y=610;
+        float x=15;
+        float y=670;
         for (int i=0; i<map.length(); i++){
             char c = map.charAt(i);
             if (c == BRICK) {
@@ -99,11 +97,12 @@ public class LevelBuilder {
                 x+=50;
             }else if (c == NEXT_LINE){
                 y-=30;
-                x=30;
+                x=15;
             }
         }
         return bricks;
     }
 
     public void dispose(){}
+
 }

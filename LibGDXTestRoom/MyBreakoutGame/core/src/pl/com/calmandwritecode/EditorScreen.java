@@ -15,10 +15,10 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.StringBuilder;
-import sun.tools.jconsole.Tab;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -34,7 +34,7 @@ public class EditorScreen implements Screen {
     private Stage stage;
     private ButtonGroup<ImageButton> buttons;
     private boolean activeGrid;
-    private BreakoutGame game;
+    private final BreakoutGame game;
 
     public EditorScreen(BreakoutGame game){
         this.game = game;
@@ -66,8 +66,11 @@ public class EditorScreen implements Screen {
 
         final TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
         textButtonStyle.font = new BitmapFont();
-        textButtonStyle.fontColor = Color.WHITE;
-        textButtonStyle.downFontColor = Color.BLUE;
+        textButtonStyle.fontColor = Color.BLACK;
+        textButtonStyle.downFontColor = Color.WHITE;
+        textButtonStyle.up = new SpriteDrawable(atlas.createSprite("wall_brick"));
+        textButtonStyle.over = new SpriteDrawable(atlas.createSprite("hard_brick0"));
+        textButtonStyle.down = new SpriteDrawable(atlas.createSprite("hard_brick2"));
 
         TextButton clear = new TextButton("Clear grid",textButtonStyle);
         clear.addListener(new ChangeListener() {
@@ -104,10 +107,13 @@ public class EditorScreen implements Screen {
         windowStyle.titleFont = new BitmapFont();
         windowStyle.background = new SpriteDrawable(atlas.createSprite("dialog"));
         final Dialog dialog = new Dialog("Type level name: ",windowStyle);
+        dialog.getTitleLabel().getStyle().background = new SpriteDrawable(atlas.createSprite("dialog_stage"));
+        dialog.getTitleLabel().setAlignment(Align.center);
 
         TextField.TextFieldStyle textFieldStyle = new TextField.TextFieldStyle();
         textFieldStyle.font = new BitmapFont();
-        textFieldStyle.fontColor = Color.BLUE;
+        textFieldStyle.fontColor = Color.WHITE;
+        textFieldStyle.background = new SpriteDrawable(atlas.createSprite("dialog_text_field"));
         final TextField textField = new TextField("myLevelName",textFieldStyle);
 
         TextButton ok = new TextButton("OK",textButtonStyle);
@@ -115,7 +121,7 @@ public class EditorScreen implements Screen {
         ok.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                Level level = new Level(textField.getText().toString(),saveToString(),slider.getValue());
+                Level level = new Level(textField.getText(),saveToString(),slider.getValue());
                 Json json = new Json();
                 File file = Gdx.files.absolute("assets/levels/"+level.getLevelTitle()+".json").file();
                 try (FileWriter writer = new FileWriter(file)){
@@ -137,9 +143,8 @@ public class EditorScreen implements Screen {
                 dialog.remove();
             }
         });
-        dialog.debug();
-        dialog.getContentTable().add(textField).center();
-        dialog.getButtonTable().add(ok,cancel).padBottom(50);
+        dialog.getContentTable().add(textField).padTop(30);
+        dialog.getButtonTable().add(ok,cancel).padBottom(30);
 
         save.addListener(new ChangeListener() {
             @Override

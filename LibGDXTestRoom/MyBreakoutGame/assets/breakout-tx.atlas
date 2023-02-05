@@ -6,112 +6,126 @@ filter: Nearest, Nearest
 repeat: none
 ball
   rotate: false
-  xy: 206, 10
+  xy: 206, 42
   size: 22, 22
   orig: 22, 22
   offset: 0, 0
   index: -1
 brick1
   rotate: false
-  xy: 503, 211
+  xy: 427, 177
   size: 100, 30
   orig: 100, 30
   offset: 0, 0
   index: -1
 brick2
   rotate: false
-  xy: 2, 2
+  xy: 2, 34
   size: 100, 30
   orig: 100, 30
   offset: 0, 0
   index: -1
 brick3
   rotate: false
-  xy: 503, 179
+  xy: 427, 145
   size: 100, 30
   orig: 100, 30
   offset: 0, 0
   index: -1
 brick4
   rotate: false
-  xy: 605, 211
+  xy: 529, 177
   size: 100, 30
   orig: 100, 30
   offset: 0, 0
   index: -1
 brick5
   rotate: false
-  xy: 104, 2
+  xy: 2, 2
   size: 100, 30
   orig: 100, 30
   offset: 0, 0
   index: -1
 brick6
   rotate: false
-  xy: 503, 147
+  xy: 104, 34
   size: 100, 30
   orig: 100, 30
   offset: 0, 0
   index: -1
 brick7
   rotate: false
-  xy: 605, 179
+  xy: 427, 113
   size: 100, 30
   orig: 100, 30
   offset: 0, 0
   index: -1
 brick8
   rotate: false
-  xy: 707, 211
+  xy: 529, 145
   size: 100, 30
   orig: 100, 30
   offset: 0, 0
   index: -1
 dialog
   rotate: false
-  xy: 2, 56
-  size: 499, 185
-  orig: 499, 185
+  xy: 2, 113
+  size: 423, 121
+  orig: 423, 121
+  offset: 0, 0
+  index: -1
+dialog_stage
+  rotate: false
+  xy: 2, 88
+  size: 423, 23
+  orig: 423, 23
+  offset: 0, 0
+  index: -1
+dialog_text_field
+  rotate: false
+  xy: 427, 209
+  size: 270, 25
+  orig: 270, 25
   offset: 0, 0
   index: -1
 hard_brick0
   rotate: false
-  xy: 503, 115
+  xy: 104, 2
   size: 100, 30
   orig: 100, 30
   offset: 0, 0
   index: -1
 hard_brick1
   rotate: false
-  xy: 605, 147
+  xy: 529, 113
   size: 100, 30
   orig: 100, 30
   offset: 0, 0
   index: -1
 hard_brick2
   rotate: false
-  xy: 707, 179
+  xy: 699, 204
   size: 100, 30
   orig: 100, 30
   offset: 0, 0
   index: -1
 paddle
   rotate: false
-  xy: 2, 34
+  xy: 2, 66
   size: 240, 20
   orig: 240, 20
   offset: 0, 0
   index: -1
 small_paddle
   rotate: false
-  xy: 244, 47
+  xy: 244, 79
   size: 79, 7
   orig: 79, 7
   offset: 0, 0
   index: -1
 wall_brick
   rotate: false
-  xy: 809, 211
+  xy: 801, 204
   size: 100, 30
   orig: 100, 30
   offset: 0, 0
