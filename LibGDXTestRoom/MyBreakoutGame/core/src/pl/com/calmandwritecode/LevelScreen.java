@@ -3,12 +3,14 @@ package pl.com.calmandwritecode;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.*;
 
@@ -25,7 +27,7 @@ public class LevelScreen implements Screen {
 
     private long lastCheckoutTime;
     private long score;
-    private BitmapFont font;
+    private final BitmapFont font;
 
     public LevelScreen(BreakoutGame game) {
         this.game = game;
@@ -37,8 +39,11 @@ public class LevelScreen implements Screen {
         paddle = new Paddle(WIDTH,atlas);
         paddle.setReadyToThrow();
 
+        FileHandle[] files  = Gdx.files.internal("assets/levels/").list();
+        FileHandle file = files[MathUtils.random(files.length-1)];
+
         Json json = new Json();
-        Level level = json.fromJson(Level.class,Gdx.files.internal("levels/level2.json"));
+        Level level = json.fromJson(Level.class,file);
         LevelBuilder builder = new LevelBuilder(atlas);
         bricks = new Array<>();
         bricks = builder.buildFromString(level.getBrickMap());

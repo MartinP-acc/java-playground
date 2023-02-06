@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -35,6 +36,7 @@ public class EditorScreen implements Screen {
     private ButtonGroup<ImageButton> buttons;
     private boolean activeGrid;
     private final BreakoutGame game;
+    private OrthographicCamera camera;
 
     public EditorScreen(BreakoutGame game){
         this.game = game;
@@ -52,7 +54,6 @@ public class EditorScreen implements Screen {
 
         cleanGrid();
 
-
         ImageButton brick1Button = new ImageButton(new SpriteDrawable(atlas.createSprite("brick1")));
         ImageButton brick2Button = new ImageButton(new SpriteDrawable(atlas.createSprite("brick2")));
         ImageButton brick3Button = new ImageButton(new SpriteDrawable(atlas.createSprite("brick3")));
@@ -69,7 +70,6 @@ public class EditorScreen implements Screen {
         textButtonStyle.fontColor = Color.BLACK;
         textButtonStyle.downFontColor = Color.WHITE;
         textButtonStyle.up = new SpriteDrawable(atlas.createSprite("wall_brick"));
-        textButtonStyle.over = new SpriteDrawable(atlas.createSprite("hard_brick0"));
         textButtonStyle.down = new SpriteDrawable(atlas.createSprite("hard_brick2"));
 
         TextButton clear = new TextButton("Clear grid",textButtonStyle);
@@ -191,6 +191,9 @@ public class EditorScreen implements Screen {
         Gdx.input.setInputProcessor(stage);
 
         stage.addActor(root);
+
+        camera = new OrthographicCamera();
+        camera.setToOrtho(false,Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
     }
 
     private void cleanGrid() {
@@ -218,6 +221,10 @@ public class EditorScreen implements Screen {
     public void render(float delta) {
         ScreenUtils.clear(Color.BLACK);
         Gdx.gl20.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        camera.update();
+
+        shapeRenderer.setProjectionMatrix(camera.combined);
+        batch.setProjectionMatrix(camera.combined);
 
         cursorRect.setPosition(Gdx.input.getX(),Gdx.graphics.getHeight()-Gdx.input.getY());
 
@@ -244,7 +251,9 @@ public class EditorScreen implements Screen {
             }
         }
         batch.end();
+
         stage.draw();
+        stage.getBatch().setProjectionMatrix(camera.combined);
 
         if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)){
             game.setScreen(new WelcomeScreen(game));

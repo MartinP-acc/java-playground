@@ -3,6 +3,7 @@ package pl.com.calmandwritecode;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -12,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.AlphaAction;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.utils.Json;
 
 public class WelcomeScreen implements Screen {
 
@@ -36,8 +38,6 @@ public class WelcomeScreen implements Screen {
         Image image = new Image(textureRegion);
         image.setSize(Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
         image.setPosition(0,0);
-
-
 
         TextButton startButton = new TextButton("start", menuSkin);
         startButton.addListener(new ChangeListener() {
@@ -97,6 +97,8 @@ public class WelcomeScreen implements Screen {
         Gdx.input.setInputProcessor(stage);
         stage.addActor(image);
         stage.addActor(table);
+
+
     }
 
     @Override
