@@ -13,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.AlphaAction;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
 
 public class WelcomeScreen implements Screen {
@@ -23,6 +24,17 @@ public class WelcomeScreen implements Screen {
     public WelcomeScreen(final BreakoutGame game) {
         this.game = game;
         Gdx.input.setCursorCatched(false);
+        initLevels();
+    }
+
+    private void initLevels(){
+        Json json = new Json();
+        game.levels = new Array<>();
+        FileHandle[] files  = Gdx.files.internal("assets/levels/").list();
+        for (FileHandle file : files){
+            Level level = json.fromJson(Level.class,file);
+            game.levels.add(level);
+        }
     }
 
     @Override
@@ -43,7 +55,7 @@ public class WelcomeScreen implements Screen {
         startButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.setScreen(new LevelScreen(game));
+                game.setScreen(new LevelScreen(game,0));
                 dispose();
             }
         });

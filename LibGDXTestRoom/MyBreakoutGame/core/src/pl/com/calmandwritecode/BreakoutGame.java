@@ -4,11 +4,13 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.utils.Array;
 
 public class BreakoutGame extends Game {
 
 	public SpriteBatch batch;
 	public BitmapFont font;
+	public Array<Level> levels;
 
 
 	@Override
