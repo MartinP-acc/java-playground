@@ -24,14 +24,9 @@ public class LevelScreen implements Screen {
     private final LifeCounter lifeCounter;
 
     private long lastCheckoutTime;
-    private long score;
     private final BitmapFont font;
-    private int levelNr;
 
-    public LevelScreen(BreakoutGame game, int levelNr) {
-        System.out.println("starting :" + levelNr);
-        System.out.println("levels in array :" + game.levels.size);
-        this.levelNr = levelNr;
+    public LevelScreen(BreakoutGame game) {
         this.game = game;
         float WIDTH = Gdx.graphics.getWidth();
         float HEIGHT = Gdx.graphics.getHeight();
@@ -41,7 +36,7 @@ public class LevelScreen implements Screen {
         paddle = new Paddle(WIDTH,atlas);
         paddle.setReadyToThrow();
 
-        Level level = game.levels.get(levelNr);
+        Level level = game.levels.get(game.player.getCurrentLevel());
         LevelBuilder builder = new LevelBuilder(atlas);
         bricks = new Array<>();
         bricks = builder.buildFromString(level.getBrickMap());
@@ -51,7 +46,6 @@ public class LevelScreen implements Screen {
 
         lifeCounter = new LifeCounter(atlas, game);
 
-        score = 0;
         font = new BitmapFont();
 
         lastCheckoutTime = TimeUtils.millis();
@@ -82,7 +76,6 @@ public class LevelScreen implements Screen {
 
         if (TimeUtils.timeSinceMillis(lastCheckoutTime)>20000){
             ball.accelerateBall();
-            System.out.println(ball.xSpeed+" "+ball.ySpeed);
             lastCheckoutTime = TimeUtils.millis();
         }
 
@@ -96,7 +89,7 @@ public class LevelScreen implements Screen {
             ball.stickTo(paddle);
         }
 
-        if (lifeCounter.isGameOver() || Gdx.input.isKeyPressed(Input.Keys.ESCAPE)){
+        if (lifeCounter.noMoreLives() || Gdx.input.isKeyPressed(Input.Keys.ESCAPE)){
             backToMenu();
         }
     }
@@ -138,15 +131,14 @@ public class LevelScreen implements Screen {
         }
 
         if (!gameOn) {
-            levelNr++;
-            if (game.levels.size>levelNr){
-                game.setScreen(new LevelScreen(game,levelNr));
-                System.out.println("level finished - next level :" + levelNr);
+            game.player.nextLevel();
+            if (game.levels.size>game.player.getCurrentLevel()){
+                game.setScreen(new LevelScreen(game));
             }else{
                 game.setScreen(new WelcomeScreen(game));
             }
             dispose();
-        };
+        }
     }
 
     @Override

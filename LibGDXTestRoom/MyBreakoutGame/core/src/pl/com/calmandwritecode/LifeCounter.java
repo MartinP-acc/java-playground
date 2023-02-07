@@ -31,7 +31,7 @@ public class LifeCounter {
         game.player.extraLife();
     }
 
-    public boolean isGameOver(){
+    public boolean noMoreLives(){
         return game.player.getLives() < 0;
     }
 

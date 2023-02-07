@@ -56,7 +56,7 @@ public class WelcomeScreen implements Screen {
         startButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.setScreen(new LevelScreen(game,0));
+                game.setScreen(new LevelScreen(game));
                 dispose();
             }
         });
