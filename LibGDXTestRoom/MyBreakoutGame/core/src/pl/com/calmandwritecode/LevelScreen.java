@@ -49,7 +49,7 @@ public class LevelScreen implements Screen {
         camera = new OrthographicCamera();
         camera.setToOrtho(false, WIDTH, HEIGHT);
 
-        lifeCounter = new LifeCounter(atlas);
+        lifeCounter = new LifeCounter(atlas, game);
 
         score = 0;
         font = new BitmapFont();
@@ -74,7 +74,7 @@ public class LevelScreen implements Screen {
         ball.draw(game.batch);
         lifeCounter.draw(game.batch);
         findBrickCollision();
-        font.draw(game.batch, "Score : "+score,Gdx.graphics.getWidth()/2,Gdx.graphics.getHeight()-10);
+        font.draw(game.batch, "Score : "+game.player.getScore(),Gdx.graphics.getWidth()/2,Gdx.graphics.getHeight()-10);
         game.batch.end();
         paddle.collision(ball);
         paddle.update();
@@ -131,7 +131,7 @@ public class LevelScreen implements Screen {
         if (closest != null){
             closest.collision(ball);
             if (closest.destroyed) {
-                score += closest.getPointsWorth();
+                game.player.addToScore(closest.getPointsWorth());
                 bricks.removeIndex(bricks.indexOf(closest, true));
             }
             findBrickCollision();

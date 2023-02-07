@@ -9,30 +9,30 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 public class LifeCounter {
 
     private Sprite paddleSprite;
-    private int lives;
     private BitmapFont font;
+    private BreakoutGame game;
 
-    public LifeCounter(TextureAtlas atlas){
+    public LifeCounter(TextureAtlas atlas, BreakoutGame game){
+        this.game = game;
         paddleSprite = atlas.createSprite("small_paddle");
-        lives = 3;
         font = new BitmapFont();
     }
 
     public void draw(SpriteBatch batch){
         batch.draw(paddleSprite, 10, Gdx.graphics.getHeight()-20);
-        font.draw(batch," x "+lives,paddleSprite.getX()+paddleSprite.getWidth()+10,Gdx.graphics.getHeight()-10);
+        font.draw(batch," x "+game.player.getLives(),paddleSprite.getX()+paddleSprite.getWidth()+10,Gdx.graphics.getHeight()-10);
     }
 
     public void ballOut(){
-        lives -= 1;
+        game.player.decLife();
     }
 
     public void extraLife(){
-        lives += 1;
+        game.player.extraLife();
     }
 
     public boolean isGameOver(){
-        return lives < 0;
+        return game.player.getLives() < 0;
     }
 
     public void dispose(){

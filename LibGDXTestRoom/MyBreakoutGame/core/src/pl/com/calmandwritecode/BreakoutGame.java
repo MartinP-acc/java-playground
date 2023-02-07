@@ -11,7 +11,7 @@ public class BreakoutGame extends Game {
 	public SpriteBatch batch;
 	public BitmapFont font;
 	public Array<Level> levels;
-
+	public PlayerData player;
 
 	@Override
 	public void create () {

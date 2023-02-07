@@ -23,6 +23,7 @@ public class WelcomeScreen implements Screen {
 
     public WelcomeScreen(final BreakoutGame game) {
         this.game = game;
+        game.player = new PlayerData();
         Gdx.input.setCursorCatched(false);
         initLevels();
     }
