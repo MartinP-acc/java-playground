@@ -1,11 +1,11 @@
-package pl.com.calmandwritecode;
+package pl.com.calmandwritecode.game;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 
 public class WallBrick extends Brick {
 
     public WallBrick(float x, float y, Sprite texture) {
         super(x, y, texture);
-        destryable = false;
+        destroyable = false;
         pointsWorth = 50;
     }
 

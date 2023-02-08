@@ -1,4 +1,4 @@
-package pl.com.calmandwritecode;
+package pl.com.calmandwritecode.game;
 
 
 import com.badlogic.gdx.graphics.g2d.Sprite;

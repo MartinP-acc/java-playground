@@ -1,4 +1,4 @@
-package pl.com.calmandwritecode;
+package pl.com.calmandwritecode.menu;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -15,13 +15,16 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
+import pl.com.calmandwritecode.*;
+import pl.com.calmandwritecode.editor.EditorScreen;
+import pl.com.calmandwritecode.game.LevelScreen;
 
-public class WelcomeScreen implements Screen {
+public class MenuScreen implements Screen {
 
     private Stage stage;
     private final BreakoutGame game;
 
-    public WelcomeScreen(final BreakoutGame game) {
+    public MenuScreen(final BreakoutGame game) {
         this.game = game;
         game.player = new PlayerData();
         Gdx.input.setCursorCatched(false);

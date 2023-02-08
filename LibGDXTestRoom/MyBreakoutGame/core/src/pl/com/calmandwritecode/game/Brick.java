@@ -1,4 +1,4 @@
-package pl.com.calmandwritecode;
+package pl.com.calmandwritecode.game;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -9,14 +9,14 @@ import com.badlogic.gdx.math.Vector2;
 public class Brick extends Rectangle {
 
     public boolean destroyed = false;
-    public boolean destryable = true;
+    public boolean destroyable = true;
     public Vector2 center;
     protected Sprite texture;
 
-    private Vector2 bottomLeft;
-    private Vector2 topLeft;
-    private Vector2 bottomRight;
-    private Vector2 topRight;
+    private final Vector2 bottomLeft;
+    private final Vector2 topLeft;
+    private final Vector2 bottomRight;
+    private final Vector2 topRight;
 
     private String boundSide;
     private Vector2 lastIntersection;

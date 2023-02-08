@@ -1,8 +1,7 @@
-package pl.com.calmandwritecode;
+package pl.com.calmandwritecode.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -18,7 +17,7 @@ public class Paddle extends Rectangle {
 
     public Paddle(float widthScreen, TextureAtlas atlas){
         this. widthScreen = widthScreen;
-        paddleTexture = atlas.createSprite("paddle");
+        paddleTexture = atlas.createSprite("paddle120");
         x = widthScreen/2;
         y = 40;
         width = paddleTexture.getWidth();
@@ -30,8 +29,8 @@ public class Paddle extends Rectangle {
     }
 
     public void update(){
-        x=Gdx.input.getX()-120;
-        if (x>widthScreen-240) x= widthScreen-240;
+        x=Gdx.input.getX()-width/2;
+        if (x>widthScreen-width) x= widthScreen-width;
         if (x<0) x=0;
     }
 
@@ -54,12 +53,12 @@ public class Paddle extends Rectangle {
                 Intersector.intersectSegmentCircle(new Vector2(x,y), new Vector2(x+width,y), center, ball.radius*ball.radius)) {
             if (ball.ySpeed<0)ball.ySpeed = -ball.ySpeed;
             ball.y += ball.ySpeed;
-            if (ball.x < x + 60) {
+            if (ball.x < x + width/4) {
                 ball.xSpeed -= 1;
-                if (ball.x < x + 30) ball.xSpeed -= 1;
-            } else if (ball.x > x + width - 60) {
+                if (ball.x < x + width/8) ball.xSpeed -= 1;
+            } else if (ball.x > x + width - width/4) {
                 ball.xSpeed += 1;
-                if (ball.x < x + width - 30) ball.xSpeed -= 1;
+                if (ball.x < x + width - width/8) ball.xSpeed -= 1;
             }
             wasCollision = true;
         }else
@@ -86,6 +85,4 @@ public class Paddle extends Rectangle {
         return readyToThrow;
     }
 
-    public void dispose(){
-    }
 }

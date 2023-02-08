@@ -1,4 +1,4 @@
-package pl.com.calmandwritecode;
+package pl.com.calmandwritecode.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;

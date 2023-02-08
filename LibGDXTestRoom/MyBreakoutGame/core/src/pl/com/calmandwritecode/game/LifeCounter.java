@@ -1,26 +1,24 @@
-package pl.com.calmandwritecode;
+package pl.com.calmandwritecode.game;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import pl.com.calmandwritecode.BreakoutGame;
 
 public class LifeCounter {
 
-    private Sprite paddleSprite;
-    private BitmapFont font;
-    private BreakoutGame game;
+    private final Sprite paddleSprite;
+    private final BreakoutGame game;
 
     public LifeCounter(TextureAtlas atlas, BreakoutGame game){
         this.game = game;
         paddleSprite = atlas.createSprite("small_paddle");
-        font = new BitmapFont();
     }
 
     public void draw(SpriteBatch batch){
         batch.draw(paddleSprite, 10, Gdx.graphics.getHeight()-20);
-        font.draw(batch," x "+game.player.getLives(),paddleSprite.getX()+paddleSprite.getWidth()+10,Gdx.graphics.getHeight()-10);
+        game.normFont.draw(batch," x "+game.player.getLives(),paddleSprite.getX()+paddleSprite.getWidth()+10,Gdx.graphics.getHeight()-10);
     }
 
     public void ballOut(){
@@ -33,10 +31,6 @@ public class LifeCounter {
 
     public boolean noMoreLives(){
         return game.player.getLives() < 0;
-    }
-
-    public void dispose(){
-        font.dispose();
     }
 
 }

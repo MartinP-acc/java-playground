@@ -1,4 +1,4 @@
-package pl.com.calmandwritecode;
+package pl.com.calmandwritecode.editor;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -7,10 +7,8 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
@@ -19,7 +17,9 @@ import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.ScreenUtils;
-import com.badlogic.gdx.utils.StringBuilder;
+import pl.com.calmandwritecode.BreakoutGame;
+import pl.com.calmandwritecode.Level;
+import pl.com.calmandwritecode.menu.MenuScreen;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -28,13 +28,9 @@ import java.io.IOException;
 public class EditorScreen implements Screen {
 
     private ShapeRenderer shapeRenderer;
-    private SpriteBatch batch;
     private TextureAtlas atlas;
-    private Rectangle cursorRect;
-    private GridCell[][] grid;
+    private Grid grid;
     private Stage stage;
-    private ButtonGroup<ImageButton> buttons;
-    private boolean activeGrid;
     private final BreakoutGame game;
     private OrthographicCamera camera;
 
@@ -45,25 +41,19 @@ public class EditorScreen implements Screen {
     @Override
     public void show() {
 
-        cursorRect = new Rectangle(0,0,1,1);
         shapeRenderer = new ShapeRenderer();
-        batch = new SpriteBatch();
         atlas = new TextureAtlas("breakout-tx.atlas");
-        grid = new GridCell[16][25];
-        activeGrid = true;
 
-        cleanGrid();
-
-        ImageButton brick1Button = new ImageButton(new SpriteDrawable(atlas.createSprite("brick1")));
-        ImageButton brick2Button = new ImageButton(new SpriteDrawable(atlas.createSprite("brick2")));
-        ImageButton brick3Button = new ImageButton(new SpriteDrawable(atlas.createSprite("brick3")));
-        ImageButton brick4Button = new ImageButton(new SpriteDrawable(atlas.createSprite("brick4")));
-        ImageButton brick5Button = new ImageButton(new SpriteDrawable(atlas.createSprite("brick5")));
-        ImageButton brick6Button = new ImageButton(new SpriteDrawable(atlas.createSprite("brick6")));
-        ImageButton brick7Button = new ImageButton(new SpriteDrawable(atlas.createSprite("brick7")));
-        ImageButton brick8Button = new ImageButton(new SpriteDrawable(atlas.createSprite("brick8")));
-        ImageButton hardBrickButton = new ImageButton(new SpriteDrawable(atlas.createSprite("hard_brick0")));
-        ImageButton wallBrickButton = new ImageButton(new SpriteDrawable(atlas.createSprite("wall_brick")));
+        ImageButton brick1Button = createImageButton("brick1","brick1ch");
+        ImageButton brick2Button = createImageButton("brick2","brick2ch");
+        ImageButton brick3Button = createImageButton("brick3","brick3ch");
+        ImageButton brick4Button = createImageButton("brick4","brick4ch");
+        ImageButton brick5Button = createImageButton("brick5","brick5ch");
+        ImageButton brick6Button = createImageButton("brick6","brick6ch");
+        ImageButton brick7Button = createImageButton("brick7","brick7ch");
+        ImageButton brick8Button = createImageButton("brick8","brick8ch");
+        ImageButton hardBrickButton = createImageButton("hard_brick0","hard_brick_ch");
+        ImageButton wallBrickButton = createImageButton("wall_brick","wall_brick_ch");
 
         final TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
         textButtonStyle.font = new BitmapFont();
@@ -76,19 +66,18 @@ public class EditorScreen implements Screen {
         clear.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                cleanGrid();
+                grid.cleanGrid();
             }
         });
         clear.padLeft(30);
         clear.padRight(30);
 
         TextButton save = new TextButton("Save level", textButtonStyle);
-
         save.padLeft(30);
         save.padRight(30);
 
         Slider.SliderStyle style = new Slider.SliderStyle();
-        style.background = new SpriteDrawable(atlas.createSprite("paddle"));
+        style.background = new SpriteDrawable(atlas.createSprite("paddle120"));
         style.knob = new SpriteDrawable(atlas.createSprite("ball"));
         final Slider slider = new Slider(10,100,5,false,style);
 
@@ -121,7 +110,7 @@ public class EditorScreen implements Screen {
         ok.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                Level level = new Level(textField.getText(),saveToString(),slider.getValue());
+                Level level = new Level(textField.getText(),grid.saveToString(),slider.getValue());
                 Json json = new Json();
                 File file = Gdx.files.absolute("assets/levels/"+level.getLevelTitle()+".json").file();
                 try (FileWriter writer = new FileWriter(file)){
@@ -129,8 +118,7 @@ public class EditorScreen implements Screen {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                activeGrid = true;
-                dialog.hide();
+                grid.activate();
                 dialog.remove();
             }
         });
@@ -138,8 +126,7 @@ public class EditorScreen implements Screen {
         cancel.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                activeGrid = true;
-                dialog.hide();
+                grid.activate();
                 dialog.remove();
             }
         });
@@ -149,14 +136,14 @@ public class EditorScreen implements Screen {
         save.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                activeGrid = false;
+                grid.deactivate();
                 dialog.show(stage);
 
 
             }
         });
 
-        buttons = new ButtonGroup<>();
+        ButtonGroup<ImageButton> buttons = new ButtonGroup<>();
         buttons.add(brick1Button,
                 brick2Button,
                 brick3Button,
@@ -184,6 +171,7 @@ public class EditorScreen implements Screen {
                 hardBrickButton,
                 wallBrickButton,
                 save, slider);
+        root.getCells().get(6).width(180).padLeft(20);
 
         root.setBounds(0,0,Gdx.graphics.getWidth(),150);
 
@@ -194,29 +182,17 @@ public class EditorScreen implements Screen {
 
         camera = new OrthographicCamera();
         camera.setToOrtho(false,Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
+
+        grid = new Grid(atlas, buttons);
     }
 
-    private void cleanGrid() {
-        for (int row = 0; row<16; row++){
-            for (int col = 0; col<25; col++){
-                grid[row][col]=new GridCell(row,col);
-            }
-        }
+    private ImageButton createImageButton(String normal, String checked) {
+        SpriteDrawable normalSprite = new SpriteDrawable(atlas.createSprite(normal));
+        SpriteDrawable checkedSprite = new SpriteDrawable(atlas.createSprite(checked));
+        ImageButton button = new ImageButton(normalSprite, checkedSprite, checkedSprite);
+        button.setName(normal);
+        return button;
     }
-
-    private String saveToString(){
-        StringBuilder map = new StringBuilder();
-        for (int row = 15; row>=0; row--){
-            for (int col = 0; col<25; col++){
-                GridCell cell = grid[row][col];
-                map.append(cell.brickName);
-                if (!cell.brickName.equals(" ")) col++;
-            }
-            map.append("n");
-        }
-        return map.toString();
-    }
-
     @Override
     public void render(float delta) {
         ScreenUtils.clear(Color.BLACK);
@@ -224,39 +200,23 @@ public class EditorScreen implements Screen {
         camera.update();
 
         shapeRenderer.setProjectionMatrix(camera.combined);
-        batch.setProjectionMatrix(camera.combined);
+        game.batch.setProjectionMatrix(camera.combined);
 
-        cursorRect.setPosition(Gdx.input.getX(),Gdx.graphics.getHeight()-Gdx.input.getY());
+        grid.updateCursor();
 
         shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-        for (int row = 0; row<16; row++){
-            for (int col = 0; col<25; col++){
-                GridCell cell = grid[row][col];
-                cell.draw(shapeRenderer,cursorRect);
-                if (!activeGrid) cell.cursorOver = false;
-                if (col==0 || (col<24 && grid[row][col-1].sprite==null)) {
-                    cell.setTexture(atlas, buttons);
-                }else{
-                    cell.sprite=null;
-                }
-            }
-        }
+        grid.render(shapeRenderer);
         shapeRenderer.end();
 
-        batch.begin();
-        for (int row = 0; row<16; row++) {
-            for (int col = 0; col < 25; col++) {
-                GridCell cell = grid[row][col];
-                cell.drawSprite(batch);
-            }
-        }
-        batch.end();
+        game.batch.begin();
+        grid.drawSprites(game.batch);
+        game.batch.end();
 
         stage.draw();
         stage.getBatch().setProjectionMatrix(camera.combined);
 
         if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)){
-            game.setScreen(new WelcomeScreen(game));
+            game.setScreen(new MenuScreen(game));
             dispose();
         }
     }

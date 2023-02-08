@@ -1,4 +1,4 @@
-package pl.com.calmandwritecode;
+package pl.com.calmandwritecode.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -6,11 +6,13 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.*;
+import pl.com.calmandwritecode.BreakoutGame;
+import pl.com.calmandwritecode.Level;
+import pl.com.calmandwritecode.menu.MenuScreen;
 
 public class LevelScreen implements Screen {
 
@@ -22,9 +24,7 @@ public class LevelScreen implements Screen {
     private Array<Brick> bricks;
     private final TextureAtlas atlas;
     private final LifeCounter lifeCounter;
-
     private long lastCheckoutTime;
-    private final BitmapFont font;
 
     public LevelScreen(BreakoutGame game) {
         this.game = game;
@@ -46,8 +46,6 @@ public class LevelScreen implements Screen {
 
         lifeCounter = new LifeCounter(atlas, game);
 
-        font = new BitmapFont();
-
         lastCheckoutTime = TimeUtils.millis();
         Gdx.input.setCursorCatched(true);
     }
@@ -68,7 +66,7 @@ public class LevelScreen implements Screen {
         ball.draw(game.batch);
         lifeCounter.draw(game.batch);
         findBrickCollision();
-        font.draw(game.batch, "Score : "+game.player.getScore(),Gdx.graphics.getWidth()/2,Gdx.graphics.getHeight()-10);
+        game.normFont.draw(game.batch, "Score : "+game.player.getScore(),Gdx.graphics.getWidth()/2f,Gdx.graphics.getHeight()-10);
         game.batch.end();
         paddle.collision(ball);
         paddle.update();
@@ -95,7 +93,7 @@ public class LevelScreen implements Screen {
     }
 
     private void backToMenu(){
-        game.setScreen(new WelcomeScreen(game));
+        game.setScreen(new MenuScreen(game));
         dispose();
     }
 
@@ -111,7 +109,7 @@ public class LevelScreen implements Screen {
         boolean gameOn = false;
         Brick closest = null;
         for (Brick brick : bricks){
-            if (brick.destryable) gameOn = brick.destryable;
+            if (brick.destroyable) gameOn = brick.destroyable;
             Vector2 intersection = brick.ballIntersect(ball);
             if (intersection != null){
                 currentDistance = ball.position.dst(intersection);
@@ -135,7 +133,7 @@ public class LevelScreen implements Screen {
             if (game.levels.size>game.player.getCurrentLevel()){
                 game.setScreen(new LevelScreen(game));
             }else{
-                game.setScreen(new WelcomeScreen(game));
+                game.setScreen(new MenuScreen(game));
             }
             dispose();
         }
@@ -165,6 +163,5 @@ public class LevelScreen implements Screen {
     public void dispose() {
         atlas.dispose();
         ball.dispose();
-        lifeCounter.dispose();
     }
 }
