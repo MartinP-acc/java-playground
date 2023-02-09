@@ -36,7 +36,7 @@ public class LevelScreen implements Screen {
         paddle = new Paddle(WIDTH,atlas);
         paddle.setReadyToThrow();
 
-        Level level = game.levels.get(game.player.getCurrentLevel());
+        Level level = game.levelManager.getLevel(game.player.getCurrentLevel());
         LevelBuilder builder = new LevelBuilder(atlas);
         bricks = new Array<>();
         bricks = builder.buildFromString(level.getBrickMap());
@@ -130,7 +130,7 @@ public class LevelScreen implements Screen {
 
         if (!gameOn) {
             game.player.nextLevel();
-            if (game.levels.size>game.player.getCurrentLevel()){
+            if (game.levelManager.isLevelOnList(game.player.getCurrentLevel())){
                 game.setScreen(new LevelScreen(game));
             }else{
                 game.setScreen(new MenuScreen(game));

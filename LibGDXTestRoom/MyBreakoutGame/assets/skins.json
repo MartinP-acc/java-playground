@@ -5,6 +5,7 @@
     "gold": { "hex" : "ffd700ff" }
   },
   "com.badlogic.gdx.graphics.g2d.BitmapFont": {
+    "default": { "file": "com/badlogic/gdx/utils/lsans-15.fnt"},
     "large": { "file": "fonts/bmfont120bold.fnt" }
   },
   "com.badlogic.gdx.scenes.scene2d.ui.TextButton$TextButtonStyle": {
@@ -18,6 +19,13 @@
   "com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle": {
     "default": {
       "font": "large"
+    },
+    "message": {
+      "font": "default",
+      "fontColor": "red"
+    },
+    "label": {
+      "font": "default"
     }
   }
 }

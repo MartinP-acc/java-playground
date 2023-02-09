@@ -13,8 +13,6 @@ import com.badlogic.gdx.scenes.scene2d.actions.AlphaAction;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.Json;
 import pl.com.calmandwritecode.*;
 import pl.com.calmandwritecode.editor.EditorScreen;
 import pl.com.calmandwritecode.game.LevelScreen;
@@ -28,23 +26,11 @@ public class MenuScreen implements Screen {
         this.game = game;
         game.player = new PlayerData();
         Gdx.input.setCursorCatched(false);
-        initLevels();
-    }
-
-    private void initLevels(){
-        Json json = new Json();
-        game.levels = new Array<>();
-        FileHandle[] files  = Gdx.files.internal("assets/levels/").list();
-        for (FileHandle file : files){
-            Level level = json.fromJson(Level.class,file);
-            game.levels.add(level);
-        }
+        game.levelManager.loadLevelList();
     }
 
     @Override
     public void show() {
-        Skin menuSkin = new Skin(Gdx.files.internal("skins.json"));
-
         Texture texture = new Texture(Gdx.files.internal("puzzle.png"));
         texture.setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat);
 
@@ -55,7 +41,7 @@ public class MenuScreen implements Screen {
         image.setSize(Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
         image.setPosition(0,0);
 
-        TextButton startButton = new TextButton("start", menuSkin);
+        TextButton startButton = new TextButton("start", game.skin);
         startButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -64,7 +50,7 @@ public class MenuScreen implements Screen {
             }
         });
 
-        TextButton exitButton = new TextButton("exit", menuSkin);
+        TextButton exitButton = new TextButton("exit", game.skin);
         exitButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -73,7 +59,7 @@ public class MenuScreen implements Screen {
             }
         });
 
-        TextButton editorButton = new TextButton("level editor",menuSkin);
+        TextButton editorButton = new TextButton("level editor",game.skin);
         editorButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -82,7 +68,7 @@ public class MenuScreen implements Screen {
             }
         });
 
-        Label header = new Label("breakout test", menuSkin);
+        Label header = new Label("breakout test", game.skin);
 
         AlphaAction fadeIn = new AlphaAction();
         fadeIn.setAlpha(0);

@@ -15,15 +15,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.badlogic.gdx.utils.Align;
-import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.ScreenUtils;
 import pl.com.calmandwritecode.BreakoutGame;
 import pl.com.calmandwritecode.Level;
 import pl.com.calmandwritecode.menu.MenuScreen;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 
 public class EditorScreen implements Screen {
 
@@ -42,6 +38,7 @@ public class EditorScreen implements Screen {
     public void show() {
 
         shapeRenderer = new ShapeRenderer();
+        shapeRenderer.setColor(Color.DARK_GRAY);
         atlas = new TextureAtlas("breakout-tx.atlas");
 
         ImageButton brick1Button = createImageButton("brick1","brick1ch");
@@ -81,10 +78,9 @@ public class EditorScreen implements Screen {
         style.knob = new SpriteDrawable(atlas.createSprite("ball"));
         final Slider slider = new Slider(10,100,5,false,style);
 
+        final Label label = new Label("Power up chance : "+slider.getValue()+"%",game.skin,"label");
+        final Label dialogMessage = new Label("",game.skin,"message");
 
-        Label.LabelStyle labelStyle = new Label.LabelStyle();
-        labelStyle.font = new BitmapFont();
-        final Label label = new Label("Power up chance : "+slider.getValue()+"%",labelStyle);
         slider.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -107,19 +103,17 @@ public class EditorScreen implements Screen {
 
         TextButton ok = new TextButton("OK",textButtonStyle);
 
+
         ok.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 Level level = new Level(textField.getText(),grid.saveToString(),slider.getValue());
-                Json json = new Json();
-                File file = Gdx.files.absolute("assets/levels/"+level.getLevelTitle()+".json").file();
-                try (FileWriter writer = new FileWriter(file)){
-                    json.toJson(level,writer);
-                } catch (IOException e) {
-                    e.printStackTrace();
+                if (game.levelManager.saveLevel(level)){
+                    grid.activate();
+                    dialog.remove();
+                }else {
+                    dialogMessage.setText(game.levelManager.getMessage());
                 }
-                grid.activate();
-                dialog.remove();
             }
         });
         TextButton cancel = new TextButton("Cancel",textButtonStyle);
@@ -130,7 +124,8 @@ public class EditorScreen implements Screen {
                 dialog.remove();
             }
         });
-        dialog.getContentTable().add(textField).padTop(30);
+        dialog.getContentTable().add(dialogMessage).padTop(10).row();
+        dialog.getContentTable().add(textField).padTop(10);
         dialog.getButtonTable().add(ok,cancel).padBottom(30);
 
         save.addListener(new ChangeListener() {
