@@ -13,6 +13,8 @@ import com.badlogic.gdx.utils.*;
 import pl.com.calmandwritecode.BreakoutGame;
 import pl.com.calmandwritecode.Level;
 import pl.com.calmandwritecode.menu.MenuScreen;
+import pl.com.calmandwritecode.scoreboard.Score;
+import pl.com.calmandwritecode.scoreboard.ScoreBoardScreen;
 
 public class LevelScreen implements Screen {
 
@@ -87,9 +89,22 @@ public class LevelScreen implements Screen {
             ball.stickTo(paddle);
         }
 
-        if (lifeCounter.noMoreLives() || Gdx.input.isKeyPressed(Input.Keys.ESCAPE)){
+        if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)){
             backToMenu();
         }
+
+        if (lifeCounter.noMoreLives()){
+            gameOver();
+        }
+    }
+
+    private void gameOver() {
+        if (game.scoreBoard.worthToSave(game.player.getScore())){
+            Score score = new Score("test", game.player.getScore(),game.player.getCurrentLevel());
+            game.scoreBoard.addNewScore(score);
+        }
+        game.setScreen(new ScoreBoardScreen(game));
+        dispose();
     }
 
     private void backToMenu(){
@@ -132,10 +147,10 @@ public class LevelScreen implements Screen {
             game.player.nextLevel();
             if (game.levelManager.isLevelOnList(game.player.getCurrentLevel())){
                 game.setScreen(new LevelScreen(game));
+                dispose();
             }else{
-                game.setScreen(new MenuScreen(game));
+                gameOver();
             }
-            dispose();
         }
     }
 

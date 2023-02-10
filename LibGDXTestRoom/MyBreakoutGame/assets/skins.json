@@ -6,7 +6,8 @@
   },
   "com.badlogic.gdx.graphics.g2d.BitmapFont": {
     "default": { "file": "com/badlogic/gdx/utils/lsans-15.fnt"},
-    "large": { "file": "fonts/bmfont120bold.fnt" }
+    "large": { "file": "fonts/bmfont120bold.fnt" },
+    "score": { "file" : "fonts/fp2025.fnt"}
   },
   "com.badlogic.gdx.scenes.scene2d.ui.TextButton$TextButtonStyle": {
     "default": {
@@ -26,6 +27,7 @@
     },
     "label": {
       "font": "default"
-    }
+    },
+    "scoreboard": { "font" :  "score"}
   }
 }
