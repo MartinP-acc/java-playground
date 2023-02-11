@@ -53,20 +53,20 @@ public class Brick extends Rectangle {
         Vector2 nearestIntersection = new Vector2();
         if (ball.xSpeed>0) {
             if (Intersector.intersectSegments(ball.position.x, ball.position.y, ball.futurePos.x, ball.futurePos.y,
-                    bottomLeft.x-ball.radius,
-                    bottomLeft.y-ball.radius,
-                    topLeft.x-ball.radius,
-                    topLeft.y+ball.radius, intersectionPoint)) {
+                    bottomLeft.x,
+                    bottomLeft.y,
+                    topLeft.x,
+                    topLeft.y, intersectionPoint)) {
                 boundSide = "left";
                 nearestIntersection = intersectionPoint;
             }
         }
         if (ball.xSpeed<0) {
             if (Intersector.intersectSegments(ball.position.x, ball.position.y, ball.futurePos.x, ball.futurePos.y,
-                    bottomRight.x+ball.radius,
-                    bottomRight.y-ball.radius,
-                    topRight.x+ball.radius,
-                    topRight.y+ball.radius, intersectionPoint)) {
+                    bottomRight.x,
+                    bottomRight.y,
+                    topRight.x,
+                    topRight.y, intersectionPoint)) {
                 if (boundSide.equals("none") || nearestIntersection.dst(ball.position) < intersectionPoint.dst(ball.position)) {
                     boundSide = "right";
                     nearestIntersection = intersectionPoint;
@@ -76,10 +76,10 @@ public class Brick extends Rectangle {
         if (boundSide.equals("none")){
             if (ball.ySpeed>0) {
                 if (Intersector.intersectSegments(ball.position.x, ball.position.y, ball.futurePos.x, ball.futurePos.y,
-                        bottomRight.x+ball.radius,
-                        bottomRight.y-ball.radius,
-                        bottomLeft.x-ball.radius,
-                        bottomLeft.y-ball.radius, intersectionPoint)) {
+                        bottomRight.x,
+                        bottomRight.y,
+                        bottomLeft.x,
+                        bottomLeft.y, intersectionPoint)) {
                     if (boundSide.equals("none") || nearestIntersection.dst(ball.position) < intersectionPoint.dst(ball.position)) {
                         boundSide = "bottom";
                         nearestIntersection = intersectionPoint;
@@ -87,10 +87,10 @@ public class Brick extends Rectangle {
                 }
             }else if (ball.ySpeed<0) {
                 if (Intersector.intersectSegments(ball.position.x, ball.position.y, ball.futurePos.x, ball.futurePos.y,
-                        topRight.x+ball.radius,
-                        topRight.y+ball.radius,
-                        topLeft.x-ball.radius,
-                        topLeft.y+ball.radius, intersectionPoint)) {
+                        topRight.x,
+                        topRight.y,
+                        topLeft.x,
+                        topLeft.y, intersectionPoint)) {
                     if (boundSide.equals("none") || nearestIntersection.dst(ball.position) < intersectionPoint.dst(ball.position)) {
                         boundSide = "top";
                         nearestIntersection = intersectionPoint;

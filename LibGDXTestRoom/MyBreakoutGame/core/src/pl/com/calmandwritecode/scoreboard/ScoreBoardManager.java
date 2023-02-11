@@ -1,6 +1,7 @@
 package pl.com.calmandwritecode.scoreboard;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Json;
 
 import java.io.File;
@@ -19,7 +20,8 @@ public class ScoreBoardManager {
     public ScoreBoard loadScoreBoard(){
         ScoreBoard scoreBoard;
         if (Gdx.files.internal(SCOREBOARD_PATH).exists()){
-            scoreBoard = json.fromJson(ScoreBoard.class, Score.class,SCOREBOARD_PATH);
+            FileHandle fileHandle = Gdx.files.internal(SCOREBOARD_PATH);
+            scoreBoard = json.fromJson(ScoreBoard.class,fileHandle);
         }else {
             scoreBoard = new ScoreBoard();
         }

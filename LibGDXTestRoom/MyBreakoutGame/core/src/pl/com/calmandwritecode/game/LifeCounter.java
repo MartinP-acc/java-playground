@@ -1,6 +1,7 @@
 package pl.com.calmandwritecode.game;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -16,9 +17,9 @@ public class LifeCounter {
         paddleSprite = atlas.createSprite("small_paddle");
     }
 
-    public void draw(SpriteBatch batch){
+    public void draw(SpriteBatch batch, BitmapFont font){
         batch.draw(paddleSprite, 10, Gdx.graphics.getHeight()-20);
-        game.normFont.draw(batch," x "+game.player.getLives(),paddleSprite.getX()+paddleSprite.getWidth()+10,Gdx.graphics.getHeight()-10);
+        font.draw(batch," x "+game.player.getLives(),paddleSprite.getX()+paddleSprite.getWidth()+10,Gdx.graphics.getHeight()-10);
     }
 
     public void ballOut(){

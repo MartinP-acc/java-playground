@@ -3,11 +3,12 @@ package pl.com.calmandwritecode.scoreboard;
 import com.badlogic.gdx.utils.TimeUtils;
 public class Score {
 
-    private final String playerName;
-    private final long score;
-    private final int level;
-    private final long timeStamp;
+    private String playerName;
+    private long score;
+    private int level;
+    private long timeStamp;
 
+    public Score(){};
     public Score(String playerName, long score, int level) {
         this.playerName = playerName.toUpperCase();
         this.score = score;

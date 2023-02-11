@@ -38,9 +38,9 @@ public class Paddle extends Rectangle {
 
         if (readyToThrow){
             if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)){
+                readyToThrow = false;
                 ball.ySpeed=4;
                 ball.xSpeed=2;
-                readyToThrow = false;
             }
         }
 

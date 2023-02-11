@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -24,11 +25,13 @@ import pl.com.calmandwritecode.menu.MenuScreen;
 public class EditorScreen implements Screen {
 
     private ShapeRenderer shapeRenderer;
+    private SpriteBatch batch;
     private TextureAtlas atlas;
     private Grid grid;
     private Stage stage;
     private final BreakoutGame game;
     private OrthographicCamera camera;
+    private Skin skin;
 
     public EditorScreen(BreakoutGame game){
         this.game = game;
@@ -37,9 +40,11 @@ public class EditorScreen implements Screen {
     @Override
     public void show() {
 
+        batch = new SpriteBatch();
         shapeRenderer = new ShapeRenderer();
         shapeRenderer.setColor(Color.DARK_GRAY);
         atlas = new TextureAtlas("breakout-tx.atlas");
+        skin = new Skin(Gdx.files.internal("skins.json"));
 
         ImageButton brick1Button = createImageButton("brick1","brick1ch");
         ImageButton brick2Button = createImageButton("brick2","brick2ch");
@@ -78,8 +83,8 @@ public class EditorScreen implements Screen {
         style.knob = new SpriteDrawable(atlas.createSprite("ball"));
         final Slider slider = new Slider(10,100,5,false,style);
 
-        final Label label = new Label("Power up chance : "+slider.getValue()+"%",game.skin,"label");
-        final Label dialogMessage = new Label("",game.skin,"message");
+        final Label label = new Label("Power up chance : "+slider.getValue()+"%",skin,"label");
+        final Label dialogMessage = new Label("",skin,"message");
 
         slider.addListener(new ChangeListener() {
             @Override
@@ -179,6 +184,7 @@ public class EditorScreen implements Screen {
         camera.setToOrtho(false,Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
 
         grid = new Grid(atlas, buttons);
+
     }
 
     private ImageButton createImageButton(String normal, String checked) {
@@ -195,7 +201,7 @@ public class EditorScreen implements Screen {
         camera.update();
 
         shapeRenderer.setProjectionMatrix(camera.combined);
-        game.batch.setProjectionMatrix(camera.combined);
+        batch.setProjectionMatrix(camera.combined);
 
         grid.updateCursor();
 
@@ -203,9 +209,9 @@ public class EditorScreen implements Screen {
         grid.render(shapeRenderer);
         shapeRenderer.end();
 
-        game.batch.begin();
-        grid.drawSprites(game.batch);
-        game.batch.end();
+        batch.begin();
+        grid.drawSprites(batch);
+        batch.end();
 
         stage.draw();
         stage.getBatch().setProjectionMatrix(camera.combined);
@@ -240,6 +246,8 @@ public class EditorScreen implements Screen {
     public void dispose() {
         stage.dispose();
         shapeRenderer.dispose();
-
+        batch.dispose();
+        skin.dispose();
+        atlas.dispose();
     }
 }

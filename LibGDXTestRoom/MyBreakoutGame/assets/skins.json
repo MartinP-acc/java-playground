@@ -2,6 +2,7 @@
   "com.badlogic.gdx.graphics.Color": {
     "red": { "r": 1, "g": 0, "b": 0, "a": 1 },
     "green": { "r": 0, "g": 1, "b": 0, "a": 1 },
+    "white" : {"r": 1, "g": 1, "b": 1, "a": 1},
     "gold": { "hex" : "ffd700ff" }
   },
   "com.badlogic.gdx.graphics.g2d.BitmapFont": {
@@ -28,6 +29,15 @@
     "label": {
       "font": "default"
     },
-    "scoreboard": { "font" :  "score"}
+    "scoreboard": { "font" :  "score"},
+    "score-header": {
+      "font" :  "score",
+      "fontColor": "green"}
+  },
+  "com.badlogic.gdx.scenes.scene2d.ui.TextField$TextFieldStyle" : {
+    "score" : {
+      "font" : "score",
+      "fontColor": "white"
+    }
   }
 }

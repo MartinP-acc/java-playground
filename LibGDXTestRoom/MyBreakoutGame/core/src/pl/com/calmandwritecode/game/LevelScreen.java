@@ -6,14 +6,17 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.*;
+import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.utils.TimeUtils;
 import pl.com.calmandwritecode.BreakoutGame;
 import pl.com.calmandwritecode.Level;
 import pl.com.calmandwritecode.menu.MenuScreen;
-import pl.com.calmandwritecode.scoreboard.Score;
+import pl.com.calmandwritecode.scoreboard.NewScoreScreen;
 import pl.com.calmandwritecode.scoreboard.ScoreBoardScreen;
 
 public class LevelScreen implements Screen {
@@ -22,7 +25,9 @@ public class LevelScreen implements Screen {
     private final OrthographicCamera camera;
 
     private final Ball ball;
+    private final SpriteBatch batch;
     private final Paddle paddle;
+    private final BitmapFont defaultFont;
     private Array<Brick> bricks;
     private final TextureAtlas atlas;
     private final LifeCounter lifeCounter;
@@ -33,27 +38,35 @@ public class LevelScreen implements Screen {
         float WIDTH = Gdx.graphics.getWidth();
         float HEIGHT = Gdx.graphics.getHeight();
 
+        defaultFont = new BitmapFont();
+        batch = new SpriteBatch();
+
         atlas = new TextureAtlas("breakout-tx.atlas");
         ball = new Ball(WIDTH, HEIGHT,atlas);
         paddle = new Paddle(WIDTH,atlas);
-        paddle.setReadyToThrow();
 
-        Level level = game.levelManager.getLevel(game.player.getCurrentLevel());
-        LevelBuilder builder = new LevelBuilder(atlas);
         bricks = new Array<>();
-        bricks = builder.buildFromString(level.getBrickMap());
 
         camera = new OrthographicCamera();
-        camera.setToOrtho(false, WIDTH, HEIGHT);
 
         lifeCounter = new LifeCounter(atlas, game);
-
-        lastCheckoutTime = TimeUtils.millis();
-        Gdx.input.setCursorCatched(true);
     }
 
     @Override
     public void show() {
+        paddle.setReadyToThrow();
+
+        Level level = game.levelManager.getLevel(game.player.getCurrentLevel());
+        LevelBuilder builder = new LevelBuilder(atlas);
+
+        bricks = builder.buildFromString(level.getBrickMap());
+
+        float WIDTH = Gdx.graphics.getWidth();
+        float HEIGHT = Gdx.graphics.getHeight();
+        camera.setToOrtho(false, WIDTH, HEIGHT);
+
+        Gdx.input.setCursorCatched(true);
+        lastCheckoutTime = TimeUtils.millis();
     }
 
     @Override
@@ -61,15 +74,15 @@ public class LevelScreen implements Screen {
         ScreenUtils.clear(Color.BLACK);
         Gdx.gl20.glClear(GL20.GL_COLOR_BUFFER_BIT);
         camera.update();
-        game.batch.setProjectionMatrix(camera.combined);
-        game.batch.begin();
-        paddle.draw(game.batch);
-        drawBricks(game.batch);
-        ball.draw(game.batch);
-        lifeCounter.draw(game.batch);
+        batch.setProjectionMatrix(camera.combined);
+        batch.begin();
+        paddle.draw(batch);
+        drawBricks(batch);
+        ball.draw(batch);
+        lifeCounter.draw(batch,defaultFont);
         findBrickCollision();
-        game.normFont.draw(game.batch, "Score : "+game.player.getScore(),Gdx.graphics.getWidth()/2f,Gdx.graphics.getHeight()-10);
-        game.batch.end();
+        defaultFont.draw(batch, "Score : "+game.player.getScore(),Gdx.graphics.getWidth()/2f,Gdx.graphics.getHeight()-10);
+        batch.end();
         paddle.collision(ball);
         paddle.update();
         ball.update();
@@ -82,7 +95,8 @@ public class LevelScreen implements Screen {
         if (ball.y < 0){
             lifeCounter.ballOut();
             ball.stop();
-            paddle.setReadyToThrow();
+            if (!lifeCounter.noMoreLives()) paddle.setReadyToThrow();
+
         }
 
         if (paddle.isReadyToThrow()){
@@ -99,11 +113,11 @@ public class LevelScreen implements Screen {
     }
 
     private void gameOver() {
+        Gdx.input.setCursorCatched(false);
         if (game.scoreBoard.worthToSave(game.player.getScore())){
-            Score score = new Score("test", game.player.getScore(),game.player.getCurrentLevel());
-            game.scoreBoard.addNewScore(score);
-        }
-        game.setScreen(new ScoreBoardScreen(game));
+            game.setScreen(new NewScoreScreen(game));
+        }else
+            game.setScreen(new ScoreBoardScreen(game));
         dispose();
     }
 
@@ -178,5 +192,7 @@ public class LevelScreen implements Screen {
     public void dispose() {
         atlas.dispose();
         ball.dispose();
+        batch.dispose();
+        defaultFont.dispose();
     }
 }

@@ -16,9 +16,11 @@ public class ScoreBoard {
     }
 
     private long getWorseScore() {
-        long worseScore = 0;
+        long worseScore = Long.MAX_VALUE;
         for (Score score : scores){
-            worseScore = Math.min(score.getScore(),worseScore);
+            if (score.getScore()<worseScore){
+                worseScore = score.getScore();
+            }
         }
         return worseScore;
     }
@@ -35,15 +37,16 @@ public class ScoreBoard {
         for (Score score : scores){
             if (score.getScore()<worseScore.getScore()){
                 worseScore = score;
-            } else if (score.getScore()==worseScore.getScore()){
-                worseScore = score.getTimeStamp()<worseScore.getTimeStamp() ? score : worseScore;
+            } else if (score.getScore()==worseScore.getScore() &&
+                    score.getTimeStamp()<worseScore.getTimeStamp()){
+                worseScore = score;
             }
         }
         scores.remove(worseScore);
     }
 
     public ArrayList<Score> getScores() {
-        scores.sort(new ScoreComparator().reversed());
+        scores.sort(new ScoreComparator());
         return scores;
     }
 
@@ -51,9 +54,9 @@ public class ScoreBoard {
         @Override
         public int compare(Score o1, Score o2) {
             if (o1.getScore() == o2.getScore()){
-                return Long.compare(o1.getTimeStamp(),o2.getTimeStamp());
+                return Long.compare(o2.getTimeStamp(),o1.getTimeStamp());
             }
-            return Long.compare(o1.getScore(),o2.getScore());
+            return Long.compare(o2.getScore(),o1.getScore());
         }
     }
 }

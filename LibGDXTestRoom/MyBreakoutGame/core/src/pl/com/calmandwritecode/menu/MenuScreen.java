@@ -16,6 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import pl.com.calmandwritecode.*;
 import pl.com.calmandwritecode.editor.EditorScreen;
 import pl.com.calmandwritecode.game.LevelScreen;
+import pl.com.calmandwritecode.scoreboard.ScoreBoardScreen;
 
 public class MenuScreen implements Screen {
 
@@ -31,6 +32,7 @@ public class MenuScreen implements Screen {
 
     @Override
     public void show() {
+        Skin skin = new Skin(Gdx.files.internal("skins.json"));
         Texture texture = new Texture(Gdx.files.internal("puzzle.png"));
         texture.setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat);
 
@@ -41,7 +43,7 @@ public class MenuScreen implements Screen {
         image.setSize(Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
         image.setPosition(0,0);
 
-        TextButton startButton = new TextButton("start", game.skin);
+        TextButton startButton = new TextButton("start", skin);
         startButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -50,7 +52,7 @@ public class MenuScreen implements Screen {
             }
         });
 
-        TextButton exitButton = new TextButton("exit", game.skin);
+        TextButton exitButton = new TextButton("exit", skin);
         exitButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -59,7 +61,7 @@ public class MenuScreen implements Screen {
             }
         });
 
-        TextButton editorButton = new TextButton("level editor",game.skin);
+        TextButton editorButton = new TextButton("level editor",skin);
         editorButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -68,7 +70,16 @@ public class MenuScreen implements Screen {
             }
         });
 
-        Label header = new Label("breakout test", game.skin);
+        TextButton scoreboardButton = new TextButton("scoreboard",skin);
+        scoreboardButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                game.setScreen(new ScoreBoardScreen(game));
+                dispose();
+            }
+        });
+
+        Label header = new Label("breakout test", skin);
 
         AlphaAction fadeIn = new AlphaAction();
         fadeIn.setAlpha(0);
@@ -83,7 +94,6 @@ public class MenuScreen implements Screen {
         fadeInAndOut.addAction(fadeOut);
 
         Table table = new Table();
-        table.setDebug(false);
         table.setFillParent(true);
         table.add(header).pad(100);
         table.row();
@@ -91,9 +101,10 @@ public class MenuScreen implements Screen {
         table.row();
         table.add(editorButton);
         table.row();
+        table.add(scoreboardButton);
+        table.row();
         table.add(exitButton);
         table.addAction(fadeInAndOut);
-        table.act(Gdx.graphics.getDeltaTime());
 
         stage = new Stage();
         Gdx.input.setInputProcessor(stage);
