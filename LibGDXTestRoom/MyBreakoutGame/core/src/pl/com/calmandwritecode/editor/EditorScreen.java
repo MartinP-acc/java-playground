@@ -40,7 +40,7 @@ public class EditorScreen implements Screen {
     @Override
     public void show() {
 
-        batch = new SpriteBatch();
+        batch = game.batch;
         shapeRenderer = new ShapeRenderer();
         shapeRenderer.setColor(Color.DARK_GRAY);
         atlas = new TextureAtlas("breakout-tx.atlas");
@@ -246,7 +246,6 @@ public class EditorScreen implements Screen {
     public void dispose() {
         stage.dispose();
         shapeRenderer.dispose();
-        batch.dispose();
         skin.dispose();
         atlas.dispose();
     }

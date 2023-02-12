@@ -39,7 +39,7 @@ public class LevelScreen implements Screen {
         float HEIGHT = Gdx.graphics.getHeight();
 
         defaultFont = new BitmapFont();
-        batch = new SpriteBatch();
+        batch = game.batch;
 
         atlas = new TextureAtlas("breakout-tx.atlas");
         ball = new Ball(WIDTH, HEIGHT,atlas);
@@ -80,9 +80,9 @@ public class LevelScreen implements Screen {
         drawBricks(batch);
         ball.draw(batch);
         lifeCounter.draw(batch,defaultFont);
-        findBrickCollision();
         defaultFont.draw(batch, "Score : "+game.player.getScore(),Gdx.graphics.getWidth()/2f,Gdx.graphics.getHeight()-10);
         batch.end();
+        findBrickCollision();
         paddle.collision(ball);
         paddle.update();
         ball.update();
@@ -91,16 +91,15 @@ public class LevelScreen implements Screen {
             ball.accelerateBall();
             lastCheckoutTime = TimeUtils.millis();
         }
+        if (paddle.isReadyToThrow()){
+            ball.stickTo(paddle);
+        }
 
         if (ball.y < 0){
             lifeCounter.ballOut();
             ball.stop();
             if (!lifeCounter.noMoreLives()) paddle.setReadyToThrow();
 
-        }
-
-        if (paddle.isReadyToThrow()){
-            ball.stickTo(paddle);
         }
 
         if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)){
@@ -154,7 +153,6 @@ public class LevelScreen implements Screen {
                 game.player.addToScore(closest.getPointsWorth());
                 bricks.removeIndex(bricks.indexOf(closest, true));
             }
-            findBrickCollision();
         }
 
         if (!gameOn) {
@@ -192,7 +190,6 @@ public class LevelScreen implements Screen {
     public void dispose() {
         atlas.dispose();
         ball.dispose();
-        batch.dispose();
         defaultFont.dispose();
     }
 }
