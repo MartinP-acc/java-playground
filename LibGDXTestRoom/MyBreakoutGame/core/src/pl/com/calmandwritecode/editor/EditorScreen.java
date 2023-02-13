@@ -18,6 +18,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ScreenUtils;
 import pl.com.calmandwritecode.BreakoutGame;
+import pl.com.calmandwritecode.GameAssets;
 import pl.com.calmandwritecode.Level;
 import pl.com.calmandwritecode.menu.MenuScreen;
 
@@ -43,7 +44,7 @@ public class EditorScreen implements Screen {
         batch = game.batch;
         shapeRenderer = new ShapeRenderer();
         shapeRenderer.setColor(Color.DARK_GRAY);
-        atlas = new TextureAtlas("breakout-tx.atlas");
+        atlas = game.gameAssets.get(GameAssets.ATLAS_FILE);
         skin = new Skin(Gdx.files.internal("skins.json"));
 
         ImageButton brick1Button = createImageButton("brick1","brick1ch");
@@ -247,6 +248,5 @@ public class EditorScreen implements Screen {
         stage.dispose();
         shapeRenderer.dispose();
         skin.dispose();
-        atlas.dispose();
     }
 }

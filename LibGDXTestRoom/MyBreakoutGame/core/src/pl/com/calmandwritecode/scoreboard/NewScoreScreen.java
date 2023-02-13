@@ -16,6 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ScreenUtils;
 import pl.com.calmandwritecode.BreakoutGame;
+import pl.com.calmandwritecode.GameAssets;
 
 public class NewScoreScreen implements Screen {
 
@@ -47,7 +48,7 @@ public class NewScoreScreen implements Screen {
         nameHeader.setWidth(500);
 
         textField = new TextField("",skin,"score");
-        textField.getStyle().background = new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("text_field_bg.png"))));
+        textField.getStyle().background = new SpriteDrawable(new Sprite((Texture) game.gameAssets.get(GameAssets.TF_BG_FILE)));
         textField.setMessageText("YOUR NAME");
         textField.setMaxLength(15);
 

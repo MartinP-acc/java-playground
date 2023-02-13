@@ -2,11 +2,13 @@ package pl.com.calmandwritecode.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector2;
+import pl.com.calmandwritecode.GameAssets;
 
 public class Ball extends Circle {
 
@@ -20,6 +22,8 @@ public class Ball extends Circle {
     private  final Sound ballBounceSound;
 
     public Ball(float widthScreen, float heightScreen, TextureAtlas atlas){
+        GameAssets gameAssets = GameAssets.getInstance();
+
         set(widthScreen/2,heightScreen/2-100,11);
         ballTexture = atlas.createSprite("ball");
         this.widthScreen = widthScreen;
@@ -27,7 +31,7 @@ public class Ball extends Circle {
         stop();
         position = new Vector2(x,y);
         futurePos = new Vector2(x+xSpeed*10,y+ySpeed*10);
-        ballBounceSound = Gdx.audio.newSound(Gdx.files.internal("ball_bounce.ogg"));
+        ballBounceSound = gameAssets.get(GameAssets.BOUNCE_SOUND_FILE);
     }
 
     public void draw(SpriteBatch batch){

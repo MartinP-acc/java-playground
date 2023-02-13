@@ -14,6 +14,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.TimeUtils;
 import pl.com.calmandwritecode.BreakoutGame;
+import pl.com.calmandwritecode.GameAssets;
 import pl.com.calmandwritecode.Level;
 import pl.com.calmandwritecode.menu.MenuScreen;
 import pl.com.calmandwritecode.scoreboard.NewScoreScreen;
@@ -41,7 +42,7 @@ public class LevelScreen implements Screen {
         defaultFont = new BitmapFont();
         batch = game.batch;
 
-        atlas = new TextureAtlas("breakout-tx.atlas");
+        atlas = game.gameAssets.get(GameAssets.ATLAS_FILE);
         ball = new Ball(WIDTH, HEIGHT,atlas);
         paddle = new Paddle(WIDTH,atlas);
 
@@ -188,8 +189,6 @@ public class LevelScreen implements Screen {
 
     @Override
     public void dispose() {
-        atlas.dispose();
-        ball.dispose();
         defaultFont.dispose();
     }
 }

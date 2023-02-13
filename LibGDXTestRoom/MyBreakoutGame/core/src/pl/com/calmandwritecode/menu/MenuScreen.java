@@ -3,7 +3,6 @@ package pl.com.calmandwritecode.menu;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -33,7 +32,7 @@ public class MenuScreen implements Screen {
     @Override
     public void show() {
         Skin skin = new Skin(Gdx.files.internal("skins.json"));
-        Texture texture = new Texture(Gdx.files.internal("puzzle.png"));
+        Texture texture = game.gameAssets.get(GameAssets.BACKGROUND_FILE);
         texture.setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat);
 
         TextureRegion textureRegion = new TextureRegion(texture);
