@@ -22,9 +22,17 @@ import pl.com.calmandwritecode.scoreboard.ScoreBoardScreen;
 
 public class LevelScreen implements Screen {
 
+    public enum GameStates{
+        LVL_INTRO,
+        SERVE,
+        PLAY,
+        PAUSE,
+        RESUME,
+    }
+
+    private GameStates gameState;
     private final BreakoutGame game;
     private final OrthographicCamera camera;
-
     private final Ball ball;
     private final SpriteBatch batch;
     private final Paddle paddle;
@@ -33,23 +41,21 @@ public class LevelScreen implements Screen {
     private final TextureAtlas atlas;
     private final LifeCounter lifeCounter;
     private long lastCheckoutTime;
+    private LevelBuilder lvlBuilder;
+
+
+
 
     public LevelScreen(BreakoutGame game) {
         this.game = game;
-        float WIDTH = Gdx.graphics.getWidth();
-        float HEIGHT = Gdx.graphics.getHeight();
 
         defaultFont = new BitmapFont();
         batch = game.batch;
-
         atlas = game.gameAssets.get(GameAssets.ATLAS_FILE);
-        ball = new Ball(WIDTH, HEIGHT,atlas);
-        paddle = new Paddle(WIDTH,atlas);
-
+        ball = new Ball(BreakoutGame.W_WIDTH, BreakoutGame.W_HEIGHT,atlas);
+        paddle = new Paddle(BreakoutGame.W_WIDTH,atlas);
         bricks = new Array<>();
-
         camera = new OrthographicCamera();
-
         lifeCounter = new LifeCounter(atlas, game);
     }
 
@@ -58,16 +64,15 @@ public class LevelScreen implements Screen {
         paddle.setReadyToThrow();
 
         Level level = game.levelManager.getLevel(game.player.getCurrentLevel());
-        LevelBuilder builder = new LevelBuilder(atlas);
+        lvlBuilder = new LevelBuilder(atlas);
 
-        bricks = builder.buildFromString(level.getBrickMap());
+        bricks = lvlBuilder.buildFromString(level.getBrickMap());
 
-        float WIDTH = Gdx.graphics.getWidth();
-        float HEIGHT = Gdx.graphics.getHeight();
-        camera.setToOrtho(false, WIDTH, HEIGHT);
+        camera.setToOrtho(false, BreakoutGame.W_WIDTH, BreakoutGame.W_HEIGHT);
 
         Gdx.input.setCursorCatched(true);
         lastCheckoutTime = TimeUtils.millis();
+        gameState = GameStates.LVL_INTRO;
     }
 
     @Override
@@ -76,40 +81,62 @@ public class LevelScreen implements Screen {
         Gdx.gl20.glClear(GL20.GL_COLOR_BUFFER_BIT);
         camera.update();
         batch.setProjectionMatrix(camera.combined);
+
         batch.begin();
         paddle.draw(batch);
         drawBricks(batch);
         ball.draw(batch);
         lifeCounter.draw(batch,defaultFont);
-        defaultFont.draw(batch, "Score : "+game.player.getScore(),Gdx.graphics.getWidth()/2f,Gdx.graphics.getHeight()-10);
+        defaultFont.draw(batch, "Score : "+game.player.getScore(),BreakoutGame.CENTER_X,BreakoutGame.W_HEIGHT-10);
         batch.end();
-        findBrickCollision();
-        paddle.collision(ball);
-        paddle.update();
-        ball.update();
 
-        if (TimeUtils.timeSinceMillis(lastCheckoutTime)>20000){
-            ball.accelerateBall();
-            lastCheckoutTime = TimeUtils.millis();
+        if (gameState.equals(GameStates.LVL_INTRO)){
+            //TODO level title animation: move to center and fade in
+            gameState = GameStates.SERVE;
         }
-        if (paddle.isReadyToThrow()){
+
+        if (gameState.equals(GameStates.SERVE)){
+            paddle.update();
             ball.stickTo(paddle);
+            if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)){
+                ball.serve();
+                gameState = GameStates.PLAY;
+            }
         }
 
-        if (ball.y < 0){
-            lifeCounter.ballOut();
-            ball.stop();
-            if (!lifeCounter.noMoreLives()) paddle.setReadyToThrow();
+        if (gameState.equals(GameStates.PLAY)){
 
+           findBrickCollision();
+           paddle.collision(ball);
+
+           ball.update();
+           paddle.update();
+
+           if (TimeUtils.timeSinceMillis(lastCheckoutTime)>10000){
+               ball.accelerateBall();
+               lastCheckoutTime = TimeUtils.millis();
+           }
+
+           if (ball.y < 0){
+               lifeCounter.ballOut();
+               if (lifeCounter.noMoreLives()) gameOver();
+               else gameState = GameStates.SERVE;
+           }
+
+           if (pausePressed()) gameState = GameStates.PAUSE;
         }
+
+        if (gameState.equals(GameStates.PAUSE)) pause();
+        if (gameState.equals(GameStates.RESUME)) resume();
 
         if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)){
-            backToMenu();
+           backToMenu();
         }
+    }
 
-        if (lifeCounter.noMoreLives()){
-            gameOver();
-        }
+    private boolean pausePressed() {
+        return Gdx.input.isKeyPressed(Input.Keys.P) ||
+                Gdx.input.isKeyPressed(Input.Keys.PAUSE);
     }
 
     private void gameOver() {
@@ -135,10 +162,10 @@ public class LevelScreen implements Screen {
     private void findBrickCollision() {
         float distance = Float.MAX_VALUE;
         float currentDistance;
-        boolean gameOn = false;
+        boolean lvlNotFinished = false;
         Brick closest = null;
         for (Brick brick : bricks){
-            if (brick.destroyable) gameOn = brick.destroyable;
+            if (brick.destroyable) lvlNotFinished = brick.destroyable;
             Vector2 intersection = brick.ballIntersect(ball);
             if (intersection != null){
                 currentDistance = ball.position.dst(intersection);
@@ -156,11 +183,12 @@ public class LevelScreen implements Screen {
             }
         }
 
-        if (!gameOn) {
+        if (!lvlNotFinished) {
             game.player.nextLevel();
             if (game.levelManager.isLevelOnList(game.player.getCurrentLevel())){
-                game.setScreen(new LevelScreen(game));
-                dispose();
+                Level level = game.levelManager.getLevel(game.player.getCurrentLevel());
+                bricks = lvlBuilder.buildFromString(level.getBrickMap());
+                gameState = GameStates.LVL_INTRO;
             }else{
                 gameOver();
             }
@@ -174,12 +202,13 @@ public class LevelScreen implements Screen {
 
     @Override
     public void pause() {
-
+        if (Gdx.input.isKeyPressed(Input.Keys.SPACE))
+            gameState = GameStates.RESUME;
     }
 
     @Override
     public void resume() {
-
+        gameState = GameStates.PLAY;
     }
 
     @Override

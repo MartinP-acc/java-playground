@@ -15,6 +15,8 @@ public class BreakoutGame extends Game {
 
 	public static float CENTER_X;
 	public static float CENTER_Y;
+	public static float W_WIDTH;
+	public static float W_HEIGHT;
 
 	public GameAssets gameAssets;
 	public LevelManager levelManager;
@@ -36,8 +38,10 @@ public class BreakoutGame extends Game {
 		shapeRenderer = new ShapeRenderer();
 		bitmapFont = new BitmapFont();
 
-		CENTER_X = (float) Gdx.graphics.getWidth()/2;
-		CENTER_Y = (float) Gdx.graphics.getHeight()/2;
+		W_WIDTH = (float) Gdx.graphics.getWidth();
+		W_HEIGHT = (float) Gdx.graphics.getHeight();
+		CENTER_X = W_WIDTH / 2;
+		CENTER_Y = W_HEIGHT / 2;
 	}
 
 	@Override

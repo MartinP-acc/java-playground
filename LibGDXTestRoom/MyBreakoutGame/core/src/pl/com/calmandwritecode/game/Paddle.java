@@ -36,14 +36,6 @@ public class Paddle extends Rectangle {
 
     public void collision(Ball ball) {
 
-        if (readyToThrow){
-            if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)){
-                readyToThrow = false;
-                ball.ySpeed=4;
-                ball.xSpeed=2;
-            }
-        }
-
         Vector2 start = new Vector2(x, y + height);
         Vector2 end = new Vector2(x + width, y + height);
         Vector2 center = new Vector2(ball.x, ball.y);

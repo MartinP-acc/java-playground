@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Circle;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import pl.com.calmandwritecode.GameAssets;
 
@@ -87,5 +88,10 @@ public class Ball extends Circle {
     public void stickTo(Paddle paddle){
         x = paddle.x+ paddle.width/2;
         y = paddle.y+ paddle.height+radius+1;
+    }
+
+    public void serve() {
+        xSpeed = MathUtils.random(-4,4);
+        ySpeed = MathUtils.random(2,4);
     }
 }
