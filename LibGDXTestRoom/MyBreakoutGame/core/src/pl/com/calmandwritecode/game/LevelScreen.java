@@ -10,6 +10,13 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Action;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.AlphaAction;
+import com.badlogic.gdx.scenes.scene2d.actions.MoveToAction;
+import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.TimeUtils;
@@ -42,9 +49,7 @@ public class LevelScreen implements Screen {
     private final LifeCounter lifeCounter;
     private long lastCheckoutTime;
     private LevelBuilder lvlBuilder;
-
-
-
+    private Stage stage;
 
     public LevelScreen(BreakoutGame game) {
         this.game = game;
@@ -57,6 +62,7 @@ public class LevelScreen implements Screen {
         bricks = new Array<>();
         camera = new OrthographicCamera();
         lifeCounter = new LifeCounter(atlas, game);
+        stage = new Stage();
     }
 
     @Override
@@ -73,6 +79,48 @@ public class LevelScreen implements Screen {
         Gdx.input.setCursorCatched(true);
         lastCheckoutTime = TimeUtils.millis();
         gameState = GameStates.LVL_INTRO;
+
+
+    }
+
+    private boolean actIntro(float delta){
+        if (stage.getActors().isEmpty()){
+            Skin skin = new Skin(Gdx.files.internal("skins.json"));
+            Label levelIntroLabel = new Label("LEVEL "+(game.player.getCurrentLevel()+1),skin,"scoreboard");
+            levelIntroLabel.setPosition(-levelIntroLabel.getWidth(),BreakoutGame.CENTER_Y);
+
+            MoveToAction moveToCenter1 = new MoveToAction();
+            moveToCenter1.setPosition(BreakoutGame.CENTER_X,BreakoutGame.CENTER_Y);
+            moveToCenter1.setDuration(1f);
+
+            MoveToAction moveToCenter2 = new MoveToAction();
+            moveToCenter2.setPosition(BreakoutGame.CENTER_X-levelIntroLabel.getWidth(),BreakoutGame.CENTER_Y);
+            moveToCenter2.setDuration(0.4f);
+
+            MoveToAction moveToCenter3 = new MoveToAction();
+            moveToCenter3.setPosition(BreakoutGame.CENTER_X-levelIntroLabel.getWidth()/2,BreakoutGame.CENTER_Y);
+            moveToCenter3.setDuration(0.2f);
+
+            AlphaAction fadeIn = new AlphaAction();
+            fadeIn.setAlpha(0);
+            fadeIn.setDuration(2);
+
+            SequenceAction moveCenterAndFadeIn = new SequenceAction();
+            moveCenterAndFadeIn.addAction(moveToCenter1);
+            moveCenterAndFadeIn.addAction(moveToCenter2);
+            moveCenterAndFadeIn.addAction(moveToCenter3);
+            moveCenterAndFadeIn.addAction(fadeIn);
+
+            levelIntroLabel.addAction(moveCenterAndFadeIn);
+            stage.addActor(levelIntroLabel);
+        }else{
+            stage.act(delta);
+            if (stage.getActors().get(0).getActions().isEmpty()){
+                stage.clear();
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
@@ -91,8 +139,12 @@ public class LevelScreen implements Screen {
         batch.end();
 
         if (gameState.equals(GameStates.LVL_INTRO)){
-            //TODO level title animation: move to center and fade in
-            gameState = GameStates.SERVE;
+            ball.stickTo(paddle);
+            paddle.update();
+            if (actIntro(delta)) {
+                gameState = GameStates.SERVE;
+
+            }
         }
 
         if (gameState.equals(GameStates.SERVE)){
@@ -106,11 +158,11 @@ public class LevelScreen implements Screen {
 
         if (gameState.equals(GameStates.PLAY)){
 
-           findBrickCollision();
-           paddle.collision(ball);
-
            ball.update();
            paddle.update();
+
+           findBrickCollision();
+           paddle.collision(ball);
 
            if (TimeUtils.timeSinceMillis(lastCheckoutTime)>10000){
                ball.accelerateBall();
@@ -132,6 +184,9 @@ public class LevelScreen implements Screen {
         if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)){
            backToMenu();
         }
+        stage.act(delta);
+        stage.draw();
+
     }
 
     private boolean pausePressed() {
