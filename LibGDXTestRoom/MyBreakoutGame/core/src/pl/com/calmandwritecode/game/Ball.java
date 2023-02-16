@@ -1,34 +1,29 @@
 package pl.com.calmandwritecode.game;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import pl.com.calmandwritecode.BreakoutGame;
 import pl.com.calmandwritecode.GameAssets;
 
 public class Ball extends Circle {
 
     private final Sprite ballTexture;
-    private final float widthScreen;
-    private final float heightScreen;
     public float xSpeed;
     public float ySpeed;
     public Vector2 position;
     public Vector2 futurePos;
     private  final Sound ballBounceSound;
 
-    public Ball(float widthScreen, float heightScreen, TextureAtlas atlas){
+    public Ball(TextureAtlas atlas){
         GameAssets gameAssets = GameAssets.getInstance();
 
-        set(widthScreen/2,heightScreen/2-100,11);
+        set(BreakoutGame.CENTER_X,BreakoutGame.CENTER_Y-200,11);
         ballTexture = atlas.createSprite("ball");
-        this.widthScreen = widthScreen;
-        this.heightScreen = heightScreen;
         stop();
         position = new Vector2(x,y);
         futurePos = new Vector2(x+xSpeed*10,y+ySpeed*10);
@@ -39,10 +34,6 @@ public class Ball extends Circle {
         batch.draw(ballTexture,x-radius,y-radius);
     }
 
-    public void dispose(){
-        ballBounceSound.dispose();
-    }
-
     public void update(){
         x+=xSpeed;
         y+=ySpeed;
@@ -50,11 +41,11 @@ public class Ball extends Circle {
             xSpeed = -xSpeed;
             playBounce();
         }
-        if (x>=widthScreen-radius && xSpeed>0){
+        if (x>=BreakoutGame.W_WIDTH-radius && xSpeed>0){
             xSpeed = -xSpeed;
             playBounce();
         }
-        if (y>=heightScreen-radius && ySpeed>0){
+        if (y>=BreakoutGame.W_HEIGHT-radius && ySpeed>0){
             ySpeed = -ySpeed;
             playBounce();
         }

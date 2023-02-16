@@ -10,7 +10,6 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.AlphaAction;
 import com.badlogic.gdx.scenes.scene2d.actions.MoveToAction;
@@ -49,7 +48,7 @@ public class LevelScreen implements Screen {
     private final LifeCounter lifeCounter;
     private long lastCheckoutTime;
     private LevelBuilder lvlBuilder;
-    private Stage stage;
+    private final Stage stage;
 
     public LevelScreen(BreakoutGame game) {
         this.game = game;
@@ -57,8 +56,8 @@ public class LevelScreen implements Screen {
         defaultFont = new BitmapFont();
         batch = game.batch;
         atlas = game.gameAssets.get(GameAssets.ATLAS_FILE);
-        ball = new Ball(BreakoutGame.W_WIDTH, BreakoutGame.W_HEIGHT,atlas);
-        paddle = new Paddle(BreakoutGame.W_WIDTH,atlas);
+        ball = new Ball(atlas);
+        paddle = new Paddle(atlas);
         bricks = new Array<>();
         camera = new OrthographicCamera();
         lifeCounter = new LifeCounter(atlas, game);
@@ -67,8 +66,6 @@ public class LevelScreen implements Screen {
 
     @Override
     public void show() {
-        paddle.setReadyToThrow();
-
         Level level = game.levelManager.getLevel(game.player.getCurrentLevel());
         lvlBuilder = new LevelBuilder(atlas);
 
@@ -79,11 +76,9 @@ public class LevelScreen implements Screen {
         Gdx.input.setCursorCatched(true);
         lastCheckoutTime = TimeUtils.millis();
         gameState = GameStates.LVL_INTRO;
-
-
     }
 
-    private boolean actIntro(float delta){
+    private boolean actIntro(){
         if (stage.getActors().isEmpty()){
             Skin skin = new Skin(Gdx.files.internal("skins.json"));
             Label levelIntroLabel = new Label("LEVEL "+(game.player.getCurrentLevel()+1),skin,"scoreboard");
@@ -91,15 +86,15 @@ public class LevelScreen implements Screen {
 
             MoveToAction moveToCenter1 = new MoveToAction();
             moveToCenter1.setPosition(BreakoutGame.CENTER_X,BreakoutGame.CENTER_Y);
-            moveToCenter1.setDuration(1f);
+            moveToCenter1.setDuration(0.6f);
 
             MoveToAction moveToCenter2 = new MoveToAction();
             moveToCenter2.setPosition(BreakoutGame.CENTER_X-levelIntroLabel.getWidth(),BreakoutGame.CENTER_Y);
-            moveToCenter2.setDuration(0.4f);
+            moveToCenter2.setDuration(0.2f);
 
             MoveToAction moveToCenter3 = new MoveToAction();
             moveToCenter3.setPosition(BreakoutGame.CENTER_X-levelIntroLabel.getWidth()/2,BreakoutGame.CENTER_Y);
-            moveToCenter3.setDuration(0.2f);
+            moveToCenter3.setDuration(0.1f);
 
             AlphaAction fadeIn = new AlphaAction();
             fadeIn.setAlpha(0);
@@ -114,7 +109,6 @@ public class LevelScreen implements Screen {
             levelIntroLabel.addAction(moveCenterAndFadeIn);
             stage.addActor(levelIntroLabel);
         }else{
-            stage.act(delta);
             if (stage.getActors().get(0).getActions().isEmpty()){
                 stage.clear();
                 return true;
@@ -141,9 +135,8 @@ public class LevelScreen implements Screen {
         if (gameState.equals(GameStates.LVL_INTRO)){
             ball.stickTo(paddle);
             paddle.update();
-            if (actIntro(delta)) {
+            if (actIntro()) {
                 gameState = GameStates.SERVE;
-
             }
         }
 
@@ -257,12 +250,17 @@ public class LevelScreen implements Screen {
 
     @Override
     public void pause() {
+        Skin skin = new Skin(Gdx.files.internal("skins.json"));
+        Label pauseLabel = new Label("PRESS 'SPACE' TO RESUME",skin,"scoreboard");
+        pauseLabel.setPosition(BreakoutGame.CENTER_X-pauseLabel.getWidth()/2,BreakoutGame.CENTER_Y);
+        stage.addActor(pauseLabel);
         if (Gdx.input.isKeyPressed(Input.Keys.SPACE))
             gameState = GameStates.RESUME;
     }
 
     @Override
     public void resume() {
+        stage.clear();
         gameState = GameStates.PLAY;
     }
 

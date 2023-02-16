@@ -19,7 +19,6 @@ public class Brick extends Rectangle {
     private final Vector2 topRight;
 
     private String boundSide;
-    private Vector2 lastIntersection;
     protected int pointsWorth;
 
     public Brick(float x, float y, Sprite texture){
@@ -98,37 +97,28 @@ public class Brick extends Rectangle {
                 }
             }
         }
-        lastIntersection = nearestIntersection;
         return !boundSide.equals("none") ? nearestIntersection : null;
     }
 
 
     protected void bounce(Ball ball){
+        ball.playBounce();
         switch (boundSide){
             case "left":
                 if (ball.xSpeed>0)ball.xSpeed = -ball.xSpeed;
-                ball.x = lastIntersection.x-ball.radius;
-                ball.y = lastIntersection.y;
                 break;
             case "right":
                 if (ball.xSpeed<0)ball.xSpeed = -ball.xSpeed;
-                ball.x = lastIntersection.x+ball.radius;
-                ball.y = lastIntersection.y;
                 break;
             case "top":
                 if (ball.ySpeed<0)ball.ySpeed = -ball.ySpeed;
-                ball.y = lastIntersection.y+ball.radius;
-                ball.x = lastIntersection.x;
                 break;
             case "bottom":
                 if (ball.ySpeed>0)ball.ySpeed = -ball.ySpeed;
-                ball.y = lastIntersection.y-ball.radius;
-                ball.x = lastIntersection.x;
                 break;
             default:break;
         }
         ball.updateVectors();
-        ball.playBounce();
     }
 
     public int getPointsWorth() {

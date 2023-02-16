@@ -1,24 +1,21 @@
 package pl.com.calmandwritecode.game;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import pl.com.calmandwritecode.BreakoutGame;
 
 public class Paddle extends Rectangle {
 
-    private final float widthScreen;
     private final Sprite paddleTexture;
-    private boolean readyToThrow;
 
-    public Paddle(float widthScreen, TextureAtlas atlas){
-        this. widthScreen = widthScreen;
+    public Paddle(TextureAtlas atlas){
         paddleTexture = atlas.createSprite("paddle120");
-        x = widthScreen/2;
+        x = BreakoutGame.CENTER_X;
         y = 40;
         width = paddleTexture.getWidth();
         height = paddleTexture.getHeight();
@@ -30,7 +27,7 @@ public class Paddle extends Rectangle {
 
     public void update(){
         x=Gdx.input.getX()-width/2;
-        if (x>widthScreen-width) x= widthScreen-width;
+        if (x> BreakoutGame.W_WIDTH -width) x= BreakoutGame.W_WIDTH-width;
         if (x<0) x=0;
     }
 
@@ -68,13 +65,4 @@ public class Paddle extends Rectangle {
 
         if (wasCollision)ball.playBounce();
     }
-
-    public void setReadyToThrow(){
-        readyToThrow = true;
-    }
-
-    public boolean isReadyToThrow() {
-        return readyToThrow;
-    }
-
 }
