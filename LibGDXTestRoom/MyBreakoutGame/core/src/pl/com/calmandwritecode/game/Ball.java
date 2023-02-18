@@ -1,6 +1,7 @@
 package pl.com.calmandwritecode.game;
 
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -12,14 +13,18 @@ import pl.com.calmandwritecode.GameAssets;
 
 public class Ball extends Circle {
 
-    private final Sprite ballTexture;
+    private final TextureAtlas atlas;
+    private Sprite ballTexture;
     public float xSpeed;
     public float ySpeed;
     public Vector2 position;
     public Vector2 futurePos;
     private  final Sound ballBounceSound;
+    private float velocity;
+    public boolean powerBall;
 
     public Ball(TextureAtlas atlas){
+        this.atlas = atlas;
         GameAssets gameAssets = GameAssets.getInstance();
         ballTexture = atlas.createSprite("ball");
         stop();
@@ -60,10 +65,15 @@ public class Ball extends Circle {
     }
 
     public void accelerateBall(){
-        if (Math.abs(xSpeed)<10 && Math.abs(ySpeed)<10) {
+        if (velocity < radius) {
             xSpeed = xSpeed * 1.1f;
             ySpeed = ySpeed * 1.1f;
         }
+        updateCurrentVelocity();
+    }
+
+    public void updateCurrentVelocity(){
+        velocity = position.dst(x+xSpeed,y+ySpeed);
     }
 
     public void playBounce(){
@@ -83,5 +93,29 @@ public class Ball extends Circle {
     public void serve() {
         xSpeed = MathUtils.random(-4,4);
         ySpeed = MathUtils.random(2,4);
+    }
+
+    public void shrink(){
+        ballTexture = atlas.createSprite("small_ball");
+        radius = ballTexture.getHeight()/2;
+    }
+
+    public void reset(){
+        ballTexture = atlas.createSprite("ball");
+        radius = ballTexture.getHeight()/2;
+        powerBall = false;
+        ballTexture.setColor(Color.WHITE);
+    }
+
+    public void slowDown(){
+        if (velocity>1){
+            xSpeed = xSpeed * 0.7f;
+            ySpeed = ySpeed * 0.7f;
+        }
+    }
+
+    public void setPowerBall(){
+        powerBall = true;
+        ballTexture.setColor(1,0,0,0.5f);
     }
 }

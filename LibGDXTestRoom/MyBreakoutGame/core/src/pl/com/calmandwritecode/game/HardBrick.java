@@ -23,6 +23,11 @@ public class HardBrick extends Brick{
         hits++;
         if (hits>2) destroyed=true;
         else texture = textures[hits];
+
+        if (ball.powerBall) destroyed=true;
+
+        stuckCounter = 0;
+
         ball.update();
     }
 

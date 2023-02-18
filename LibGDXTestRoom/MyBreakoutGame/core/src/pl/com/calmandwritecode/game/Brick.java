@@ -8,6 +8,7 @@ import com.badlogic.gdx.math.Vector2;
 
 public class Brick extends Rectangle {
 
+    public static int stuckCounter = 0;
     public boolean destroyed = false;
     public boolean destroyable = true;
     public Vector2 center;
@@ -20,6 +21,7 @@ public class Brick extends Rectangle {
 
     private String boundSide;
     protected int pointsWorth;
+
 
     public Brick(float x, float y, Sprite texture){
         this.x = x;
@@ -43,6 +45,7 @@ public class Brick extends Rectangle {
     public void collision(Ball ball){
         bounce(ball);
         destroyed=true;
+        stuckCounter = 0;
         ball.update();
     }
 
@@ -80,25 +83,34 @@ public class Brick extends Rectangle {
 
     protected void bounce(Ball ball){
         ball.playBounce();
-        switch (boundSide){
-            case "left":
-                if (ball.xSpeed>0)ball.xSpeed = -ball.xSpeed;
-                break;
-            case "right":
-                if (ball.xSpeed<0)ball.xSpeed = -ball.xSpeed;
-                break;
-            case "top":
-                if (ball.ySpeed<0)ball.ySpeed = -ball.ySpeed;
-                break;
-            case "bottom":
-                if (ball.ySpeed>0)ball.ySpeed = -ball.ySpeed;
-                break;
-            default:break;
+        if (!ball.powerBall) {
+            switch (boundSide) {
+                case "left":
+                    if (ball.xSpeed > 0) ball.xSpeed = -ball.xSpeed;
+                    break;
+                case "right":
+                    if (ball.xSpeed < 0) ball.xSpeed = -ball.xSpeed;
+                    break;
+                case "top":
+                    if (ball.ySpeed < 0) ball.ySpeed = -ball.ySpeed;
+                    break;
+                case "bottom":
+                    if (ball.ySpeed > 0) ball.ySpeed = -ball.ySpeed;
+                    break;
+                default:
+                    break;
+            }
+            ball.updateVectors();
+            if (stuckCounter > 40){
+                destroyed = true;
+                stuckCounter = 0;
+            }
         }
-        ball.updateVectors();
     }
 
     public int getPointsWorth() {
         return pointsWorth;
     }
+
+
 }

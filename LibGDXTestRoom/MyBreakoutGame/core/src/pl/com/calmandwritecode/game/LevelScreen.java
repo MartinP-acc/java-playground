@@ -50,6 +50,7 @@ public class LevelScreen implements Screen {
     private LevelBuilder lvlBuilder;
     private final Stage stage;
     private int bonusRange;
+    private final Array<PowerUp> powerUps;
 
     public LevelScreen(BreakoutGame game) {
         this.game = game;
@@ -60,6 +61,7 @@ public class LevelScreen implements Screen {
         ball = new Ball(atlas);
         paddle = new Paddle(atlas);
         bricks = new Array<>();
+        powerUps = new Array<>();
         camera = new OrthographicCamera();
         lifeCounter = new LifeCounter(atlas, game);
         stage = new Stage();
@@ -129,6 +131,7 @@ public class LevelScreen implements Screen {
         batch.begin();
         paddle.draw(batch);
         drawBricks(batch);
+        drawPowerUps(batch);
         ball.draw(batch);
         lifeCounter.draw(batch,defaultFont);
         defaultFont.draw(batch, "Score : "+game.player.getScore(),BreakoutGame.CENTER_X,BreakoutGame.W_HEIGHT-10);
@@ -155,6 +158,7 @@ public class LevelScreen implements Screen {
 
            ball.update();
            paddle.update();
+           updatePowerUps();
 
            findBrickCollision();
            paddle.collision(ball);
@@ -166,6 +170,8 @@ public class LevelScreen implements Screen {
 
            if (ball.y < 0){
                lifeCounter.ballOut();
+               ball.reset();
+               paddle.reset();
                if (lifeCounter.noMoreLives()) gameOver();
                else gameState = GameStates.SERVE;
            }
@@ -182,6 +188,47 @@ public class LevelScreen implements Screen {
         stage.act(delta);
         stage.draw();
 
+    }
+
+    private void updatePowerUps() {
+        for (int i=0; i<powerUps.size; i++){
+            PowerUp power = powerUps.get(i);
+            power.update();
+            if (power.y < 0-power.height)
+                powerUps.removeIndex(i);
+            else if (power.overlaps(paddle)) {
+                addPowerUpBonus(power.getPowerType());
+                game.player.addToScore(power.getWorthPoint());
+                powerUps.removeIndex(i);
+            }
+        }
+    }
+
+    private void addPowerUpBonus(int powerType) {
+        if (powerType == PowerUp.ENLARGE_PADDLE){
+            paddle.enlarge();
+        } else if (powerType == PowerUp.SHRINK_PADDLE){
+            paddle.shrink();
+        } else if (powerType == PowerUp.LOSE_BALL){
+            lifeCounter.ballOut();
+        } else if (powerType == PowerUp.EXTRA_BALL){
+            lifeCounter.extraLife();
+        } else if (powerType == PowerUp.SPEED_UP){
+            ball.accelerateBall();
+            ball.accelerateBall();
+        } else if (powerType == PowerUp.SHRINK_BALL){
+            ball.shrink();
+        } else if (powerType == PowerUp.SLOW_DOWN){
+            ball.slowDown();
+        } else if (powerType == PowerUp.POWER_BALL){
+            ball.powerBall = true;
+        }
+    }
+
+    private void drawPowerUps(SpriteBatch batch){
+        for(PowerUp powerUp : powerUps){
+            powerUp.draw(batch);
+        }
     }
 
     private boolean pausePressed() {
@@ -213,15 +260,15 @@ public class LevelScreen implements Screen {
         boolean lvlNotFinished = false;
         for (Brick brick : bricks){
             if (brick.destroyable) lvlNotFinished = brick.destroyable;
+
             if (brick.checkCollision(ball)){
                 brick.collision(ball);
                 if (brick.destroyed) {
                     game.player.addToScore(brick.getPointsWorth());
-                    bricks.removeIndex(bricks.indexOf(brick, true));
                     int luck = MathUtils.random(0,100);
-                    if (luck <= bonusRange) throwBonus();
+                    if (luck <= bonusRange) throwBonus(brick.x,brick.y);
+                    bricks.removeIndex(bricks.indexOf(brick, true));
                 }
-                break;
             }
         }
 
@@ -231,6 +278,9 @@ public class LevelScreen implements Screen {
                 Level level = game.levelManager.getLevel(game.player.getCurrentLevel());
                 bricks = lvlBuilder.buildFromString(level.getBrickMap());
                 bonusRange = (int) level.getPowerUpChance();
+                powerUps.clear();
+                paddle.reset();
+                ball.reset();
                 gameState = GameStates.LVL_INTRO;
             }else{
                 gameOver();
@@ -238,8 +288,8 @@ public class LevelScreen implements Screen {
         }
     }
 
-    private void throwBonus() {
-
+    private void throwBonus(float x, float y) {
+        powerUps.add(new PowerUp(x,y,atlas));
     }
 
     @Override

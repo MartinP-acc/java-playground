@@ -11,9 +11,11 @@ import pl.com.calmandwritecode.BreakoutGame;
 
 public class Paddle extends Rectangle {
 
-    private final Sprite paddleTexture;
+    private final TextureAtlas atlas;
+    private Sprite paddleTexture;
 
     public Paddle(TextureAtlas atlas){
+        this.atlas = atlas;
         paddleTexture = atlas.createSprite("paddle120");
         x = BreakoutGame.CENTER_X;
         y = 40;
@@ -50,6 +52,7 @@ public class Paddle extends Rectangle {
                 if (ball.x < x + width - width/8) ball.xSpeed -= 1;
             }
             wasCollision = true;
+            ball.updateCurrentVelocity();
         }
 
         if (Intersector.intersectSegmentCircle(new Vector2(x, y), new Vector2(x, y + height), center, ball.radius*ball.radius)){
@@ -64,5 +67,24 @@ public class Paddle extends Rectangle {
         }
 
         if (wasCollision)ball.playBounce();
+    }
+
+    public void enlarge() {
+        if (width<120) paddleTexture = atlas.createSprite("paddle120");
+        else if (width<180) paddleTexture = atlas.createSprite("paddle180");
+        else if (width<240) paddleTexture = atlas.createSprite("paddle240");
+        width = paddleTexture.getWidth();
+    }
+
+    public void shrink(){
+        if (width>180) paddleTexture = atlas.createSprite("paddle180");
+        else if (width>120) paddleTexture = atlas.createSprite("paddle120");
+        else if (width>60) paddleTexture = atlas.createSprite("paddle60");
+        width = paddleTexture.getWidth();
+    }
+
+    public void reset(){
+        paddleTexture = atlas.createSprite("paddle120");
+        width = paddleTexture.getWidth();
     }
 }

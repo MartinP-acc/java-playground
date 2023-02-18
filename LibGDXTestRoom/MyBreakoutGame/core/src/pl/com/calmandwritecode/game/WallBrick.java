@@ -13,5 +13,7 @@ public class WallBrick extends Brick {
     public void collision(Ball ball) {
         bounce(ball);
         ball.update();
+        if (ball.powerBall) destroyed=true;
+        stuckCounter++;
     }
 }
