@@ -6,224 +6,322 @@ filter: Nearest, Nearest
 repeat: none
 ball
   rotate: false
-  xy: 631, 173
+  xy: 631, 150
   size: 22, 22
   orig: 22, 22
   offset: 0, 0
   index: -1
 brick1
   rotate: false
-  xy: 2, 44
+  xy: 746, 196
   size: 100, 30
   orig: 100, 30
   offset: 0, 0
   index: -1
 brick1ch
   rotate: false
-  xy: 821, 214
+  xy: 912, 164
   size: 100, 30
   orig: 100, 30
   offset: 0, 0
   index: -1
 brick2
   rotate: false
-  xy: 427, 165
+  xy: 848, 196
   size: 100, 30
   orig: 100, 30
   offset: 0, 0
   index: -1
 brick2ch
   rotate: false
-  xy: 346, 66
+  xy: 427, 142
   size: 100, 30
   orig: 100, 30
   offset: 0, 0
   index: -1
 brick3
   rotate: false
-  xy: 2, 12
+  xy: 184, 14
   size: 100, 30
   orig: 100, 30
   offset: 0, 0
   index: -1
 brick3ch
   rotate: false
-  xy: 529, 165
+  xy: 427, 110
   size: 100, 30
   orig: 100, 30
   offset: 0, 0
   index: -1
 brick4
   rotate: false
-  xy: 104, 44
+  xy: 286, 19
   size: 100, 30
   orig: 100, 30
   offset: 0, 0
   index: -1
 brick4ch
   rotate: false
-  xy: 529, 133
+  xy: 529, 142
   size: 100, 30
   orig: 100, 30
   offset: 0, 0
   index: -1
 brick5
   rotate: false
-  xy: 427, 133
+  xy: 504, 174
   size: 100, 30
   orig: 100, 30
   offset: 0, 0
   index: -1
 brick5ch
   rotate: false
-  xy: 529, 101
+  xy: 427, 78
   size: 100, 30
   orig: 100, 30
   offset: 0, 0
   index: -1
 brick6
   rotate: false
-  xy: 104, 12
+  xy: 606, 174
   size: 100, 30
   orig: 100, 30
   offset: 0, 0
   index: -1
 brick6ch
   rotate: false
-  xy: 448, 69
+  xy: 529, 110
   size: 100, 30
   orig: 100, 30
   offset: 0, 0
   index: -1
 brick7
   rotate: false
-  xy: 427, 101
+  xy: 708, 164
   size: 100, 30
   orig: 100, 30
   offset: 0, 0
   index: -1
 brick7ch
   rotate: false
-  xy: 550, 69
+  xy: 529, 78
   size: 100, 30
   orig: 100, 30
   offset: 0, 0
   index: -1
 brick8
   rotate: false
-  xy: 244, 66
+  xy: 810, 164
   size: 100, 30
   orig: 100, 30
   offset: 0, 0
   index: -1
 brick8ch
   rotate: false
-  xy: 699, 192
+  xy: 427, 46
   size: 100, 30
   orig: 100, 30
   offset: 0, 0
   index: -1
+clone_ball
+  rotate: false
+  xy: 898, 140
+  size: 22, 22
+  orig: 22, 22
+  offset: 0, 0
+  index: -1
 dialog
   rotate: false
-  xy: 2, 123
+  xy: 2, 73
   size: 423, 121
   orig: 423, 121
   offset: 0, 0
   index: -1
 dialog_stage
   rotate: false
-  xy: 2, 98
+  xy: 504, 228
   size: 423, 23
   orig: 423, 23
   offset: 0, 0
   index: -1
 dialog_text_field
   rotate: false
-  xy: 427, 219
+  xy: 2, 46
   size: 270, 25
   orig: 270, 25
   offset: 0, 0
   index: -1
+enlarge_paddle
+  rotate: false
+  xy: 631, 126
+  size: 22, 22
+  orig: 22, 22
+  offset: 0, 0
+  index: -1
+extra_ball
+  rotate: false
+  xy: 655, 150
+  size: 22, 22
+  orig: 22, 22
+  offset: 0, 0
+  index: -1
 hard_brick0
   rotate: false
-  xy: 448, 37
+  xy: 529, 46
   size: 100, 30
   orig: 100, 30
   offset: 0, 0
   index: -1
 hard_brick1
   rotate: false
-  xy: 550, 37
+  xy: 388, 14
   size: 100, 30
   orig: 100, 30
   offset: 0, 0
   index: -1
 hard_brick2
   rotate: false
-  xy: 801, 182
+  xy: 490, 14
   size: 100, 30
   orig: 100, 30
   offset: 0, 0
   index: -1
 hard_brick_ch
   rotate: false
-  xy: 206, 34
+  xy: 592, 14
   size: 100, 30
   orig: 100, 30
   offset: 0, 0
   index: -1
+lasers
+  rotate: false
+  xy: 922, 140
+  size: 22, 22
+  orig: 22, 22
+  offset: 0, 0
+  index: -1
+lose_ball
+  rotate: false
+  xy: 631, 102
+  size: 22, 22
+  orig: 22, 22
+  offset: 0, 0
+  index: -1
 paddle
   rotate: false
-  xy: 2, 76
+  xy: 504, 206
   size: 240, 20
   orig: 240, 20
   offset: 0, 0
   index: -1
 paddle240
   rotate: false
-  xy: 2, 76
+  xy: 504, 206
   size: 240, 20
   orig: 240, 20
   offset: 0, 0
   index: -1
 paddle120
   rotate: false
-  xy: 699, 224
+  xy: 274, 51
   size: 120, 20
   orig: 120, 20
   offset: 0, 0
   index: -1
 paddle180
   rotate: false
-  xy: 427, 197
+  xy: 2, 24
   size: 180, 20
   orig: 180, 20
   offset: 0, 0
   index: -1
 paddle60
   rotate: false
-  xy: 609, 197
+  xy: 2, 2
   size: 60, 20
   orig: 60, 20
   offset: 0, 0
   index: -1
+power_ball
+  rotate: false
+  xy: 655, 126
+  size: 22, 22
+  orig: 22, 22
+  offset: 0, 0
+  index: -1
+random_bonus
+  rotate: false
+  xy: 946, 140
+  size: 22, 22
+  orig: 22, 22
+  offset: 0, 0
+  index: -1
+shrink_ball
+  rotate: false
+  xy: 631, 78
+  size: 22, 22
+  orig: 22, 22
+  offset: 0, 0
+  index: -1
+shrink_paddle
+  rotate: false
+  xy: 655, 102
+  size: 22, 22
+  orig: 22, 22
+  offset: 0, 0
+  index: -1
+slow_down
+  rotate: false
+  xy: 970, 140
+  size: 22, 22
+  orig: 22, 22
+  offset: 0, 0
+  index: -1
+small_ball
+  rotate: false
+  xy: 929, 231
+  size: 11, 11
+  orig: 11, 11
+  offset: 0, 0
+  index: -1
 small_paddle
   rotate: false
-  xy: 923, 237
+  xy: 929, 244
   size: 79, 7
   orig: 79, 7
   offset: 0, 0
   index: -1
+speed_up
+  rotate: false
+  xy: 631, 54
+  size: 22, 22
+  orig: 22, 22
+  offset: 0, 0
+  index: -1
+stick_paddle
+  rotate: false
+  xy: 655, 78
+  size: 22, 22
+  orig: 22, 22
+  offset: 0, 0
+  index: -1
+text_field_bg
+  rotate: false
+  xy: 2, 196
+  size: 500, 55
+  orig: 500, 55
+  offset: 0, 0
+  index: -1
 wall_brick
   rotate: false
-  xy: 308, 34
+  xy: 694, 132
   size: 100, 30
   orig: 100, 30
   offset: 0, 0
   index: -1
 wall_brick_ch
   rotate: false
-  xy: 206, 2
+  xy: 796, 132
   size: 100, 30
   orig: 100, 30
   offset: 0, 0

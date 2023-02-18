@@ -21,13 +21,12 @@ public class Ball extends Circle {
 
     public Ball(TextureAtlas atlas){
         GameAssets gameAssets = GameAssets.getInstance();
-
-        set(BreakoutGame.CENTER_X,BreakoutGame.CENTER_Y-200,11);
         ballTexture = atlas.createSprite("ball");
         stop();
         position = new Vector2(x,y);
         futurePos = new Vector2(x+xSpeed*10,y+ySpeed*10);
         ballBounceSound = gameAssets.get(GameAssets.BOUNCE_SOUND_FILE);
+        set(BreakoutGame.CENTER_X,BreakoutGame.CENTER_Y-200,ballTexture.getWidth()/2);
     }
 
     public void draw(SpriteBatch batch){

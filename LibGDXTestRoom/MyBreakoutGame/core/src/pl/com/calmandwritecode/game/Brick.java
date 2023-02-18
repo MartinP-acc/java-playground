@@ -46,58 +46,35 @@ public class Brick extends Rectangle {
         ball.update();
     }
 
-    public Vector2 ballIntersect(Ball ball){
+    public boolean checkCollision(Ball ball){
+        boolean collision = false;
         boundSide = "none";
-        Vector2 intersectionPoint = new Vector2();
-        Vector2 nearestIntersection = new Vector2();
         if (ball.xSpeed>0) {
-            if (Intersector.intersectSegments(ball.position.x, ball.position.y, ball.futurePos.x, ball.futurePos.y,
-                    bottomLeft.x,
-                    bottomLeft.y,
-                    topLeft.x,
-                    topLeft.y, intersectionPoint)) {
+            if (Intersector.intersectSegmentCircle(bottomLeft, topLeft, ball.position, ball.radius*ball.radius)) {
                 boundSide = "left";
-                nearestIntersection = intersectionPoint;
+                collision = true;
             }
         }
         if (ball.xSpeed<0) {
-            if (Intersector.intersectSegments(ball.position.x, ball.position.y, ball.futurePos.x, ball.futurePos.y,
-                    bottomRight.x,
-                    bottomRight.y,
-                    topRight.x,
-                    topRight.y, intersectionPoint)) {
-                if (boundSide.equals("none") || nearestIntersection.dst(ball.position) < intersectionPoint.dst(ball.position)) {
-                    boundSide = "right";
-                    nearestIntersection = intersectionPoint;
-                }
+            if (Intersector.intersectSegmentCircle(bottomRight, topRight, ball.position, ball.radius*ball.radius)) {
+                boundSide = "right";
+                collision = true;
             }
         }
-        if (boundSide.equals("none")){
+        if (!collision){
             if (ball.ySpeed>0) {
-                if (Intersector.intersectSegments(ball.position.x, ball.position.y, ball.futurePos.x, ball.futurePos.y,
-                        bottomRight.x,
-                        bottomRight.y,
-                        bottomLeft.x,
-                        bottomLeft.y, intersectionPoint)) {
-                    if (boundSide.equals("none") || nearestIntersection.dst(ball.position) < intersectionPoint.dst(ball.position)) {
+                if (Intersector.intersectSegmentCircle(bottomRight, bottomLeft, ball.position, ball.radius*ball.radius)) {
                         boundSide = "bottom";
-                        nearestIntersection = intersectionPoint;
-                    }
+                        collision = true;
                 }
             }else if (ball.ySpeed<0) {
-                if (Intersector.intersectSegments(ball.position.x, ball.position.y, ball.futurePos.x, ball.futurePos.y,
-                        topRight.x,
-                        topRight.y,
-                        topLeft.x,
-                        topLeft.y, intersectionPoint)) {
-                    if (boundSide.equals("none") || nearestIntersection.dst(ball.position) < intersectionPoint.dst(ball.position)) {
-                        boundSide = "top";
-                        nearestIntersection = intersectionPoint;
-                    }
+                if (Intersector.intersectSegmentCircle(topRight, topLeft, ball.position, ball.radius*ball.radius)) {
+                    boundSide = "top";
+                    collision = true;
                 }
             }
         }
-        return !boundSide.equals("none") ? nearestIntersection : null;
+        return collision;
     }
 
 

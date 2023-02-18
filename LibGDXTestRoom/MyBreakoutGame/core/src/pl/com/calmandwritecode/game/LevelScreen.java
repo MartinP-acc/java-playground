@@ -9,7 +9,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.AlphaAction;
 import com.badlogic.gdx.scenes.scene2d.actions.MoveToAction;
@@ -49,6 +49,7 @@ public class LevelScreen implements Screen {
     private long lastCheckoutTime;
     private LevelBuilder lvlBuilder;
     private final Stage stage;
+    private int bonusRange;
 
     public LevelScreen(BreakoutGame game) {
         this.game = game;
@@ -68,6 +69,7 @@ public class LevelScreen implements Screen {
     public void show() {
         Level level = game.levelManager.getLevel(game.player.getCurrentLevel());
         lvlBuilder = new LevelBuilder(atlas);
+        bonusRange = (int) level.getPowerUpChance();
 
         bricks = lvlBuilder.buildFromString(level.getBrickMap());
 
@@ -208,26 +210,18 @@ public class LevelScreen implements Screen {
     }
 
     private void findBrickCollision() {
-        float distance = Float.MAX_VALUE;
-        float currentDistance;
         boolean lvlNotFinished = false;
-        Brick closest = null;
         for (Brick brick : bricks){
             if (brick.destroyable) lvlNotFinished = brick.destroyable;
-            Vector2 intersection = brick.ballIntersect(ball);
-            if (intersection != null){
-                currentDistance = ball.position.dst(intersection);
-                if (currentDistance<distance) {
-                    distance = currentDistance;
-                    closest = brick;
+            if (brick.checkCollision(ball)){
+                brick.collision(ball);
+                if (brick.destroyed) {
+                    game.player.addToScore(brick.getPointsWorth());
+                    bricks.removeIndex(bricks.indexOf(brick, true));
+                    int luck = MathUtils.random(0,100);
+                    if (luck <= bonusRange) throwBonus();
                 }
-            }
-        }
-        if (closest != null){
-            closest.collision(ball);
-            if (closest.destroyed) {
-                game.player.addToScore(closest.getPointsWorth());
-                bricks.removeIndex(bricks.indexOf(closest, true));
+                break;
             }
         }
 
@@ -236,11 +230,16 @@ public class LevelScreen implements Screen {
             if (game.levelManager.isLevelOnList(game.player.getCurrentLevel())){
                 Level level = game.levelManager.getLevel(game.player.getCurrentLevel());
                 bricks = lvlBuilder.buildFromString(level.getBrickMap());
+                bonusRange = (int) level.getPowerUpChance();
                 gameState = GameStates.LVL_INTRO;
             }else{
                 gameOver();
             }
         }
+    }
+
+    private void throwBonus() {
+
     }
 
     @Override
