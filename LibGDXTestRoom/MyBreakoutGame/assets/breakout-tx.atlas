@@ -193,6 +193,20 @@ hard_brick_ch
   orig: 100, 30
   offset: 0, 0
   index: -1
+laser_gun
+  rotate: false
+  xy: 474, 177
+  size: 5, 20
+  orig: 5, 20
+  offset: 0, 0
+  index: -1
+laser_shot
+  rotate: false
+  xy: 874, 36
+  size: 5, 33
+  orig: 5, 33
+  offset: 0, 0
+  index: -1
 lasers
   rotate: false
   xy: 427, 105
@@ -279,7 +293,7 @@ slow_down
   index: -1
 small_ball
   rotate: false
-  xy: 474, 186
+  xy: 2, 5
   size: 11, 11
   orig: 11, 11
   offset: 0, 0

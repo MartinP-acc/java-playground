@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Array;
 
 public class Brick extends Rectangle {
 
@@ -47,6 +48,16 @@ public class Brick extends Rectangle {
         destroyed=true;
         stuckCounter = 0;
         ball.update();
+    }
+
+    public void collision(Array<Shot> shots, boolean isPowerBall){
+        for (int i=0; i<shots.size; i++){
+            Shot shot = shots.get(i);
+            if (shot.overlaps(this)){
+                if (destroyable || isPowerBall) destroyed = true;
+                if (!isPowerBall) shots.removeIndex(i);
+            }
+        }
     }
 
     public boolean checkCollision(Ball ball){

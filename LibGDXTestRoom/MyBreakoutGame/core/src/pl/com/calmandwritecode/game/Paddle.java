@@ -12,19 +12,27 @@ import pl.com.calmandwritecode.BreakoutGame;
 public class Paddle extends Rectangle {
 
     private final TextureAtlas atlas;
+    private final Sprite laserGunSprite;
     private Sprite paddleTexture;
+    public int laserShots;
 
     public Paddle(TextureAtlas atlas){
         this.atlas = atlas;
         paddleTexture = atlas.createSprite("paddle120");
+        laserGunSprite = atlas.createSprite("laser_gun");
         x = BreakoutGame.CENTER_X;
         y = 40;
         width = paddleTexture.getWidth();
         height = paddleTexture.getHeight();
+        laserShots = 10;
     }
 
     public void draw(SpriteBatch batch){
         batch.draw(paddleTexture,x,y);
+        if (laserShots > 0) {
+            batch.draw(laserGunSprite, x - laserGunSprite.getWidth(), y);
+            batch.draw(laserGunSprite, x + width, y);
+        }
     }
 
     public void update(){
@@ -86,5 +94,28 @@ public class Paddle extends Rectangle {
     public void reset(){
         paddleTexture = atlas.createSprite("paddle120");
         width = paddleTexture.getWidth();
+    }
+
+    public void loadLasers(){
+        if (laserShots<31)
+            laserShots +=20;
+        else
+            laserShots = 50;
+    }
+
+    public boolean lasersActive(){
+        return laserShots > 0;
+    }
+
+    public float getLaser1X(){
+        return x - laserGunSprite.getWidth();
+    }
+
+    public float getLaser2X(){
+        return x + width;
+    }
+
+    public void removeOneShot(){
+        laserShots-=1;
     }
 }

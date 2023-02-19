@@ -109,8 +109,8 @@ public class Ball extends Circle {
 
     public void slowDown(){
         if (velocity>1){
-            xSpeed = xSpeed * 0.7f;
-            ySpeed = ySpeed * 0.7f;
+            xSpeed = xSpeed * 0.5f;
+            ySpeed = ySpeed * 0.5f;
         }
     }
 

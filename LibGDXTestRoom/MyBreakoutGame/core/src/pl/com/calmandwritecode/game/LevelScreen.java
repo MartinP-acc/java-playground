@@ -36,21 +36,22 @@ public class LevelScreen implements Screen {
         RESUME,
     }
 
-    private GameStates gameState;
+    private final Array<PowerUp> powerUps;
+    private final Array<Shot> laserShots;
     private final BreakoutGame game;
     private final OrthographicCamera camera;
     private final Ball ball;
     private final SpriteBatch batch;
     private final Paddle paddle;
     private final BitmapFont defaultFont;
-    private Array<Brick> bricks;
     private final TextureAtlas atlas;
     private final LifeCounter lifeCounter;
-    private long lastCheckoutTime;
-    private LevelBuilder lvlBuilder;
     private final Stage stage;
+    private long lastCheckoutTime;
     private int bonusRange;
-    private final Array<PowerUp> powerUps;
+    private Array<Brick> bricks;
+    private LevelBuilder lvlBuilder;
+    private GameStates gameState;
 
     public LevelScreen(BreakoutGame game) {
         this.game = game;
@@ -62,6 +63,7 @@ public class LevelScreen implements Screen {
         paddle = new Paddle(atlas);
         bricks = new Array<>();
         powerUps = new Array<>();
+        laserShots = new Array<>();
         camera = new OrthographicCamera();
         lifeCounter = new LifeCounter(atlas, game);
         stage = new Stage();
@@ -132,9 +134,11 @@ public class LevelScreen implements Screen {
         paddle.draw(batch);
         drawBricks(batch);
         drawPowerUps(batch);
+        drawShots();
         ball.draw(batch);
         lifeCounter.draw(batch,defaultFont);
         defaultFont.draw(batch, "Score : "+game.player.getScore(),BreakoutGame.CENTER_X,BreakoutGame.W_HEIGHT-10);
+        defaultFont.draw(batch, "Shots : "+paddle.laserShots,BreakoutGame.W_WIDTH-100,BreakoutGame.W_HEIGHT-10);
         batch.end();
 
         if (gameState.equals(GameStates.LVL_INTRO)){
@@ -176,6 +180,14 @@ public class LevelScreen implements Screen {
                else gameState = GameStates.SERVE;
            }
 
+           if (paddle.lasersActive() && Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)){
+               shoot();
+           }
+
+           if (!laserShots.isEmpty()){
+               updateShots();
+           }
+
            if (pausePressed()) gameState = GameStates.PAUSE;
         }
 
@@ -188,6 +200,26 @@ public class LevelScreen implements Screen {
         stage.act(delta);
         stage.draw();
 
+    }
+
+    private void drawShots() {
+        for (Shot shot : laserShots) shot.draw(batch);
+    }
+
+    private void updateShots() {
+        for (int i=0; i<laserShots.size; i++){
+            Shot shot = laserShots.get(i);
+            shot.update();
+            if (shot.isOutOfScreen()) laserShots.removeIndex(i);
+        }
+    }
+
+    private void shoot() {
+        if (laserShots.size < 5){
+            laserShots.add(new Shot(paddle.getLaser1X(),atlas));
+            laserShots.add(new Shot(paddle.getLaser2X(),atlas));
+            paddle.removeOneShot();
+        }
     }
 
     private void updatePowerUps() {
@@ -222,6 +254,8 @@ public class LevelScreen implements Screen {
             ball.slowDown();
         } else if (powerType == PowerUp.POWER_BALL){
             ball.powerBall = true;
+        } else if (powerType == PowerUp.LASERS){
+            paddle.loadLasers();
         }
     }
 
@@ -263,12 +297,15 @@ public class LevelScreen implements Screen {
 
             if (brick.checkCollision(ball)){
                 brick.collision(ball);
-                if (brick.destroyed) {
-                    game.player.addToScore(brick.getPointsWorth());
-                    int luck = MathUtils.random(0,100);
-                    if (luck <= bonusRange) throwBonus(brick.x,brick.y);
-                    bricks.removeIndex(bricks.indexOf(brick, true));
-                }
+            }
+
+            brick.collision(laserShots, ball.powerBall);
+
+            if (brick.destroyed) {
+                game.player.addToScore(brick.getPointsWorth());
+                int luck = MathUtils.random(0,100);
+                if (luck <= bonusRange) throwBonus(brick.x,brick.y);
+                bricks.removeIndex(bricks.indexOf(brick, true));
             }
         }
 
