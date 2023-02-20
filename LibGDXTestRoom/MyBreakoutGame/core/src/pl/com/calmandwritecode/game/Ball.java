@@ -1,10 +1,8 @@
 package pl.com.calmandwritecode.game;
 
 import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
@@ -13,29 +11,46 @@ import pl.com.calmandwritecode.GameAssets;
 
 public class Ball extends Circle {
 
-    private final TextureAtlas atlas;
-    private Sprite ballTexture;
+    private Sound ballBounceSound;
+    private Sprite currentBallTexture;
+    private float velocity;
+
+    public Vector2 position;
+    public boolean serveState;
+    public boolean powerBall;
     public float xSpeed;
     public float ySpeed;
-    public Vector2 position;
-    public Vector2 futurePos;
-    private  final Sound ballBounceSound;
-    private float velocity;
-    public boolean powerBall;
+    public float posOnPaddle;
 
-    public Ball(TextureAtlas atlas){
-        this.atlas = atlas;
+    public static Ball cloneBall(Ball ball){
+        Ball clone = new Ball();
+        clone.currentBallTexture = ball.currentBallTexture;
+        clone.x = ball.x;
+        clone.y = ball.y;
+        clone.radius = ball.radius;
+        clone.xSpeed = -ball.xSpeed;
+        clone.ySpeed = ball.ySpeed;
+        clone.powerBall = ball.powerBall;
+        clone.position = new Vector2(clone.x,clone.y);
+        clone.ballBounceSound = ball.ballBounceSound;
+        return clone;
+    }
+
+    private Ball(){}
+
+    public Ball(Sprite currentBallTexture){
         GameAssets gameAssets = GameAssets.getInstance();
-        ballTexture = atlas.createSprite("ball");
-        stop();
-        position = new Vector2(x,y);
-        futurePos = new Vector2(x+xSpeed*10,y+ySpeed*10);
+        this.currentBallTexture = currentBallTexture;
+        xSpeed = 0;
+        ySpeed = 0;
+        posOnPaddle = 60;
         ballBounceSound = gameAssets.get(GameAssets.BOUNCE_SOUND_FILE);
-        set(BreakoutGame.CENTER_X,BreakoutGame.CENTER_Y-200,ballTexture.getWidth()/2);
+        set(BreakoutGame.CENTER_X,61+currentBallTexture.getWidth()/2,currentBallTexture.getWidth()/2);
+        position = new Vector2(x,y);
     }
 
     public void draw(SpriteBatch batch){
-        batch.draw(ballTexture,x-radius,y-radius);
+        batch.draw(currentBallTexture,x-radius,y-radius);
     }
 
     public void update(){
@@ -53,15 +68,7 @@ public class Ball extends Circle {
             ySpeed = -ySpeed;
             playBounce();
         }
-        updateVectors();
-    }
-
-    public void updateVectors(){
         position.set(x,y);
-        float xs = Math.abs(xSpeed);
-        float ys = Math.abs(ySpeed);
-        float multiplier = xs>ys ? 10/xs : 10/ys;
-        futurePos.set(x+xSpeed*multiplier,y+ySpeed*multiplier);
     }
 
     public void accelerateBall(){
@@ -80,13 +87,8 @@ public class Ball extends Circle {
         ballBounceSound.play();
     }
 
-    public void stop(){
-        xSpeed = 0;
-        ySpeed = 0;
-    }
-
     public void stickTo(Paddle paddle){
-        x = paddle.x+ paddle.width/2;
+        x = paddle.x+ posOnPaddle;
         y = paddle.y+ paddle.height+radius+1;
     }
 
@@ -95,16 +97,9 @@ public class Ball extends Circle {
         ySpeed = MathUtils.random(2,4);
     }
 
-    public void shrink(){
-        ballTexture = atlas.createSprite("small_ball");
-        radius = ballTexture.getHeight()/2;
-    }
-
-    public void reset(){
-        ballTexture = atlas.createSprite("ball");
-        radius = ballTexture.getHeight()/2;
-        powerBall = false;
-        ballTexture.setColor(Color.WHITE);
+    public void changeTexture(Sprite newTexture){
+        currentBallTexture = newTexture;
+        radius = newTexture.getHeight()/2;
     }
 
     public void slowDown(){
@@ -116,6 +111,10 @@ public class Ball extends Circle {
 
     public void setPowerBall(){
         powerBall = true;
-        ballTexture.setColor(1,0,0,0.5f);
+        currentBallTexture.setColor(1,0,0,0.5f);
+    }
+
+    public boolean isBelowScreen(){
+        return y<0;
     }
 }

@@ -14,9 +14,12 @@ public class Paddle extends Rectangle {
     private final TextureAtlas atlas;
     private final Sprite laserGunSprite;
     private Sprite paddleTexture;
-    public int laserShots;
+    private boolean magnetic;
+    private int laserShots;
+
 
     public Paddle(TextureAtlas atlas){
+        magnetic = false;
         this.atlas = atlas;
         paddleTexture = atlas.createSprite("paddle120");
         laserGunSprite = atlas.createSprite("laser_gun");
@@ -24,7 +27,7 @@ public class Paddle extends Rectangle {
         y = 40;
         width = paddleTexture.getWidth();
         height = paddleTexture.getHeight();
-        laserShots = 10;
+        laserShots = 0;
     }
 
     public void draw(SpriteBatch batch){
@@ -74,7 +77,13 @@ public class Paddle extends Rectangle {
             wasCollision = true;
         }
 
-        if (wasCollision)ball.playBounce();
+        if (wasCollision && magnetic){
+            ball.serveState = true;
+            ball.posOnPaddle = ball.x - x;
+            if (ball.posOnPaddle>width) ball.posOnPaddle = width;
+            else if (ball.posOnPaddle<0) ball.posOnPaddle = 0;
+        }
+        else if (wasCollision)ball.playBounce();
     }
 
     public void enlarge() {
@@ -94,13 +103,23 @@ public class Paddle extends Rectangle {
     public void reset(){
         paddleTexture = atlas.createSprite("paddle120");
         width = paddleTexture.getWidth();
+        laserShots = 0;
+        magnetic = false;
     }
 
     public void loadLasers(){
         if (laserShots<31)
-            laserShots +=20;
+            laserShots +=10;
         else
-            laserShots = 50;
+            laserShots = 40;
+    }
+
+    public void setPaddleStick(){
+        magnetic = true;
+    }
+
+    public boolean isMagnetic() {
+        return magnetic;
     }
 
     public boolean lasersActive(){

@@ -111,7 +111,7 @@ public class Brick extends Rectangle {
                 default:
                     break;
             }
-            ball.updateVectors();
+
             if (stuckCounter > 40){
                 destroyed = true;
                 stuckCounter = 0;

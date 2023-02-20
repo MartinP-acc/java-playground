@@ -38,9 +38,9 @@ public class LevelScreen implements Screen {
 
     private final Array<PowerUp> powerUps;
     private final Array<Shot> laserShots;
+    private final BallsService ballsService;
     private final BreakoutGame game;
     private final OrthographicCamera camera;
-    private final Ball ball;
     private final SpriteBatch batch;
     private final Paddle paddle;
     private final BitmapFont defaultFont;
@@ -55,11 +55,10 @@ public class LevelScreen implements Screen {
 
     public LevelScreen(BreakoutGame game) {
         this.game = game;
-
         defaultFont = new BitmapFont();
         batch = game.batch;
         atlas = game.gameAssets.get(GameAssets.ATLAS_FILE);
-        ball = new Ball(atlas);
+        ballsService = new BallsService(atlas);
         paddle = new Paddle(atlas);
         bricks = new Array<>();
         powerUps = new Array<>();
@@ -71,17 +70,19 @@ public class LevelScreen implements Screen {
 
     @Override
     public void show() {
-        Level level = game.levelManager.getLevel(game.player.getCurrentLevel());
         lvlBuilder = new LevelBuilder(atlas);
-        bonusRange = (int) level.getPowerUpChance();
-
-        bricks = lvlBuilder.buildFromString(level.getBrickMap());
-
         camera.setToOrtho(false, BreakoutGame.W_WIDTH, BreakoutGame.W_HEIGHT);
-
         Gdx.input.setCursorCatched(true);
-        lastCheckoutTime = TimeUtils.millis();
+
+        initLevel();
+    }
+
+    public void initLevel(){
+        Level level = game.levelManager.getLevel(game.player.getCurrentLevel());
+        bonusRange = (int) level.getPowerUpChance();
+        bricks = lvlBuilder.buildFromString(level.getBrickMap());
         gameState = GameStates.LVL_INTRO;
+        lastCheckoutTime = TimeUtils.millis();
     }
 
     private boolean actIntro(){
@@ -135,15 +136,15 @@ public class LevelScreen implements Screen {
         drawBricks(batch);
         drawPowerUps(batch);
         drawShots();
-        ball.draw(batch);
+        ballsService.drawBalls(batch);
         lifeCounter.draw(batch,defaultFont);
         defaultFont.draw(batch, "Score : "+game.player.getScore(),BreakoutGame.CENTER_X,BreakoutGame.W_HEIGHT-10);
-        defaultFont.draw(batch, "Shots : "+paddle.laserShots,BreakoutGame.W_WIDTH-100,BreakoutGame.W_HEIGHT-10);
         batch.end();
 
         if (gameState.equals(GameStates.LVL_INTRO)){
-            ball.stickTo(paddle);
             paddle.update();
+            updateShots();
+            ballsService.stickTo(paddle);
             if (actIntro()) {
                 gameState = GameStates.SERVE;
             }
@@ -151,38 +152,37 @@ public class LevelScreen implements Screen {
 
         if (gameState.equals(GameStates.SERVE)){
             paddle.update();
-            ball.stickTo(paddle);
+            ballsService.stickTo(paddle);
             if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)){
-                ball.serve();
+                ballsService.serveAll();
                 gameState = GameStates.PLAY;
             }
         }
 
         if (gameState.equals(GameStates.PLAY)){
 
-           ball.update();
            paddle.update();
+           ballsService.updateAll(paddle);
            updatePowerUps();
 
            findBrickCollision();
-           paddle.collision(ball);
+           ballsService.collisionPaddle(paddle);
 
            if (TimeUtils.timeSinceMillis(lastCheckoutTime)>10000){
-               ball.accelerateBall();
+               ballsService.accelerateAll();
                lastCheckoutTime = TimeUtils.millis();
            }
 
-           if (ball.y < 0){
-               lifeCounter.ballOut();
-               ball.reset();
-               paddle.reset();
-               if (lifeCounter.noMoreLives()) gameOver();
-               else gameState = GameStates.SERVE;
+           if (ballsService.allBallsOutScreen()){
+               serveNewBall();
+
            }
 
            if (paddle.lasersActive() && Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)){
                shoot();
            }
+
+           if (paddle.isMagnetic()) ballsService.releaseBalls();
 
            if (!laserShots.isEmpty()){
                updateShots();
@@ -200,6 +200,14 @@ public class LevelScreen implements Screen {
         stage.act(delta);
         stage.draw();
 
+    }
+
+    public void serveNewBall(){
+        lifeCounter.ballOut();
+        ballsService.setOneBall();
+        paddle.reset();
+        if (lifeCounter.noMoreLives()) gameOver();
+        else gameState = GameStates.SERVE;
     }
 
     private void drawShots() {
@@ -242,20 +250,23 @@ public class LevelScreen implements Screen {
         } else if (powerType == PowerUp.SHRINK_PADDLE){
             paddle.shrink();
         } else if (powerType == PowerUp.LOSE_BALL){
-            lifeCounter.ballOut();
+            serveNewBall();
         } else if (powerType == PowerUp.EXTRA_BALL){
             lifeCounter.extraLife();
         } else if (powerType == PowerUp.SPEED_UP){
-            ball.accelerateBall();
-            ball.accelerateBall();
+            ballsService.accelerateAll();
         } else if (powerType == PowerUp.SHRINK_BALL){
-            ball.shrink();
+            ballsService.shrinkAll();
         } else if (powerType == PowerUp.SLOW_DOWN){
-            ball.slowDown();
+            ballsService.slowDownAll();
         } else if (powerType == PowerUp.POWER_BALL){
-            ball.powerBall = true;
+            ballsService.setPowerAll();
         } else if (powerType == PowerUp.LASERS){
             paddle.loadLasers();
+        } else if (powerType == PowerUp.CLONE_BALL){
+            ballsService.cloneAll();
+        } else if (powerType == PowerUp.STICK_PADDLE){
+            paddle.setPaddleStick();
         }
     }
 
@@ -295,11 +306,9 @@ public class LevelScreen implements Screen {
         for (Brick brick : bricks){
             if (brick.destroyable) lvlNotFinished = brick.destroyable;
 
-            if (brick.checkCollision(ball)){
-                brick.collision(ball);
-            }
+            ballsService.collisionBrick(brick);
 
-            brick.collision(laserShots, ball.powerBall);
+            brick.collision(laserShots, ballsService.isPowerOn());
 
             if (brick.destroyed) {
                 game.player.addToScore(brick.getPointsWorth());
@@ -312,13 +321,13 @@ public class LevelScreen implements Screen {
         if (!lvlNotFinished) {
             game.player.nextLevel();
             if (game.levelManager.isLevelOnList(game.player.getCurrentLevel())){
-                Level level = game.levelManager.getLevel(game.player.getCurrentLevel());
-                bricks = lvlBuilder.buildFromString(level.getBrickMap());
-                bonusRange = (int) level.getPowerUpChance();
+
+                laserShots.clear();
                 powerUps.clear();
                 paddle.reset();
-                ball.reset();
-                gameState = GameStates.LVL_INTRO;
+                ballsService.setOneBall();
+
+                initLevel();
             }else{
                 gameOver();
             }

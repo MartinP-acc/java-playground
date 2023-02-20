@@ -43,6 +43,11 @@ public class PowerUp extends Rectangle {
             case EXTRA_BALL : sprite = atlas.createSprite("extra_ball"); break;
         }
 
+        if (powerType<LOSE_BALL){
+            int randomInt = MathUtils.random(1,4);
+            if (randomInt == 1) sprite = atlas.createSprite("random_bonus");
+        }
+
         if (sprite != null) set(x,y,sprite.getWidth(),sprite.getHeight());
     }
 
