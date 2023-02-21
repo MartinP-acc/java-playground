@@ -188,7 +188,10 @@ public class LevelScreen implements Screen {
                updateShots();
            }
 
-           if (pausePressed()) gameState = GameStates.PAUSE;
+           if (pausePressed()){
+               lastCheckoutTime = TimeUtils.millis();
+               gameState = GameStates.PAUSE;
+           }
         }
 
         if (gameState.equals(GameStates.PAUSE)) pause();
@@ -277,8 +280,8 @@ public class LevelScreen implements Screen {
     }
 
     private boolean pausePressed() {
-        return Gdx.input.isKeyPressed(Input.Keys.P) ||
-                Gdx.input.isKeyPressed(Input.Keys.PAUSE);
+        return Gdx.input.isKeyJustPressed(Input.Keys.P) ||
+                Gdx.input.isKeyJustPressed(Input.Keys.PAUSE);
     }
 
     private void gameOver() {
@@ -346,16 +349,17 @@ public class LevelScreen implements Screen {
     @Override
     public void pause() {
         Skin skin = new Skin(Gdx.files.internal("skins.json"));
-        Label pauseLabel = new Label("PRESS 'SPACE' TO RESUME",skin,"scoreboard");
+        Label pauseLabel = new Label("PRESS 'P' TO RESUME",skin,"scoreboard");
         pauseLabel.setPosition(BreakoutGame.CENTER_X-pauseLabel.getWidth()/2,BreakoutGame.CENTER_Y);
         stage.addActor(pauseLabel);
-        if (Gdx.input.isKeyPressed(Input.Keys.SPACE))
+        if (TimeUtils.timeSinceMillis(lastCheckoutTime)>500 && Gdx.input.isKeyJustPressed(Input.Keys.P))
             gameState = GameStates.RESUME;
     }
 
     @Override
     public void resume() {
         stage.clear();
+        lastCheckoutTime = TimeUtils.millis();
         gameState = GameStates.PLAY;
     }
 

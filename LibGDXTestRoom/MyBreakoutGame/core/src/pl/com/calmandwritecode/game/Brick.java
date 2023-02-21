@@ -22,8 +22,6 @@ public class Brick extends Rectangle {
 
     private String boundSide;
     protected int pointsWorth;
-
-
     public Brick(float x, float y, Sprite texture){
         this.x = x;
         this.y = y;

@@ -60,6 +60,7 @@ public class PowerUp extends Rectangle {
     }
 
     public void update(){
+        sprite.rotate(30);
         y-=gravity;
     }
 
