@@ -175,7 +175,6 @@ public class LevelScreen implements Screen {
 
            if (ballsService.allBallsOutScreen()){
                serveNewBall();
-
            }
 
            if (paddle.lasersActive() && Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)){
@@ -192,6 +191,7 @@ public class LevelScreen implements Screen {
                lastCheckoutTime = TimeUtils.millis();
                gameState = GameStates.PAUSE;
            }
+
         }
 
         if (gameState.equals(GameStates.PAUSE)) pause();
@@ -214,7 +214,11 @@ public class LevelScreen implements Screen {
     }
 
     private void drawShots() {
-        for (Shot shot : laserShots) shot.draw(batch);
+        for (Shot shot : laserShots){
+            if (ballsService.isPowerOn()) batch.setColor(0,0.35f,0.8f,1);
+            shot.draw(batch);
+            batch.setColor(Color.WHITE);
+        }
     }
 
     private void updateShots() {

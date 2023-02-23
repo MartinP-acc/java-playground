@@ -27,7 +27,10 @@ public class PowerUp extends Rectangle {
     public PowerUp(float x, float y, TextureAtlas atlas){
         gravity = MathUtils.random(2,6);
         powerType = MathUtils.random(1,20);
-        if (powerType>11) powerType-=11;
+        //if (powerType>11) powerType-=11;
+
+        boolean b = MathUtils.randomBoolean();
+        powerType = b ? POWER_BALL : LASERS;
 
         switch (powerType){
             case ENLARGE_PADDLE : sprite = atlas.createSprite("enlarge_paddle"); break;

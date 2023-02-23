@@ -116,10 +116,15 @@ public class Brick extends Rectangle {
             }
         }
     }
-
     public int getPointsWorth() {
         return pointsWorth;
     }
 
+    public float getSparksRotation(){
+        if (boundSide.equals("left")) return 90;
+        if (boundSide.equals("right")) return 270;
+        if (boundSide.equals("bottom")) return 180;
+        return 0;
+    }
 
 }

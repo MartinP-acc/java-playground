@@ -1,8 +1,11 @@
 package pl.com.calmandwritecode.game;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
@@ -14,6 +17,7 @@ public class Ball extends Circle {
     private Sound ballBounceSound;
     private Sprite currentBallTexture;
     private float velocity;
+    private Sparks sparks;
 
     public Vector2 position;
     public boolean serveState;
@@ -33,6 +37,7 @@ public class Ball extends Circle {
         clone.powerBall = ball.powerBall;
         clone.position = new Vector2(clone.x,clone.y);
         clone.ballBounceSound = ball.ballBounceSound;
+        clone.sparks = ball.sparks;
         return clone;
     }
 
@@ -47,10 +52,14 @@ public class Ball extends Circle {
         ballBounceSound = gameAssets.get(GameAssets.BOUNCE_SOUND_FILE);
         set(BreakoutGame.CENTER_X,61+currentBallTexture.getWidth()/2,currentBallTexture.getWidth()/2);
         position = new Vector2(x,y);
+        sparks = new Sparks((TextureAtlas) gameAssets.get(GameAssets.ATLAS_FILE));
     }
 
     public void draw(SpriteBatch batch){
+        if (powerBall) batch.setColor(0.9f,0.1f,0,1f);
         batch.draw(currentBallTexture,x-radius,y-radius);
+        batch.setColor(Color.WHITE);
+        sparks.draw(batch, Gdx.graphics.getDeltaTime());
     }
 
     public void update(){
@@ -59,14 +68,17 @@ public class Ball extends Circle {
         if (x<=radius && xSpeed<0){
             xSpeed = -xSpeed;
             playBounce();
+            sparks.start(25,y,270);
         }
         if (x>=BreakoutGame.W_WIDTH-radius && xSpeed>0){
             xSpeed = -xSpeed;
             playBounce();
+            sparks.start(BreakoutGame.W_WIDTH-25,y,90);
         }
         if (y>=BreakoutGame.W_HEIGHT-radius && ySpeed>0){
             ySpeed = -ySpeed;
             playBounce();
+            sparks.start(x,BreakoutGame.W_HEIGHT-25,180);
         }
         position.set(x,y);
     }

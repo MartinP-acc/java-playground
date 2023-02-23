@@ -305,6 +305,27 @@ small_paddle
   orig: 79, 7
   offset: 0, 0
   index: -1
+sparks
+  rotate: false
+  xy: 278, 4
+  size: 55, 16
+  orig: 55, 16
+  offset: 0, 0
+  index: 0
+sparks
+  rotate: false
+  xy: 521, 31
+  size: 55, 16
+  orig: 55, 16
+  offset: 0, 0
+  index: 1
+sparks
+  rotate: false
+  xy: 578, 31
+  size: 55, 16
+  orig: 55, 16
+  offset: 0, 0
+  index: 2
 speed_up
   rotate: false
   xy: 427, 11

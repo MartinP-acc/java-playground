@@ -1,6 +1,7 @@
 package pl.com.calmandwritecode.game;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -16,6 +17,7 @@ public class Paddle extends Rectangle {
     private Sprite paddleTexture;
     private boolean magnetic;
     private int laserShots;
+    private Sparks sparks;
 
 
     public Paddle(TextureAtlas atlas){
@@ -28,14 +30,16 @@ public class Paddle extends Rectangle {
         width = paddleTexture.getWidth();
         height = paddleTexture.getHeight();
         laserShots = 0;
+        sparks = new Sparks(atlas);
     }
 
     public void draw(SpriteBatch batch){
         batch.draw(paddleTexture,x,y);
         if (laserShots > 0) {
-            batch.draw(laserGunSprite, x - laserGunSprite.getWidth(), y);
-            batch.draw(laserGunSprite, x + width, y);
+            batch.draw(laserGunSprite, getLaser1X(), y);
+            batch.draw(laserGunSprite, getLaser2X(), y);
         }
+        sparks.draw(batch,Gdx.graphics.getDeltaTime());
     }
 
     public void update(){
@@ -63,6 +67,7 @@ public class Paddle extends Rectangle {
                 if (ball.x < x + width - width/8) ball.xSpeed -= 1;
             }
             wasCollision = true;
+            sparks.start(ball.x,60,0);
             ball.updateCurrentVelocity();
         }
 
