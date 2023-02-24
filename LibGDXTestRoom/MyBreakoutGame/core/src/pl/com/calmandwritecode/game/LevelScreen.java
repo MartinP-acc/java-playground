@@ -6,9 +6,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.AlphaAction;
@@ -49,9 +47,12 @@ public class LevelScreen implements Screen {
     private final Stage stage;
     private long lastCheckoutTime;
     private int bonusRange;
+    private final Animation<TextureRegion> laserRayAnim;
     private Array<Brick> bricks;
     private LevelBuilder lvlBuilder;
     private GameStates gameState;
+    private float rayAnimState;
+    private boolean rayAnimOn;
 
     public LevelScreen(BreakoutGame game) {
         this.game = game;
@@ -66,6 +67,9 @@ public class LevelScreen implements Screen {
         camera = new OrthographicCamera();
         lifeCounter = new LifeCounter(atlas, game);
         stage = new Stage();
+        laserRayAnim = new Animation<TextureRegion>(0.07f,atlas.findRegions("laser_ray"), Animation.PlayMode.NORMAL);
+        rayAnimState = 0;
+        rayAnimOn = false;
     }
 
     @Override
@@ -181,7 +185,7 @@ public class LevelScreen implements Screen {
                shoot();
            }
 
-           if (paddle.isMagnetic()) ballsService.releaseBalls();
+           ballsService.releaseBalls();
 
            if (!laserShots.isEmpty()){
                updateShots();
@@ -214,11 +218,19 @@ public class LevelScreen implements Screen {
     }
 
     private void drawShots() {
+        if (ballsService.isPowerOn()) batch.setColor(0,0.35f,0.8f,1);
         for (Shot shot : laserShots){
-            if (ballsService.isPowerOn()) batch.setColor(0,0.35f,0.8f,1);
             shot.draw(batch);
-            batch.setColor(Color.WHITE);
         }
+        if (rayAnimOn) {
+            rayAnimState+=Gdx.graphics.getDeltaTime();
+            TextureRegion rayFrame = laserRayAnim.getKeyFrame(rayAnimState);
+            float offset = rayFrame.getRegionWidth()/2f;
+            batch.draw(rayFrame,paddle.getLaser1X()-offset,60);
+            batch.draw(rayFrame,paddle.getLaser2X()-offset,60);
+            if (rayAnimState>0.21) rayAnimOn=false;
+        }
+        batch.setColor(Color.WHITE);
     }
 
     private void updateShots() {
@@ -235,6 +247,8 @@ public class LevelScreen implements Screen {
             laserShots.add(new Shot(paddle.getLaser2X(),atlas));
             paddle.removeOneShot();
         }
+        rayAnimOn = true;
+        rayAnimState = 0;
     }
 
     private void updatePowerUps() {

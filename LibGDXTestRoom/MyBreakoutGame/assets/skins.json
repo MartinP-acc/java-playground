@@ -32,7 +32,12 @@
     "scoreboard": { "font" :  "score"},
     "score-header": {
       "font" :  "score",
-      "fontColor": "green"}
+      "fontColor": "green"
+    },
+    "score-warning": {
+      "font" :  "score",
+      "fontColor": "red"
+    }
   },
   "com.badlogic.gdx.scenes.scene2d.ui.TextField$TextFieldStyle" : {
     "score" : {

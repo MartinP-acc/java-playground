@@ -9,15 +9,18 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.TimeUtils;
 import pl.com.calmandwritecode.BreakoutGame;
 import pl.com.calmandwritecode.GameAssets;
 
 public class Ball extends Circle {
 
+    private static final long POWER_BALL_LIMIT = 15000;
     private Sound ballBounceSound;
     private Sprite currentBallTexture;
     private float velocity;
     private Sparks sparks;
+    private long powerBallStartTime;
 
     public Vector2 position;
     public boolean serveState;
@@ -56,10 +59,15 @@ public class Ball extends Circle {
     }
 
     public void draw(SpriteBatch batch){
-        if (powerBall) batch.setColor(0.9f,0.1f,0,1f);
+        if (isPowerBall()) batch.setColor(0.9f,0.1f,0,1f);
         batch.draw(currentBallTexture,x-radius,y-radius);
         batch.setColor(Color.WHITE);
         sparks.draw(batch, Gdx.graphics.getDeltaTime());
+    }
+
+    private boolean isPowerBall() {
+        if (TimeUtils.timeSinceMillis(powerBallStartTime)>POWER_BALL_LIMIT) powerBall = false;
+        return powerBall;
     }
 
     public void update(){
@@ -123,7 +131,7 @@ public class Ball extends Circle {
 
     public void setPowerBall(){
         powerBall = true;
-        currentBallTexture.setColor(1,0,0,0.5f);
+        powerBallStartTime = TimeUtils.millis();
     }
 
     public boolean isBelowScreen(){

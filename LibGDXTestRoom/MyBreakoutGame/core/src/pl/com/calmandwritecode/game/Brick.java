@@ -73,7 +73,7 @@ public class Brick extends Rectangle {
                 collision = true;
             }
         }
-        if (!collision){
+        if (!collision || (ball.x>x && ball.x<x+width)){
             if (ball.ySpeed>0) {
                 if (Intersector.intersectSegmentCircle(bottomRight, bottomLeft, ball.position, ball.radius*ball.radius)) {
                         boundSide = "bottom";

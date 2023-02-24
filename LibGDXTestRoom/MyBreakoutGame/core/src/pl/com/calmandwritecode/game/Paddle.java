@@ -8,16 +8,19 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.TimeUtils;
 import pl.com.calmandwritecode.BreakoutGame;
 
 public class Paddle extends Rectangle {
 
+    private static final float MAGNETIC_TIME_LIMIT = 15000;
     private final TextureAtlas atlas;
     private final Sprite laserGunSprite;
     private Sprite paddleTexture;
     private boolean magnetic;
     private int laserShots;
     private Sparks sparks;
+    private long magneticStartTime;
 
 
     public Paddle(TextureAtlas atlas){
@@ -34,7 +37,9 @@ public class Paddle extends Rectangle {
     }
 
     public void draw(SpriteBatch batch){
+        if (isMagnetic()) batch.setColor(Color.SKY);
         batch.draw(paddleTexture,x,y);
+        batch.setColor(Color.WHITE);
         if (laserShots > 0) {
             batch.draw(laserGunSprite, getLaser1X(), y);
             batch.draw(laserGunSprite, getLaser2X(), y);
@@ -120,10 +125,12 @@ public class Paddle extends Rectangle {
     }
 
     public void setPaddleStick(){
+        magneticStartTime = TimeUtils.millis();
         magnetic = true;
     }
 
     public boolean isMagnetic() {
+        if (TimeUtils.timeSinceMillis(magneticStartTime)>MAGNETIC_TIME_LIMIT) magnetic = false;
         return magnetic;
     }
 

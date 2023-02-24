@@ -200,6 +200,27 @@ laser_gun
   orig: 5, 20
   offset: 0, 0
   index: -1
+laser_ray
+  rotate: false
+  xy: 278, 2
+  size: 26, 18
+  orig: 26, 18
+  offset: 0, 0
+  index: 0
+laser_ray
+  rotate: false
+  xy: 306, 2
+  size: 26, 18
+  orig: 26, 18
+  offset: 0, 0
+  index: 1
+laser_ray
+  rotate: false
+  xy: 334, 2
+  size: 26, 18
+  orig: 26, 18
+  offset: 0, 0
+  index: 2
 laser_shot
   rotate: false
   xy: 874, 36
@@ -307,21 +328,21 @@ small_paddle
   index: -1
 sparks
   rotate: false
-  xy: 278, 4
+  xy: 521, 31
   size: 55, 16
   orig: 55, 16
   offset: 0, 0
   index: 0
 sparks
   rotate: false
-  xy: 521, 31
+  xy: 578, 31
   size: 55, 16
   orig: 55, 16
   offset: 0, 0
   index: 1
 sparks
   rotate: false
-  xy: 578, 31
+  xy: 521, 13
   size: 55, 16
   orig: 55, 16
   offset: 0, 0
