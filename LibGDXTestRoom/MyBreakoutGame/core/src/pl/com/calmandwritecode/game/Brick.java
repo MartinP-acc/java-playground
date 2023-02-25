@@ -1,11 +1,13 @@
 package pl.com.calmandwritecode.game;
 
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
+import pl.com.calmandwritecode.GameAssets;
 
 public class Brick extends Rectangle {
 
@@ -19,6 +21,8 @@ public class Brick extends Rectangle {
     private final Vector2 topLeft;
     private final Vector2 bottomRight;
     private final Vector2 topRight;
+    private final Sound metalHitSound;
+    private final Sound brickHitSound;
 
     private String boundSide;
     protected int pointsWorth;
@@ -29,7 +33,9 @@ public class Brick extends Rectangle {
         this.height = texture.getHeight();
         this.texture = texture;
         center = new Vector2(x+width/2,y+height/2);
-
+        GameAssets gameAssets = GameAssets.getInstance();
+        brickHitSound = gameAssets.get(GameAssets.BRICK_HIT);
+        metalHitSound = gameAssets.get(GameAssets.METAL_HIT);
         bottomLeft = new Vector2(x,y);
         bottomRight = new Vector2(x+width,y);
         topLeft = new Vector2(x,y+height);
@@ -52,6 +58,9 @@ public class Brick extends Rectangle {
         for (int i=0; i<shots.size; i++){
             Shot shot = shots.get(i);
             if (shot.overlaps(this)){
+                if (destroyable) playBrickHit();
+                else playMetalHit();
+
                 if (destroyable || isPowerBall) destroyed = true;
                 if (!isPowerBall) shots.removeIndex(i);
             }
@@ -91,7 +100,9 @@ public class Brick extends Rectangle {
 
 
     protected void bounce(Ball ball){
-        ball.playBounce();
+        if (destroyable) playBrickHit();
+        else playMetalHit();
+
         if (!ball.powerBall) {
             switch (boundSide) {
                 case "left":
@@ -125,6 +136,14 @@ public class Brick extends Rectangle {
         if (boundSide.equals("right")) return 270;
         if (boundSide.equals("bottom")) return 180;
         return 0;
+    }
+
+    public void playBrickHit(){
+        brickHitSound.play();
+    }
+
+    public void playMetalHit(){
+        metalHitSound.play();
     }
 
 }

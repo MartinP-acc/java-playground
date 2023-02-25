@@ -17,10 +17,13 @@ public class Ball extends Circle {
 
     private static final long POWER_BALL_LIMIT = 15000;
     private Sound ballBounceSound;
+    private Sound[] ricochet;
+    private Sound magneticSound;
     private Sprite currentBallTexture;
     private float velocity;
     private Sparks sparks;
     private long powerBallStartTime;
+    private int ricochetIndex;
 
     public Vector2 position;
     public boolean serveState;
@@ -40,7 +43,10 @@ public class Ball extends Circle {
         clone.powerBall = ball.powerBall;
         clone.position = new Vector2(clone.x,clone.y);
         clone.ballBounceSound = ball.ballBounceSound;
+        clone.magneticSound = ball.magneticSound;
+        clone.ricochet = ball.ricochet;
         clone.sparks = ball.sparks;
+        clone.ricochetIndex = MathUtils.random(0,3);
         return clone;
     }
 
@@ -53,9 +59,17 @@ public class Ball extends Circle {
         ySpeed = 0;
         posOnPaddle = 60;
         ballBounceSound = gameAssets.get(GameAssets.BOUNCE_SOUND_FILE);
+        magneticSound = gameAssets.get(GameAssets.MAGNETIC);
+        ricochet = new Sound[]{
+                gameAssets.get(GameAssets.RICOCHET_0),
+                gameAssets.get(GameAssets.RICOCHET_1),
+                gameAssets.get(GameAssets.RICOCHET_2),
+                gameAssets.get(GameAssets.RICOCHET_3),
+        };
         set(BreakoutGame.CENTER_X,61+currentBallTexture.getWidth()/2,currentBallTexture.getWidth()/2);
         position = new Vector2(x,y);
         sparks = new Sparks((TextureAtlas) gameAssets.get(GameAssets.ATLAS_FILE));
+        ricochetIndex = MathUtils.random(0,3);
     }
 
     public void draw(SpriteBatch batch){
@@ -75,17 +89,17 @@ public class Ball extends Circle {
         y+=ySpeed;
         if (x<=radius && xSpeed<0){
             xSpeed = -xSpeed;
-            playBounce();
+            playRicochet();
             sparks.start(25,y,270);
         }
         if (x>=BreakoutGame.W_WIDTH-radius && xSpeed>0){
             xSpeed = -xSpeed;
-            playBounce();
+            playRicochet();
             sparks.start(BreakoutGame.W_WIDTH-25,y,90);
         }
         if (y>=BreakoutGame.W_HEIGHT-radius && ySpeed>0){
             ySpeed = -ySpeed;
-            playBounce();
+            playRicochet();
             sparks.start(x,BreakoutGame.W_HEIGHT-25,180);
         }
         position.set(x,y);
@@ -105,6 +119,17 @@ public class Ball extends Circle {
 
     public void playBounce(){
         ballBounceSound.play();
+    }
+
+
+
+    public void playMagneticSound(){
+        magneticSound.play();
+    }
+
+    public void playRicochet(){
+        ricochet[ricochetIndex].play();
+        ricochetIndex = MathUtils.random(0,3);
     }
 
     public void stickTo(Paddle paddle){

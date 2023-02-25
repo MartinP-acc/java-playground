@@ -3,6 +3,8 @@ package pl.com.calmandwritecode.game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -243,6 +245,8 @@ public class LevelScreen implements Screen {
 
     private void shoot() {
         if (laserShots.size < 5){
+            Sound laserGun = game.gameAssets.get(GameAssets.LASER_GUN);
+            laserGun.play();
             laserShots.add(new Shot(paddle.getLaser1X(),atlas));
             laserShots.add(new Shot(paddle.getLaser2X(),atlas));
             paddle.removeOneShot();

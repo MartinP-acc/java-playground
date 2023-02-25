@@ -88,6 +88,7 @@ public class Paddle extends Rectangle {
         }
 
         if (wasCollision && magnetic){
+            ball.playMagneticSound();
             ball.serveState = true;
             ball.posOnPaddle = ball.x - x;
             if (ball.posOnPaddle>width) ball.posOnPaddle = width;
