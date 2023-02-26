@@ -27,9 +27,9 @@ public class BallsService {
         balls.add(ball);
     }
 
-    public void accelerateAll(){
+    public void accelerateAll(boolean fullSpeed){
         for (Ball ball : balls){
-            ball.accelerateBall();
+            ball.accelerateBall(fullSpeed);
         }
     }
 

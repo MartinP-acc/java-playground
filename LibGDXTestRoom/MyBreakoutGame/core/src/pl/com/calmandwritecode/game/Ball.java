@@ -16,21 +16,17 @@ import pl.com.calmandwritecode.GameAssets;
 public class Ball extends Circle {
 
     private static final long POWER_BALL_LIMIT = 15000;
-    private Sound ballBounceSound;
+    private Sound ballBounceSound, magneticSound;
     private Sound[] ricochet;
-    private Sound magneticSound;
     private Sprite currentBallTexture;
-    private float velocity;
     private Sparks sparks;
+    private float velocity;
     private long powerBallStartTime;
     private int ricochetIndex;
 
     public Vector2 position;
-    public boolean serveState;
-    public boolean powerBall;
-    public float xSpeed;
-    public float ySpeed;
-    public float posOnPaddle;
+    public boolean serveState, powerBall;
+    public float xSpeed, ySpeed, posOnPaddle = 60;
 
     public static Ball cloneBall(Ball ball){
         Ball clone = new Ball();
@@ -57,7 +53,6 @@ public class Ball extends Circle {
         this.currentBallTexture = currentBallTexture;
         xSpeed = 0;
         ySpeed = 0;
-        posOnPaddle = 60;
         ballBounceSound = gameAssets.get(GameAssets.BOUNCE_SOUND_FILE);
         magneticSound = gameAssets.get(GameAssets.MAGNETIC);
         ricochet = new Sound[]{
@@ -87,28 +82,36 @@ public class Ball extends Circle {
     public void update(){
         x+=xSpeed;
         y+=ySpeed;
+        handleScreenBoundCollision();
+        position.set(x,y);
+    }
+
+    private void handleScreenBoundCollision(){
+        //LEFT SIDE of the screen
         if (x<=radius && xSpeed<0){
             xSpeed = -xSpeed;
             playRicochet();
             sparks.start(25,y,270);
         }
+        //RIGHT SIDE of the screen
         if (x>=BreakoutGame.W_WIDTH-radius && xSpeed>0){
             xSpeed = -xSpeed;
             playRicochet();
             sparks.start(BreakoutGame.W_WIDTH-25,y,90);
         }
+        //TOP of the screen
         if (y>=BreakoutGame.W_HEIGHT-radius && ySpeed>0){
             ySpeed = -ySpeed;
             playRicochet();
             sparks.start(x,BreakoutGame.W_HEIGHT-25,180);
         }
-        position.set(x,y);
     }
 
-    public void accelerateBall(){
+    public void accelerateBall(boolean fullSpeed){
+        float multiplier = fullSpeed ? 1.5f : 1.1f;
         if (velocity < radius) {
-            xSpeed = xSpeed * 1.1f;
-            ySpeed = ySpeed * 1.1f;
+            xSpeed = xSpeed * multiplier;
+            ySpeed = ySpeed * multiplier;
         }
         updateCurrentVelocity();
     }

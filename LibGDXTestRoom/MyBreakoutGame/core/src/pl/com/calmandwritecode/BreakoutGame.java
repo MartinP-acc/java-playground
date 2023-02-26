@@ -58,13 +58,13 @@ public class BreakoutGame extends Game {
 			shapeRenderer.end();
 
 			batch.begin();
-			bitmapFont.draw(batch,gameAssets.loadProgress()*100+" %",CENTER_X,CENTER_Y+100, 50, Align.center, false);
+			String formattedProgress = String.format("%.0f",(gameAssets.loadProgress()*100))+" %";
+			bitmapFont.draw(batch,formattedProgress,CENTER_X,CENTER_Y+100, 50, Align.center, false);
 			batch.end();
 
 			if (gameAssets.isUpdated()){
 				setScreen(new MenuScreen(this));
 				isScreenSet = true;
-				System.out.println(gameAssets.loadProgress());
 			}
 		}
 	}

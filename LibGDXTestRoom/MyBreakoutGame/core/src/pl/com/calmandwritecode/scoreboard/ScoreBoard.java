@@ -9,6 +9,9 @@ public class ScoreBoard {
 
     public ScoreBoard() {
         this.scores = new ArrayList<>();
+        for(int i=0; i<10; i++){
+            scores.add(new Score("AAA",10*i,0));
+        }
     }
 
     public boolean worthToSave(long scorePoints){

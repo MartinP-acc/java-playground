@@ -182,7 +182,7 @@ public class EditorScreen implements Screen {
         stage.addActor(root);
 
         camera = new OrthographicCamera();
-        camera.setToOrtho(false,Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
+        camera.setToOrtho(false,BreakoutGame.W_WIDTH,BreakoutGame.W_HEIGHT);
 
         grid = new Grid(atlas, buttons);
 
@@ -203,6 +203,7 @@ public class EditorScreen implements Screen {
 
         shapeRenderer.setProjectionMatrix(camera.combined);
         batch.setProjectionMatrix(camera.combined);
+        stage.getBatch().setProjectionMatrix(camera.combined);
 
         grid.updateCursor();
 
@@ -215,7 +216,7 @@ public class EditorScreen implements Screen {
         batch.end();
 
         stage.draw();
-        stage.getBatch().setProjectionMatrix(camera.combined);
+
 
         if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)){
             game.setScreen(new MenuScreen(game));
@@ -225,6 +226,7 @@ public class EditorScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
+
 
     }
 

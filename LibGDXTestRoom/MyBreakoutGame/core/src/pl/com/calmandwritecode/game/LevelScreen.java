@@ -175,7 +175,7 @@ public class LevelScreen implements Screen {
            ballsService.collisionPaddle(paddle);
 
            if (TimeUtils.timeSinceMillis(lastCheckoutTime)>10000){
-               ballsService.accelerateAll();
+               ballsService.accelerateAll(false);
                lastCheckoutTime = TimeUtils.millis();
            }
 
@@ -279,7 +279,7 @@ public class LevelScreen implements Screen {
         } else if (powerType == PowerUp.EXTRA_BALL){
             lifeCounter.extraLife();
         } else if (powerType == PowerUp.SPEED_UP){
-            ballsService.accelerateAll();
+            ballsService.accelerateAll(true);
         } else if (powerType == PowerUp.SHRINK_BALL){
             ballsService.shrinkAll();
         } else if (powerType == PowerUp.SLOW_DOWN){

@@ -14,34 +14,34 @@ public class Brick extends Rectangle {
     public static int stuckCounter = 0;
     public boolean destroyed = false;
     public boolean destroyable = true;
-    public Vector2 center;
     protected Sprite texture;
 
-    private final Vector2 bottomLeft;
-    private final Vector2 topLeft;
-    private final Vector2 bottomRight;
-    private final Vector2 topRight;
-    private final Sound metalHitSound;
-    private final Sound brickHitSound;
+    private Vector2 bottomLeft, topLeft, bottomRight, topRight;
+    private Sound metalHitSound, brickHitSound;
 
     private String boundSide;
     protected int pointsWorth;
     public Brick(float x, float y, Sprite texture){
-        this.x = x;
-        this.y = y;
-        this.width = texture.getWidth();
-        this.height = texture.getHeight();
+        super(x,y,texture.getWidth(),texture.getHeight());
         this.texture = texture;
-        center = new Vector2(x+width/2,y+height/2);
-        GameAssets gameAssets = GameAssets.getInstance();
-        brickHitSound = gameAssets.get(GameAssets.BRICK_HIT);
-        metalHitSound = gameAssets.get(GameAssets.METAL_HIT);
+        this.pointsWorth = 10;
+        initCornerVec2();
+        setSounds();
+    }
+
+    private void initCornerVec2(){
         bottomLeft = new Vector2(x,y);
         bottomRight = new Vector2(x+width,y);
         topLeft = new Vector2(x,y+height);
         topRight = new Vector2(x+width, y+height );
-        pointsWorth = 10;
     }
+
+    private void setSounds(){
+        GameAssets gameAssets = GameAssets.getInstance();
+        brickHitSound = gameAssets.get(GameAssets.BRICK_HIT);
+        metalHitSound = gameAssets.get(GameAssets.METAL_HIT);
+    }
+
 
     public void draw(SpriteBatch batch){
         batch.draw(texture,x,y);
@@ -53,20 +53,17 @@ public class Brick extends Rectangle {
         stuckCounter = 0;
         ball.update();
     }
-
     public void collision(Array<Shot> shots, boolean isPowerBall){
         for (int i=0; i<shots.size; i++){
             Shot shot = shots.get(i);
             if (shot.overlaps(this)){
-                if (destroyable) playBrickHit();
-                else playMetalHit();
+                playHitSound();
 
                 if (destroyable || isPowerBall) destroyed = true;
                 if (!isPowerBall) shots.removeIndex(i);
             }
         }
     }
-
     public boolean checkCollision(Ball ball){
         boolean collision = false;
         boundSide = "none";
@@ -100,8 +97,7 @@ public class Brick extends Rectangle {
 
 
     protected void bounce(Ball ball){
-        if (destroyable) playBrickHit();
-        else playMetalHit();
+        playHitSound();
 
         if (!ball.powerBall) {
             switch (boundSide) {
@@ -120,13 +116,22 @@ public class Brick extends Rectangle {
                 default:
                     break;
             }
-
-            if (stuckCounter > 40){
-                destroyed = true;
-                stuckCounter = 0;
-            }
+            handleBallStuck();
         }
     }
+
+    private void playHitSound() {
+        if (destroyable) brickHitSound.play();
+        else metalHitSound.play();
+    }
+
+    private void handleBallStuck() {
+        if (stuckCounter > 40) {
+            destroyed = true;
+            stuckCounter = 0;
+        }
+    }
+
     public int getPointsWorth() {
         return pointsWorth;
     }
@@ -137,13 +142,4 @@ public class Brick extends Rectangle {
         if (boundSide.equals("bottom")) return 180;
         return 0;
     }
-
-    public void playBrickHit(){
-        brickHitSound.play();
-    }
-
-    public void playMetalHit(){
-        metalHitSound.play();
-    }
-
 }

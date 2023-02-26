@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -21,12 +22,15 @@ public class MenuScreen implements Screen {
 
     private Stage stage;
     private final BreakoutGame game;
+    private OrthographicCamera camera;
 
     public MenuScreen(final BreakoutGame game) {
         this.game = game;
         game.player = new PlayerData();
         Gdx.input.setCursorCatched(false);
         game.levelManager.loadLevelList();
+        camera = new OrthographicCamera();
+        camera.setToOrtho(false,BreakoutGame.W_WIDTH,BreakoutGame.W_HEIGHT);
     }
 
     @Override
@@ -109,20 +113,21 @@ public class MenuScreen implements Screen {
         Gdx.input.setInputProcessor(stage);
         stage.addActor(image);
         stage.addActor(table);
-
-
     }
 
     @Override
     public void render(float delta) {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        camera.update();
+
+        stage.getBatch().setProjectionMatrix(camera.combined);
         stage.act(delta);
         stage.draw();
     }
 
     @Override
     public void resize(int width, int height) {
-
+        show();
     }
 
     @Override

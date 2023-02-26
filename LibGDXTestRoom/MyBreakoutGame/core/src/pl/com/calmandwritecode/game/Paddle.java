@@ -13,7 +13,7 @@ import pl.com.calmandwritecode.BreakoutGame;
 
 public class Paddle extends Rectangle {
 
-    private static final float MAGNETIC_TIME_LIMIT = 15000;
+    private static final float MAGNETIC_TIME_LIMIT = 25000;
     private final TextureAtlas atlas;
     private final Sprite laserGunSprite;
     private Sprite paddleTexture;
