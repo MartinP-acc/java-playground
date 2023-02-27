@@ -3,7 +3,6 @@ package pl.com.calmandwritecode.game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -16,6 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.MoveToAction;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.TimeUtils;
@@ -55,6 +55,8 @@ public class LevelScreen implements Screen {
     private GameStates gameState;
     private float rayAnimState;
     private boolean rayAnimOn;
+    private PowerRemainBar magneticBar, powerBallBar, laserBar;
+    private Table pBarsTable;
 
     public LevelScreen(BreakoutGame game) {
         this.game = game;
@@ -72,6 +74,9 @@ public class LevelScreen implements Screen {
         laserRayAnim = new Animation<TextureRegion>(0.07f,atlas.findRegions("laser_ray"), Animation.PlayMode.NORMAL);
         rayAnimState = 0;
         rayAnimOn = false;
+        powerBallBar = new PowerRemainBar(Ball.POWER_BALL_LIMIT,150,PowerRemainBar.POWER_BALL,atlas);
+        laserBar = new PowerRemainBar(Paddle.LASER_LIMIT,1,PowerRemainBar.LASERS,atlas);
+        magneticBar = new PowerRemainBar(Paddle.MAGNETIC_TIME_LIMIT,250,PowerRemainBar.STICK_PADDLE,atlas);
     }
 
     @Override
@@ -80,6 +85,10 @@ public class LevelScreen implements Screen {
         camera.setToOrtho(false, BreakoutGame.W_WIDTH, BreakoutGame.W_HEIGHT);
         Gdx.input.setCursorCatched(true);
 
+        pBarsTable = new Table();
+        pBarsTable.setBounds(BreakoutGame.W_WIDTH-400,BreakoutGame.W_HEIGHT-20,400,20);
+        pBarsTable.add(laserBar,powerBallBar,magneticBar);
+        pBarsTable.debug();
         initLevel();
     }
 
@@ -144,7 +153,8 @@ public class LevelScreen implements Screen {
         drawShots();
         ballsService.drawBalls(batch);
         lifeCounter.draw(batch,defaultFont);
-        defaultFont.draw(batch, "Score : "+game.player.getScore(),BreakoutGame.CENTER_X,BreakoutGame.W_HEIGHT-10);
+        pBarsTable.draw(batch,1);
+        defaultFont.draw(batch, "Score : "+game.player.getScore(),BreakoutGame.CENTER_X,BreakoutGame.W_HEIGHT-5);
         batch.end();
 
         if (gameState.equals(GameStates.LVL_INTRO)){
@@ -206,6 +216,11 @@ public class LevelScreen implements Screen {
         if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)){
            backToMenu();
         }
+
+        laserBar.update(paddle.getLaserShots());
+        magneticBar.update(paddle.getMagneticRemain());
+        powerBallBar.update(ballsService.getPowerBallRemain());
+
         stage.act(delta);
         stage.draw();
 

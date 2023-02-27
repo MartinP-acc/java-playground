@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.TimeUtils;
 
 public class BallsService {
 
@@ -13,6 +14,7 @@ public class BallsService {
     private final Sprite ballTexture;
     private final Sprite smallBallTexture;
     private final Sparks sparks;
+    private long powerBallStartTime;
     public BallsService(TextureAtlas atlas){
         sparks = new Sparks(atlas);
         balls = new Array<>();
@@ -40,6 +42,7 @@ public class BallsService {
     }
 
     public void setPowerAll(){
+        powerBallStartTime = TimeUtils.millis();
         for (Ball ball : balls){
             ball.setPowerBall();
         }
@@ -118,10 +121,17 @@ public class BallsService {
     }
 
     public boolean isPowerOn() {
-        if (!balls.isEmpty()){
-            return balls.get(0).powerBall;
+        if (powerBallStartTime == 0) return false;
+
+        if (TimeUtils.timeSinceMillis(powerBallStartTime) > Ball.POWER_BALL_LIMIT) {
+            for (Ball ball : balls) {
+                ball.powerBall = false;
+            }
+            powerBallStartTime = 0;
+            return false;
         }
-        return false;
+
+        return true;
     }
 
     public void cloneAll(){
@@ -142,5 +152,9 @@ public class BallsService {
                 ball.serveState = false;
             }
         }
+    }
+
+    public float getPowerBallRemain(){
+        return Ball.POWER_BALL_LIMIT - TimeUtils.timeSinceMillis(powerBallStartTime);
     }
 }

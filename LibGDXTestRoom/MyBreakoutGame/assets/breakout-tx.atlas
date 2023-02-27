@@ -11,6 +11,15 @@ ball
   orig: 22, 22
   offset: 0, 0
   index: -1
+blue_bar
+  rotate: false
+  xy: 474, 177
+  size: 20, 20
+  split: 3, 3, 3, 3
+  pad: 0, 0, 0, 0
+  orig: 20, 20
+  offset: 0, 0
+  index: -1
 brick1
   rotate: false
   xy: 746, 199
@@ -165,6 +174,15 @@ extra_ball
   orig: 45, 45
   offset: 0, 0
   index: -1
+green_bar
+  rotate: false
+  xy: 991, 234
+  size: 20, 20
+  split: 3, 3, 3, 3
+  pad: 0, 0, 0, 0
+  orig: 20, 20
+  offset: 0, 0
+  index: -1
 hard_brick0
   rotate: false
   xy: 678, 103
@@ -195,7 +213,7 @@ hard_brick_ch
   index: -1
 laser_gun
   rotate: false
-  xy: 474, 177
+  xy: 496, 177
   size: 5, 20
   orig: 5, 20
   offset: 0, 0
@@ -289,6 +307,15 @@ random_bonus
   xy: 827, 24
   size: 45, 45
   orig: 45, 45
+  offset: 0, 0
+  index: -1
+red_bar
+  rotate: false
+  xy: 396, 54
+  size: 20, 20
+  split: 3, 3, 3, 3
+  pad: 0, 0, 0, 0
+  orig: 20, 20
   offset: 0, 0
   index: -1
 shrink_ball

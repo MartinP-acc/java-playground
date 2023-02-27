@@ -8,7 +8,7 @@ public class Score {
     private int level;
     private long timeStamp;
 
-    public Score(){};
+    public Score(){}
     public Score(String playerName, long score, int level) {
         this.playerName = playerName.toUpperCase();
         this.score = score;

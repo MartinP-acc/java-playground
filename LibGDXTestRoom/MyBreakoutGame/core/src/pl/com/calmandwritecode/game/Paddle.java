@@ -13,13 +13,14 @@ import pl.com.calmandwritecode.BreakoutGame;
 
 public class Paddle extends Rectangle {
 
-    private static final float MAGNETIC_TIME_LIMIT = 25000;
+    public static final float MAGNETIC_TIME_LIMIT = 25000;
+    public static final int LASER_LIMIT = 40;
     private final TextureAtlas atlas;
     private final Sprite laserGunSprite;
     private Sprite paddleTexture;
     private boolean magnetic;
     private int laserShots;
-    private Sparks sparks;
+    private final Sparks sparks;
     private long magneticStartTime;
 
 
@@ -122,7 +123,7 @@ public class Paddle extends Rectangle {
         if (laserShots<31)
             laserShots +=10;
         else
-            laserShots = 40;
+            laserShots = LASER_LIMIT;
     }
 
     public void setPaddleStick(){
@@ -149,5 +150,13 @@ public class Paddle extends Rectangle {
 
     public void removeOneShot(){
         laserShots-=1;
+    }
+
+    public int getLaserShots() {
+        return laserShots;
+    }
+
+    public float getMagneticRemain(){
+        return MAGNETIC_TIME_LIMIT - TimeUtils.timeSinceMillis(magneticStartTime);
     }
 }

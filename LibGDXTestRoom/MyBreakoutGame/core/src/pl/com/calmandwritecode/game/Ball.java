@@ -9,19 +9,17 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.TimeUtils;
 import pl.com.calmandwritecode.BreakoutGame;
 import pl.com.calmandwritecode.GameAssets;
 
 public class Ball extends Circle {
 
-    private static final long POWER_BALL_LIMIT = 15000;
+    public static final long POWER_BALL_LIMIT = 15000;
     private Sound ballBounceSound, magneticSound;
     private Sound[] ricochet;
     private Sprite currentBallTexture;
     private Sparks sparks;
     private float velocity;
-    private long powerBallStartTime;
     private int ricochetIndex;
 
     public Vector2 position;
@@ -68,16 +66,12 @@ public class Ball extends Circle {
     }
 
     public void draw(SpriteBatch batch){
-        if (isPowerBall()) batch.setColor(0.9f,0.1f,0,1f);
+        if (powerBall) batch.setColor(0.9f,0.1f,0,1f);
         batch.draw(currentBallTexture,x-radius,y-radius);
         batch.setColor(Color.WHITE);
         sparks.draw(batch, Gdx.graphics.getDeltaTime());
     }
 
-    private boolean isPowerBall() {
-        if (TimeUtils.timeSinceMillis(powerBallStartTime)>POWER_BALL_LIMIT) powerBall = false;
-        return powerBall;
-    }
 
     public void update(){
         x+=xSpeed;
@@ -159,10 +153,11 @@ public class Ball extends Circle {
 
     public void setPowerBall(){
         powerBall = true;
-        powerBallStartTime = TimeUtils.millis();
     }
 
     public boolean isBelowScreen(){
         return y<0;
     }
+
+
 }

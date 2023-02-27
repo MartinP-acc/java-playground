@@ -18,8 +18,8 @@ public class LifeCounter {
     }
 
     public void draw(SpriteBatch batch, BitmapFont font){
-        batch.draw(paddleSprite, 10, Gdx.graphics.getHeight()-20);
-        font.draw(batch," x "+game.player.getLives(),paddleSprite.getX()+paddleSprite.getWidth()+10,Gdx.graphics.getHeight()-10);
+        batch.draw(paddleSprite, 10, Gdx.graphics.getHeight()-15);
+        font.draw(batch," x "+game.player.getLives(),paddleSprite.getX()+paddleSprite.getWidth()+10,Gdx.graphics.getHeight()-5);
     }
 
     public void ballOut(){
