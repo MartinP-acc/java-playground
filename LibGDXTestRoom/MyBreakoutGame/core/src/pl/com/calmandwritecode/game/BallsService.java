@@ -146,11 +146,12 @@ public class BallsService {
         }
     }
 
-    public void releaseBalls() {
+    public void releaseBallsAction() {
         if (Gdx.input.isButtonJustPressed(Input.Buttons.RIGHT)){
             for (Ball ball : balls){
                 ball.serveState = false;
             }
+
         }
     }
 

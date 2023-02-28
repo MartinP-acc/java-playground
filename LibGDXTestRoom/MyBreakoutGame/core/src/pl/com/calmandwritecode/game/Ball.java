@@ -14,7 +14,12 @@ import pl.com.calmandwritecode.GameAssets;
 
 public class Ball extends Circle {
 
+    public static final long ACCELERATE_INTERVAL_TIME = 10000;
     public static final long POWER_BALL_LIMIT = 15000;
+    public static final float PADDLE_TOP = 61;
+    private static final float SPEED_UP = 1.5f;
+    private static final float JUST_ACCELERATION = 1.1f;
+    private static final float SLOW_DOWN = 0.5f;
     private Sound ballBounceSound, magneticSound;
     private Sound[] ricochet;
     private Sprite currentBallTexture;
@@ -59,7 +64,7 @@ public class Ball extends Circle {
                 gameAssets.get(GameAssets.RICOCHET_2),
                 gameAssets.get(GameAssets.RICOCHET_3),
         };
-        set(BreakoutGame.CENTER_X,61+currentBallTexture.getWidth()/2,currentBallTexture.getWidth()/2);
+        set(BreakoutGame.CENTER_X, PADDLE_TOP+currentBallTexture.getWidth()/2,currentBallTexture.getWidth()/2);
         position = new Vector2(x,y);
         sparks = new Sparks((TextureAtlas) gameAssets.get(GameAssets.ATLAS_FILE));
         ricochetIndex = MathUtils.random(0,3);
@@ -102,7 +107,7 @@ public class Ball extends Circle {
     }
 
     public void accelerateBall(boolean fullSpeed){
-        float multiplier = fullSpeed ? 1.5f : 1.1f;
+        float multiplier = fullSpeed ? SPEED_UP : JUST_ACCELERATION;
         if (velocity < radius) {
             xSpeed = xSpeed * multiplier;
             ySpeed = ySpeed * multiplier;
@@ -136,7 +141,7 @@ public class Ball extends Circle {
 
     public void serve() {
         xSpeed = MathUtils.random(-4,4);
-        ySpeed = MathUtils.random(2,4);
+        ySpeed = MathUtils.random(3,5);
     }
 
     public void changeTexture(Sprite newTexture){
@@ -146,8 +151,8 @@ public class Ball extends Circle {
 
     public void slowDown(){
         if (velocity>1){
-            xSpeed = xSpeed * 0.5f;
-            ySpeed = ySpeed * 0.5f;
+            xSpeed = xSpeed * SLOW_DOWN;
+            ySpeed = ySpeed * SLOW_DOWN;
         }
     }
 

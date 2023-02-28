@@ -11,7 +11,9 @@ import pl.com.calmandwritecode.GameAssets;
 
 public class Brick extends Rectangle {
 
+    public static final int STUCK_HIT_LIMIT = 50;
     public static int stuckCounter = 0;
+
     public boolean destroyed = false;
     public boolean destroyable = true;
     protected Sprite texture;
@@ -126,7 +128,7 @@ public class Brick extends Rectangle {
     }
 
     private void handleBallStuck() {
-        if (stuckCounter > 40) {
+        if (stuckCounter > STUCK_HIT_LIMIT) {
             destroyed = true;
             stuckCounter = 0;
         }

@@ -14,6 +14,6 @@ public class WallBrick extends Brick {
         bounce(ball);
         ball.update();
         if (ball.powerBall) destroyed=true;
-        stuckCounter++;
+        else stuckCounter++;
     }
 }

@@ -15,6 +15,7 @@ public class Paddle extends Rectangle {
 
     public static final float MAGNETIC_TIME_LIMIT = 25000;
     public static final int LASER_LIMIT = 40;
+    public static final float BOTTOM_PAD = 40;
     private final TextureAtlas atlas;
     private final Sprite laserGunSprite;
     private Sprite paddleTexture;
@@ -30,7 +31,7 @@ public class Paddle extends Rectangle {
         paddleTexture = atlas.createSprite("paddle120");
         laserGunSprite = atlas.createSprite("laser_gun");
         x = BreakoutGame.CENTER_X;
-        y = 40;
+        y = BOTTOM_PAD;
         width = paddleTexture.getWidth();
         height = paddleTexture.getHeight();
         laserShots = 0;

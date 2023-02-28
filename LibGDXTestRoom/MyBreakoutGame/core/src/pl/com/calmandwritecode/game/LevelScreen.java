@@ -36,6 +36,7 @@ public class LevelScreen implements Screen {
         RESUME,
     }
 
+    private final static int SHOTS_LIMIT_ON_SCREEN = 5;
     private final Array<PowerUp> powerUps;
     private final Array<Shot> laserShots;
     private final BallsService ballsService;
@@ -184,7 +185,9 @@ public class LevelScreen implements Screen {
            findBrickCollision();
            ballsService.collisionPaddle(paddle);
 
-           if (TimeUtils.timeSinceMillis(lastCheckoutTime)>10000){
+           ballsService.releaseBallsAction();
+
+           if (TimeUtils.timeSinceMillis(lastCheckoutTime)>Ball.ACCELERATE_INTERVAL_TIME){
                ballsService.accelerateAll(false);
                lastCheckoutTime = TimeUtils.millis();
            }
@@ -196,8 +199,6 @@ public class LevelScreen implements Screen {
            if (paddle.lasersActive() && Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)){
                shoot();
            }
-
-           ballsService.releaseBalls();
 
            if (!laserShots.isEmpty()){
                updateShots();
@@ -259,7 +260,7 @@ public class LevelScreen implements Screen {
     }
 
     private void shoot() {
-        if (laserShots.size < 5){
+        if (laserShots.size < SHOTS_LIMIT_ON_SCREEN){
             Sound laserGun = game.gameAssets.get(GameAssets.LASER_GUN);
             laserGun.play();
             laserShots.add(new Shot(paddle.getLaser1X(),atlas));
