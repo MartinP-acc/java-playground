@@ -18,7 +18,7 @@ public class DesignTacoController {
 
     @GetMapping
     public String showDesignForm(Model model){
-        List<Ingredient> ingredients = Arrays.asList(
+        List<Ingredient> ingredient = Arrays.asList(
                 new Ingredient("FLTO", "wheat", Ingredient.Type.WRAP),
                 new Ingredient("COTO", "corn", Ingredient.Type.WRAP),
                 new Ingredient("GRBF", "ground beef", Ingredient.Type.PROTEIN),
@@ -33,9 +33,9 @@ public class DesignTacoController {
 
         Ingredient.Type[] types = Ingredient.Type.values();
         for (Ingredient.Type type : types){
-            model.addAttribute(type.filterByType(ingredients,type));
+            model.addAttribute(type.filterByType(ingredient,type));
         }
-        model.addAttribute("design", new Taco());
+        //model.addAttribute("design", new Taco());
         return "design";
     }
 }

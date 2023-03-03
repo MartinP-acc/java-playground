@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="UTF-8">
+  <title>Taco Cloud App</title>
+  <link rel="stylesheet" href="@{/styles.css}"/>
+</head>
+<body>
+  <h1>Prepare your own taco !</h1>
+  <img th:src="@{/img/logo.png}"/>
+
+  <form method="POST" th:object="${design}">
+    <div class="grid">
+      <div class="ingredient-group" id="wraps">
+        <h3>Select wrap</h3>
+        <div th:each="ingredient : ${wrap}">
+          <input name="ingredients" type="checkbox" th:value="${ingredient.id}"/>
+          <span th:text="${ingredient.name}">INGREDIENT</span><br/>
+        </div>
+      </div>
+
+      <div class="ingredient-group" id="proteins">
+        <h3>Select protein</h3>
+        <div th:each="ingredient : ${protein}">
+          <input name="ingredients" type="checkbox" th:value="${ingredient.id}"/>
+          <span th:text="${ingredient.name}">INGREDIENT</span><br/>
+        </div>
+      </div>
+    </div>
+
+    <div class="ingredient-group" id="veggies">
+      <h3>Select vegetable</h3>
+      <div th:each="ingredient : ${veggies}">
+        <input name="ingredients" type="checkbox" th:value="${ingredient.id}"/>
+        <span th:text="${ingredient.name}">INGREDIENT</span><br/>
+      </div>
+    </div>
+
+    <div class="ingredient-group" id="cheese">
+      <h3>Select cheese</h3>
+      <div th:each="ingredient : ${cheese}">
+        <input name="ingredients" type="checkbox" th:value="${ingredient.id}"/>
+        <span th:text="${ingredient.name}">INGREDIENT</span><br/>
+      </div>
+    </div>
+
+    <div class="ingredient-group" id="sauce">
+      <h3>Select sauce</h3>
+      <div th:each="ingredient : ${sauce}">
+        <input name="ingredients" type="checkbox" th:value="${ingredient.id}"/>
+        <span th:text="${ingredient.name}">INGREDIENT</span><br/>
+      </div>
+    </div>
+
+    </div>
+
+    <div>
+
+      <h3>type name for your taco: </h3>
+      <!-- <input type="text" th:field="*{name}"/> -->
+      <br/>
+
+      <button>Send your order</button>
+    </div>
+
+  </form>
+</body>
+</html>
