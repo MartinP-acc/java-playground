@@ -3,13 +3,16 @@
 <head>
   <meta charset="UTF-8">
   <title>Taco Cloud App</title>
-  <link rel="stylesheet" href="@{/styles.css}"/>
+  <link rel="stylesheet" th:href="@{/css/styles.css}"/>
 </head>
 <body>
   <h1>Prepare your own taco !</h1>
   <img th:src="@{/img/logo.png}"/>
 
-  <form method="POST" th:object="${design}">
+  <form method="POST" th:object="${taco}">
+
+        <span class="validationError" th:if="${#fields.hasErrors}">Remove problems and try again</span>
+
     <div class="grid">
       <div class="ingredient-group" id="wraps">
         <h3>Select wrap</h3>
@@ -52,12 +55,17 @@
       </div>
     </div>
 
-    </div>
+    <span class="validationError"
+          th:if="${#fields.hasErrors('ingredients')}"
+          th:errors="*{ingredients}">ingredient checkbox error</span>
 
     <div>
 
       <h3>type name for your taco: </h3>
       <input type="text" th:field="*{name}"/>
+      <span class="validationError"
+            th:if="${#fields.hasErrors('name')}"
+            th:errors="*{name}">name field error</span>
       <br/>
 
       <button>Send your order</button>
