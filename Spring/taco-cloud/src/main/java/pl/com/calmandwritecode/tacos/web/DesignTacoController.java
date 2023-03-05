@@ -5,6 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import pl.com.calmandwritecode.tacos.Ingredient;
 import pl.com.calmandwritecode.tacos.Taco;
@@ -36,7 +37,7 @@ public class DesignTacoController {
         Ingredient.Type[] types = Ingredient.Type.values();
         for (Ingredient.Type type : types) {
             model.addAttribute(type.toString().toLowerCase(),
-                    type.filterByType(ingredient, type));
+                    filterByType(ingredient, type));
         }
     }
 
@@ -52,5 +53,11 @@ public class DesignTacoController {
     public String showDesignForm(Model model){
         model.addAttribute("design", new Taco());
         return "design";
+    }
+
+    @PostMapping
+    public String processDesign(Taco design){
+        log.info("Processing taco design : "+ design);
+        return "redirect:/order/current";
     }
 }

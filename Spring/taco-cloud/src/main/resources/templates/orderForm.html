@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+  <title>Taco Cloud App</title>
+  <link rel="stylesheet" href="@{/styles.css}"/>
+</head>
+<body>
+  <form method="POST" th:action="@{/order}" th:object="${order}">
+    <h1>Order designed taco</h1>
+
+    <img th:src="@{/img/logo.png}"/>
+
+    <a th:href="@{/design}" id="another">Prepare another taco</a>
+
+    <h3>Delivery address</h3>
+    <label>Full name </label>
+    <input type="text" th:field="*{name}"/>
+    <br/>
+
+    <label>Street </label>
+    <input type="text" th:field="*{street}"/>
+    <br/>
+
+    <label>City </label>
+    <input type="text" th:field="*{city}"/>
+    <br/>
+
+    <label>Region</label>
+    <input type="text" th:field="*{region}"/>
+    <br/>
+
+    <label>Post code </label>
+    <input type="text" th:field="*{zip}"/>
+    <br/>
+
+    <h3>Payment method</h3>
+    <label>Credit Card Number</label>
+    <input type="text" th:field="*{ccNumber}"/>
+    <br/>
+
+    <label>Expiration Date</label>
+    <input type="text" th:field="*{ccExpiration}"/>
+    <br/>
+
+    <label>CCV</label>
+    <input type="text" th:field="*{ccv}"/>
+    <br/>
+
+    <input type="submit" value="Submit order"/>
+
+  </form>
+
+</body>
+</html>

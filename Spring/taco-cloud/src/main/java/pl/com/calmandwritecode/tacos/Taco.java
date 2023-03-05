@@ -10,5 +10,5 @@ public class Taco {
 
     @Nonnull
     private String name;
-    private List<Ingredient> ingredients;
+    private List<String> ingredients;
 }
