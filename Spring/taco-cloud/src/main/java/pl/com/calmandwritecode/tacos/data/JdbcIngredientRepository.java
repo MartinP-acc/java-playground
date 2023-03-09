@@ -11,7 +11,7 @@ import java.sql.SQLException;
 @Repository
 public class JdbcIngredientRepository implements IngredientRepository{
 
-    private JdbcTemplate jdbc;
+    private final JdbcTemplate jdbc;
     @Autowired
     public JdbcIngredientRepository(JdbcTemplate jdbc){
         this.jdbc = jdbc;
@@ -19,10 +19,10 @@ public class JdbcIngredientRepository implements IngredientRepository{
 
     @Override
     public Iterable<Ingredient> findAll() {
-        return jdbc.query("select id, name, type from ingredient", this::mapRowToIngrdient);
+        return jdbc.query("select id, name, type from ingredient", this::mapRowToIngredient);
     }
 
-    private Ingredient mapRowToIngrdient(ResultSet resultSet, int i) throws SQLException {
+    private Ingredient mapRowToIngredient(ResultSet resultSet, int i) throws SQLException {
         return new Ingredient(
                 resultSet.getString("id"),
                 resultSet.getString("name"),
@@ -32,7 +32,7 @@ public class JdbcIngredientRepository implements IngredientRepository{
     @Override
     public Ingredient findById(String id) {
         return jdbc.queryForObject("select id, name, type from Ingredient where id=?",
-                this::mapRowToIngrdient, id);
+                this::mapRowToIngredient, id);
     }
 
     @Override
