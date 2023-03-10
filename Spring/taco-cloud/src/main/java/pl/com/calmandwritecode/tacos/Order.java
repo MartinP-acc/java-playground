@@ -1,19 +1,27 @@
 package pl.com.calmandwritecode.tacos;
 
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import lombok.Data;
 import org.hibernate.validator.constraints.CreditCardNumber;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 
 @Data
-public class Order {
+@Entity
+@Table(name = "Taco_Order")
+public class Order implements Serializable {
 
+    private static final long SERIAL_VERSION_UID = 1;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private Date placedAt;
 
@@ -42,9 +50,15 @@ public class Order {
     @Digits(integer = 3,fraction = 0,message = "CCV code have only 3 digits")
     private String ccv;
 
+    @ManyToMany(targetEntity = Taco.class)
     private List<Taco> tacos = new ArrayList<>();
 
     public void addTacoDesign(Taco savedTaco) {
         this.tacos.add(savedTaco);
+    }
+
+    @PrePersist
+    void placedAt(){
+        this.placedAt = new Date();
     }
 }

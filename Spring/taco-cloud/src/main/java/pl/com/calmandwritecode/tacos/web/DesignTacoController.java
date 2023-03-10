@@ -11,7 +11,6 @@ import pl.com.calmandwritecode.tacos.Ingredient;
 import pl.com.calmandwritecode.tacos.Order;
 import pl.com.calmandwritecode.tacos.Taco;
 import pl.com.calmandwritecode.tacos.data.IngredientRepository;
-import pl.com.calmandwritecode.tacos.data.JdbcTacoRepository;
 import pl.com.calmandwritecode.tacos.data.TacoRepository;
 
 import java.util.ArrayList;
@@ -30,9 +29,9 @@ public class DesignTacoController {
     @Autowired
     public DesignTacoController(
             IngredientRepository ingredientRepo,
-            JdbcTacoRepository jdbcTacoRepository){
+            TacoRepository tacoRepository){
         this.ingredientRepo = ingredientRepo;
-        this.tacoRepo = jdbcTacoRepository;
+        this.tacoRepo = tacoRepository;
     }
 
     @ModelAttribute(name = "taco")
@@ -47,13 +46,13 @@ public class DesignTacoController {
 
     @GetMapping
     public String showDesignForm(Model model){
-        List<Ingredient> ingredient = new ArrayList<>();
-        ingredientRepo.findAll().forEach(ingredient::add);
+        List<Ingredient> ingredients = new ArrayList<>();
+        ingredientRepo.findAll().forEach(ingredient -> ingredients.add(ingredient));
 
         Ingredient.Type[] types = Ingredient.Type.values();
         for (Ingredient.Type type : types) {
             model.addAttribute(type.toString().toLowerCase(),
-                    filterByType(ingredient, type));
+                    filterByType(ingredients, type));
         }
         return "design";
     }
