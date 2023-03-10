@@ -16,5 +16,5 @@ public class Taco {
     @Size(min = 5, message = "Name must have at least 5 digits")
     private String name;
     @NotNull(message = "You must select at least one ingredient")
-    private List<String> ingredients;
+    private List<Ingredient> ingredients;
 }

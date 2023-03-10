@@ -8,8 +8,11 @@ import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import pl.com.calmandwritecode.tacos.Ingredient;
+import pl.com.calmandwritecode.tacos.Order;
 import pl.com.calmandwritecode.tacos.Taco;
 import pl.com.calmandwritecode.tacos.data.IngredientRepository;
+import pl.com.calmandwritecode.tacos.data.JdbcTacoRepository;
+import pl.com.calmandwritecode.tacos.data.TacoRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,41 +25,24 @@ import java.util.stream.Collectors;
 public class DesignTacoController {
 
     private final IngredientRepository ingredientRepo;
+    private final TacoRepository tacoRepo;
 
     @Autowired
-    public DesignTacoController(IngredientRepository ingredientRepo){
+    public DesignTacoController(
+            IngredientRepository ingredientRepo,
+            JdbcTacoRepository jdbcTacoRepository){
         this.ingredientRepo = ingredientRepo;
-    }
-
-    /*
-    @ModelAttribute
-    public void addIngredientsToModel(Model model) {
-        List<Ingredient> ingredient = Arrays.asList(
-                new Ingredient("FLTO", "wheat", Ingredient.Type.WRAP),
-                new Ingredient("COTO", "corn", Ingredient.Type.WRAP),
-                new Ingredient("GRBF", "ground beef", Ingredient.Type.PROTEIN),
-                new Ingredient("CARN", "piece of meat", Ingredient.Type.PROTEIN),
-                new Ingredient("TMTO", "tomato cubes", Ingredient.Type.VEGGIES),
-                new Ingredient("LETC", "lettuce", Ingredient.Type.VEGGIES),
-                new Ingredient("CHED", "cheddar", Ingredient.Type.CHEESE),
-                new Ingredient("JACK", "monterey Jack", Ingredient.Type.CHEESE),
-                new Ingredient("SLSA", "spice tomato sauce", Ingredient.Type.SAUCE),
-                new Ingredient("SRCR", "cream", Ingredient.Type.SAUCE)
-        );
-    }
-     */
-
-    private List<Ingredient> filterByType(
-            List<Ingredient> ingredients, Ingredient.Type type) {
-        return ingredients
-                .stream()
-                .filter(x -> x.getType().equals(type))
-                .collect(Collectors.toList());
+        this.tacoRepo = jdbcTacoRepository;
     }
 
     @ModelAttribute(name = "taco")
     public Taco taco() {
         return new Taco();
+    }
+
+    @ModelAttribute(name = "order")
+    public Order order(){
+        return new Order();
     }
 
     @GetMapping
@@ -72,12 +58,25 @@ public class DesignTacoController {
         return "design";
     }
 
+    private List<Ingredient> filterByType(
+            List<Ingredient> ingredients, Ingredient.Type type) {
+        return ingredients
+                .stream()
+                .filter(x -> x.getType().equals(type))
+                .collect(Collectors.toList());
+    }
+
     @PostMapping
-    public String processDesign(@Valid Taco taco, Errors errors){
+    public String processDesign(
+            @Valid Taco taco,
+            Errors errors,
+            @ModelAttribute Order order){
         if (errors.hasErrors()){
+            log.error(errors.toString());
             return "design";
         }else {
-            log.info("Processing taco design : " + taco);
+            Taco savedTaco = tacoRepo.save(taco);
+            order.addTacoDesign(savedTaco);
             return "redirect:/order/current";
         }
     }
