@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Taco Cloud</title>
+</head>
+<body>
+
+<h1>Login</h1>
+<img th:src="@{/img/logo.png}"/>
+
+<div th:if="${error}">
+    Unable to login. check your username and login.
+</div>
+
+<p>New here? Click
+    <a th:href="register">here</a> to register.
+</p>
+
+<form method="POST" th:action="@{/login}" id="loginForm">
+
+    <label for="username">Username: </label>
+    <input type="text" name="username" id="username">
+    <br>
+
+    <label for="password">Password: </label>
+    <input type="password" name="password" id="password">
+    <br>
+
+    <button name="submit">Login</button>
+</form>
+
+</body>
+</html>
