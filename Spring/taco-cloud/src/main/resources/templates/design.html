@@ -11,6 +11,8 @@
 
   <form method="POST" th:object="${taco}">
 
+    <input type="hidden" name="_csrf" th:value="${_csrf.token}"/>
+
         <span class="validationError" th:if="${#fields.hasErrors}">Remove problems and try again</span>
 
     <div class="grid">

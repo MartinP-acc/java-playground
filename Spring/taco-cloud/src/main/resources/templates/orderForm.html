@@ -13,6 +13,8 @@
 
     <a th:href="@{/design}" id="another">Prepare another taco</a>
 
+    <input type="hidden" name="_csrf" th:value="${_csrf.token}"/>
+
     <div th:if="${#fields.hasErrors}">
       <span class="validationError">remove problems and try again</span>
     </div>
