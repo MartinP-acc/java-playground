@@ -3,6 +3,7 @@ package pl.com.calmandwritecode.tacos.web;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import pl.com.calmandwritecode.tacos.Ingredient;
 import pl.com.calmandwritecode.tacos.Order;
 import pl.com.calmandwritecode.tacos.Taco;
+import pl.com.calmandwritecode.tacos.UserTaco;
 import pl.com.calmandwritecode.tacos.data.IngredientRepository;
 import pl.com.calmandwritecode.tacos.data.TacoRepository;
 
@@ -69,12 +71,14 @@ public class DesignTacoController {
     public String processDesign(
             @Valid Taco taco,
             Errors errors,
-            @ModelAttribute Order order){
+            @ModelAttribute Order order,
+            @AuthenticationPrincipal UserTaco userTaco){
         if (errors.hasErrors()){
             log.error(errors.toString());
             return "design";
         }else {
             Taco savedTaco = tacoRepo.save(taco);
+            order.setUserTaco(userTaco);
             order.addTacoDesign(savedTaco);
             return "redirect:/order/current";
         }

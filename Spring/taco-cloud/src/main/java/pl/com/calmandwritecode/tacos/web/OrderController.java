@@ -2,6 +2,7 @@ package pl.com.calmandwritecode.tacos.web;
 
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 import pl.com.calmandwritecode.tacos.Order;
+import pl.com.calmandwritecode.tacos.UserTaco;
 import pl.com.calmandwritecode.tacos.data.OrderRepository;
 
 @Controller
@@ -37,6 +39,7 @@ public class OrderController {
         if (errors.hasErrors()){
             return "orderForm";
         }else {
+
             orderRepository.save(order);
             sessionStatus.setComplete();
             return "redirect:/";

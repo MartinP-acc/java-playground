@@ -50,6 +50,9 @@ public class Order implements Serializable {
     @Digits(integer = 3,fraction = 0,message = "CCV code have only 3 digits")
     private String ccv;
 
+    @ManyToOne
+    private UserTaco userTaco;
+
     @ManyToMany(targetEntity = Taco.class)
     private List<Taco> tacos = new ArrayList<>();
 

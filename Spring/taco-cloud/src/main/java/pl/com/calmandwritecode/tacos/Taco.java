@@ -19,7 +19,7 @@ public class Taco {
     private Date createdAt;
     @NotNull
     @Size(min = 5, message = "Name must have at least 5 digits")
-    private String name;
+    private String tacoName;
 
     @ManyToMany(targetEntity = Ingredient.class)
     @NotNull(message = "You must select at least one ingredient")

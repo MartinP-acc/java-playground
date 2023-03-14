@@ -15,37 +15,41 @@
 
     <input type="hidden" name="_csrf" th:value="${_csrf.token}"/>
 
+    <ul>
+      <li th:each="taco : ${order.tacos}"><span th:text="${taco.tacoName}">nazwa taco</span></li>
+    </ul>
+
     <div th:if="${#fields.hasErrors}">
       <span class="validationError">remove problems and try again</span>
     </div>
 
     <h3>Delivery address</h3>
     <label>Full name </label>
-    <input type="text" th:field="*{name}"/>
+    <input type="text" th:value="${order.userTaco.name}" name="name" id="name"/>
     <span class="validationError" th:if="${#fields.hasErrors('name')}"
           th:errors="*{name}"> name field error </span>
     <br/>
 
     <label>Street </label>
-    <input type="text" th:field="*{street}"/>
+    <input type="text" th:value="${order.userTaco.street}" name="street" id="street"/>
     <span class="validationError" th:if="${#fields.hasErrors('street')}"
           th:errors="*{street}"> street field error </span>
     <br/>
 
     <label>City </label>
-    <input type="text" th:field="*{city}"/>
+    <input type="text" th:value="${order.userTaco.city}" name="city" id="city"/>
     <span class="validationError" th:if="${#fields.hasErrors('city')}"
           th:errors="*{city}"> city field error </span>
     <br/>
 
     <label>Region</label>
-    <input type="text" th:field="*{region}"/>
+    <input type="text" th:value="${order.userTaco.region}" name="region" id="region"/>
     <span class="validationError" th:if="${#fields.hasErrors('region')}"
           th:errors="*{region}"> region field error </span>
     <br/>
 
     <label>Zip code </label>
-    <input type="text" th:field="*{zip}"/>
+    <input type="text" th:value="${order.userTaco.zip}" name="zip" id="zip"/>
     <span class="validationError" th:if="${#fields.hasErrors('zip')}"
           th:errors="*{zip}"> zip field error </span>
     <br/>
