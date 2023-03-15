@@ -1,0 +1,4 @@
+spring:
+    datasource:
+        data:
+            - ingredients.sql
