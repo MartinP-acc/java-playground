@@ -2,3 +2,7 @@ spring:
     datasource:
         data:
             - ingredients.sql
+
+taco:
+    orders:
+        pageSize: 10
