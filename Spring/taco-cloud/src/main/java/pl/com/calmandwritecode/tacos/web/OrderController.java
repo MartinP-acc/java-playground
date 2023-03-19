@@ -22,15 +22,17 @@ import pl.com.calmandwritecode.tacos.data.OrderRepository;
 @Controller
 @RequestMapping("/order")
 @SessionAttributes("order")
-@ConfigurationProperties(prefix = "taco.orders")
 public class OrderController {
 
     private OrderRepository orderRepository;
-    private int pageSize = 20;
+    private OrdersProps ordersProps;
 
     @Autowired
-    public OrderController(OrderRepository orderRepository){
+    public OrderController(
+            OrderRepository orderRepository,
+            OrdersProps ordersProps){
         this.orderRepository = orderRepository;
+        this.ordersProps = ordersProps;
     }
 
     @GetMapping("/current")
@@ -42,7 +44,7 @@ public class OrderController {
     public String ordersForUser(
             @AuthenticationPrincipal UserTaco userTaco,
             Model model){
-        Pageable pageable = PageRequest.of(0,pageSize);
+        Pageable pageable = PageRequest.of(0, ordersProps.getPageSize());
         model.addAttribute("orders",
                 orderRepository.findByUserTacoOrderByPlacedAtDesc(userTaco, pageable));
 
@@ -62,9 +64,5 @@ public class OrderController {
             sessionStatus.setComplete();
             return "redirect:/";
         }
-    }
-
-    public void setPageSize(int pageSize) {
-        this.pageSize = pageSize;
     }
 }
